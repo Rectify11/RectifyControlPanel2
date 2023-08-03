@@ -1,0 +1,131 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "Windows.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""Windows.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON1               ICON                    "icon1.ico"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// XMLFILE
+//
+
+IDR_XMLFILE2            XMLFILE                 "tasks.xml"
+
+IDR_XMLFILE3            UIFILE                  "uifile.xml"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_EXPLORE             "Explore"
+    IDS_OPEN                "Open"
+    IDS_GROUPBYSIDES        "Group By Sides"
+    IDS_EXPLORE_HELP        "Explore Item"
+    IDS_OPEN_HELP           "Open Item in New Window"
+    IDS_ONE                 "One"
+    IDS_TWO                 "Two"
+    IDS_THREE               "Three"
+    IDS_FOUR                "Four"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_FIVE                "Five"
+    IDS_SIX                 "Six"
+    IDS_SEVEN               "Seven"
+    IDS_EIGHT               "Eight"
+    IDS_NINE                "Nine"
+    IDS_ZERO                "Zero"
+    IDS_GROUPBYSIZE         "Group by Size"
+    IDS_GROUPBYALPHA        "Alphebetical"
+    IDS_VALUE               "Value"
+    IDS_SMALL               "Small"
+    IDS_MEDIUM              "Medium"
+    IDS_LARGE               "Large"
+    IDS_LESSTHAN5           "Less Than 5"
+    IDS_5ORGREATER          "Five or Geater"
+    IDS_GROUPBYVALUE        "Group by Value"
+    IDS_GROUPBYLEVEL        "Group by Level"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_RECTANGLE           "Rectangle"
+    IDS_TRIANGLE            "Triangle"
+    IDS_CIRCLE              "Circle"
+    IDS_POLYGON             "Polygon"
+    IDS_TITLE               "FolderViewImpl"
+    IDS_DISPLAY             "Display"
+    IDS_UNSPECIFIED         "Unspecified"
+END
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -1,0 +1,7 @@
+.vs/
+*.user
+DirectUIx64/x64/
+DirectUIx64/debug/
+
+FolderViewImpl_Sample_folderview/x64/
+FolderViewImpl_Sample_folderview/debug/
