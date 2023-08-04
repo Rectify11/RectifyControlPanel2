@@ -14,6 +14,7 @@
 #include "ClassFactory.h"
 #include "ShellFolder.h"
 #include "Guid.h"
+#include "CElementWithSite.h"
 
 CFolderViewImplClassFactory::CFolderViewImplClassFactory(REFCLSID rclsid) : m_cRef(1), m_rclsid(rclsid)
 {
@@ -49,6 +50,19 @@ DWORD CFolderViewImplClassFactory::Release()
     return cRef;
 }
 
+HRESULT CElementProvider_CreateInstance(__in REFIID riid, __deref_out void** ppv)
+{
+    HRESULT hr = S_ALLTHRESHOLD;
+    CElementProvider* pElementProvider = new CElementProvider();
+    hr = pElementProvider ? S_OK : E_OUTOFMEMORY;
+    if (SUCCEEDED(hr))
+    {
+        hr = pElementProvider->QueryInterface(riid, ppv);
+        CElementWithSite::Register();
+        pElementProvider->Release();
+    }
+    return hr;
+}
 HRESULT CFolderViewImplClassFactory::CreateInstance(__in_opt IUnknown* punkOuter, 
                                                     __in REFIID riid, 
                                                     __deref_out void **ppv)
@@ -70,14 +84,8 @@ HRESULT CFolderViewImplClassFactory::CreateInstance(__in_opt IUnknown* punkOuter
         //}
         if (CLSID_FolderViewImplElement == m_rclsid)
         {
-            MessageBox(NULL, "Trying to create element provider...", "", 0);
-            CElementProvider* pElementProvider = new CElementProvider();
-            hr = pElementProvider ? S_OK : E_OUTOFMEMORY;
-            if (SUCCEEDED(hr))
-            {          
-                hr = pElementProvider->QueryInterface(riid, ppv);
-                pElementProvider->Release();
-            }
+            hr = CElementProvider_CreateInstance(riid, ppv);
+           
         }
         else
         {

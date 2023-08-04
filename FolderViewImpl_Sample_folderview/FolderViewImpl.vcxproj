@@ -182,6 +182,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Category.cpp" />
+    <ClCompile Include="CElementWithSite.cpp" />
     <ClCompile Include="ClassFactory.cpp" />
     <ClCompile Include="ElementProvider.cpp" />
     <ClCompile Include="Register.cpp" />
@@ -193,12 +194,22 @@
     <None Include="uifile.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="accessibility.h" />
+    <ClInclude Include="base.h" />
     <ClInclude Include="Category.h" />
+    <ClInclude Include="CElementWithSite.h" />
     <ClInclude Include="ClassFactory.h" />
     <ClInclude Include="directui.h" />
-    <ClInclude Include="DirectUITypes.h" />
+    <ClInclude Include="element.h" />
     <ClInclude Include="ElementProvider.h" />
+    <ClInclude Include="event.h" />
     <ClInclude Include="Guid.h" />
+    <ClInclude Include="host.h" />
+    <ClInclude Include="layout.h" />
+    <ClInclude Include="misc.h" />
+    <ClInclude Include="parser.h" />
+    <ClInclude Include="provider.h" />
+    <ClInclude Include="types.h" />
     <ClInclude Include="undoc.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ShellFolder.h" />

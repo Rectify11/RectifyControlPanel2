@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Category.cpp" />
+    <ClCompile Include="ClassFactory.cpp" />
+    <ClCompile Include="ElementProvider.cpp" />
+    <ClCompile Include="Register.cpp" />
+    <ClCompile Include="ShellFolder.cpp" />
+    <ClCompile Include="Utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Category.h" />
+    <ClInclude Include="ClassFactory.h" />
+    <ClInclude Include="ElementProvider.h" />
+    <ClInclude Include="Guid.h" />
+    <ClInclude Include="undoc.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="ShellFolder.h" />
+    <ClInclude Include="Utils.h" />
+    <ClInclude Include="types.h">
+      <Filter>DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="provider.h">
+      <Filter>DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="accessibility.h">
+      <Filter>DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="base.h">
+      <Filter>DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="element.h">
+      <Filter>DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="host.h">
+      <Filter>DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="layout.h">
+      <Filter>DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="misc.h">
+      <Filter>DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="parser.h">
+      <Filter>DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="directui.h">
+      <Filter>DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="event.h">
+      <Filter>DirectUI</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="FolderViewImpl.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="tasks.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FolderViewImpl.def" />
+    <None Include="uifile.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="DirectUI">
+      <UniqueIdentifier>{589e13ad-1b59-44b3-969b-9f197eb520d8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

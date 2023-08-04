@@ -1,145 +1,145 @@
 #pragma once
-#include <windows.h>
-#include "undoc.h"
-#include "DirectUITypes.h"
-// Taken from: https://github.com/jameskeane/directui/
+
+
+#include <objbase.h>
+#include <initguid.h>
+#include <oleacc.h>
+#pragma comment(lib, "Oleacc.lib")
+
+
+typedef struct tagGMSG
+{
+} GMSG, * LPGMSG;
+
+#include "types.h"
+#include "element.h"
+#include "base.h"
+#include "event.h"
+#include "layout.h"
+#include "host.h"
+#include "accessibility.h"
+#include "misc.h"
+
+
+#include "provider.h"
+#include "parser.h"
 
 typedef HRESULT(*InitProcessPriv)(int duiVersion, unsigned short* unk1, char unk2, bool bEnableUIAutomationProvider);
 typedef HRESULT(*InitThread)(int idk);
 
-namespace DirectUI
-{
-	class ElementProvider
+namespace DirectUI {
+
+	HRESULT WINAPI InitProcessPriv(int duiVersion, unsigned short* unk1, char unk2, bool bEnableUIAutomationProvider);
+	HRESULT WINAPI UnInitProcessPriv(unsigned short* unk1);
+	HRESULT WINAPI InitThread(int iDontKnow);
+	void WINAPI UnInitThread();
+
+	// These might be wrong, disassemble and check if it is DirectUI::XProvider * or DirectUI::XProvider **
+	int WINAPI CreateDUIWrapper(DirectUI::Element*, DirectUI::XProvider*);
+	int WINAPI CreateDUIWrapperEx(DirectUI::Element*, DirectUI::IXProviderCP*, DirectUI::XProvider*);
+	int WINAPI CreateDUIWrapperFromResource(HINSTANCE, unsigned short*, unsigned short*, unsigned short*, DirectUI::XResourceProvider*);
+
+	int WINAPI GetScreenDPI();
+
+	int WINAPI RegisterAllControls();
+	int WINAPI RegisterBaseControls();
+	int WINAPI RegisterBrowserControls();
+	int WINAPI RegisterCommonControls();
+	int WINAPI RegisterExtendedControls();
+	int WINAPI RegisterMacroControls();
+	int WINAPI RegisterMiscControls();
+	int WINAPI RegisterStandardControls();
+	int WINAPI RegisterXControls();
+
+	int WINAPI StartMessagePump();
+	int WINAPI StopMessagePump();
+
+
+	ATOM WINAPI StrToID(LPCWSTR resId);
+
+
+	int WINAPI UnicodeToMultiByte(LPCWSTR lpWideCharStr, int cchWideChar, int unk);
+	int WINAPI MultiByteToUnicode(LPCSTR lpMultiByteStr, int cbMultiByte, int unk);
+
+	BOOL WINAPI IsAnimationsEnabled();
+	int WINAPI IsPalette(HWND hWnd);
+	BOOL WINAPI IsUIAutomationProviderEnabled();
+
+
+
+
+	/*
+	int WINAPI DUI_CreateParserWithCallbackFromResource(HLOCAL hMem, LPCSTR pszSrc, HMODULE hLibModule, GetSheetCallback cb, void *cbParam)
 	{
-	public:
-		ElementProvider();
-		virtual ~ElementProvider();
+		HINSTANCE hLibModule = GetShellStyleHInstance(NULL);
 
-		virtual unsigned long AddRef();
-		virtual long AdviseEventAdded(int, SAFEARRAY*);
-		virtual long AdviseEventRemoved(int, SAFEARRAY*);
-		static long Create(Element*, InvokeHelper*, ElementProvider** out);
-		long DoInvokeArgs(int, ProviderProxy* (__cdecl*)(Element*), char*);
-		virtual volatile const Element* GetElement();
-		const Element* GetElementKey();
+		//DUI_LoadUIFileFromResources();
+		//DirectUI::DUIXmlParser
+		//DirectUI::DUIXmlParser::Create(
 
-		virtual long GetEmbeddedFragmentRoots(SAFEARRAY**);
-		virtual long GetPatternProvider(int, IUnknown**);
-		virtual long GetPropertyValue(int, VARIANT*);
-
-		virtual ProviderProxy* (*GetProxyCreator())(Element*);
-
-		virtual long GetRuntimeId(SAFEARRAY**);
-		virtual long Navigate(NavigateDirection, IRawElementProviderFragment**);
-
-		virtual long QueryInterface(const GUID&, void**);
-		virtual unsigned long Release();
-		virtual long SetFocus();
-
-		void TossElement();
-		void TossPatternProvider();
-
-		virtual long get_BoundingRectangle(UiaRect*);
-		virtual long get_FragmentRoot(IRawElementProviderFragmentRoot**);
-		virtual long get_HostRawElementProvider(IRawElementProviderSimple**);
-		virtual long get_ProviderOptions(ProviderOptions*);
-
-	protected:
-		virtual long Init(Element*, InvokeHelper*);
-		long DoInvoke(int, ...);
-	};
-
-	template <class X, class Y, int>
-	class PatternProvider
+		::FreeLibrary(hLibModule);
+	}
+	/*
+	int WINAPI DUI_CreateParserFromResource(HLOCAL hMem, LPCSTR pszSrc, HMODULE hLibModule, DUIXmlParser **)
 	{
-	public:
-		PatternProvider();
-		virtual ~PatternProvider();
 
-		static long Create(ElementProvider*, IUnknown**);
-		virtual void Init(ElementProvider*);
+	}
 
-	protected:
-		long DoInvoke(int, ...);
-	private:
-
-	};
-
-	class XProvider : public IUnknown
+	int WINAPI DUI_CreateElementFromResource(HLOCAL hMem, LPCSTR pszSrc, unsigned short const *, Element *, Element *, unsigned long *, Element **, DUIXmlParser ** )
 	{
-	public:
-		XProvider();
-		XProvider(const XProvider&);
-		virtual ~XProvider();
+		// Create parser
 
-		XProvider& operator=(const XProvider&);
 
-		virtual long QueryInterface(const GUID&, void** pUnk);
-		virtual unsigned long AddRef();
-		virtual unsigned long Release();
-
-		virtual long CreateDUI(IXElementCP*, HWND*);
-		virtual long SetParameter(const GUID&, void*);
-		virtual long GetDesiredSize(int, int, LPSIZE);
-		virtual long IsDescendent(Element*, bool*);
-		virtual long SetFocus(Element*);
-		virtual long Navigate(int, bool*);
-		virtual long CanSetFocus(bool*);
-		virtual int FindElementWithShortcutAndDoDefaultAction(unsigned short, int);
-		virtual long GetHostedElementID(String id);
-		virtual long ForceThemeChange(unsigned __int64, __int64);
-		virtual long SetDefaultButtonTracking(bool);
-		virtual int ClickDefaultButton();
-		virtual long SetRegisteredDefaultButton(Element*);
-		virtual long SetButtonClassAcceptsEnterKey(bool);
-		virtual long CreateXBaby(IXElementCP* param_1, HWND__* param_2, Element* param_3, ULONG* param_4, IXBaby** param_5);
-
-		long Initialize(Element*, IXProviderCP*);
-		static long Create(Element*, IXProviderCP*, XProvider**);
-		
-		//long CreateParser(DUIXmlParser**);
-
-	
-		
-
-		
-		
-
-		
-		
-		
-
-		
-		
-
-		
-		
-		
-		
-
-	protected:
-		void SetHandleEnterKey(bool);
-		Element* GetRoot();
-	private:
-		UINT a;
-		UINT b;
-		UINT c;
-	};
-
-	class XResourceProvider : public XProvider
+	}
+	*/
+	/*
+	int WINAPI CreateDUIWrapperFromResource( HINSTANCE hInst, unsigned short* s1, unsigned short *s2, unsigned short *s3, DirectUI::XResourceProvider **xp)
 	{
-	public:
-		XResourceProvider();
-		XResourceProvider(const XResourceProvider&);
-		XResourceProvider& operator=(const XResourceProvider&);
+		*xp = NULL;
+		long ret = DirectUI::XResourceProvider::Create(hInst, s1, s2, s3, xp);
+		if( ret < 0 )
+			return ret;
 
-		static long Create(XResourceProvider** pOut);
-		static long Create(HINSTANCE instance, unsigned short const* id, unsigned short const*, unsigned short const*, XResourceProvider** pOut);
-		virtual long CreateDUICP(HWNDElement*, HWND, HWND, Element**, DUIXmlParser**);
-		virtual long CreateParserCP(DUIXmlParser** pOut);
+		int r = CreateDUIWrapperEx(NULL, (DirectUI::IXProviderCP *)*xp, (DirectUI::XProvider **)xp);
+		if( r >= 0 )
+			return r;
 
-		virtual void DestroyCP();
-		//long Initialize(HINSTANCE h, const unsigned short* s1, const unsigned short* s2, const unsigned short* s3);
+		(*xp)->AddRef();
+		return r;
+	}*/
 
-	};
+
+
+
+
+
+
+	/* haven't reversed
+	BlurBitmap
+	BrushFromEnumI
+	ColorFromEnumI
+	DUIDrawShadowText
+	DisableAnimations
+	DrawShadowTextEx
+	ElementFromGadget
+	EnableAnimations
+	FlushThemeHandles
+	ForceDebugBreak
+	GetElementDataEntry
+	GetElementMacro
+	GetFontCache
+	GetThemeHandle
+	HStrDup
+	HrSysAllocString
+	InitPreprocessor
+	NotifyAccessibilityEvent
+	PreprocessBuffer
+	ProcessAlphaBitmapI
+	PurgeThemeHandles
+	SetDefAction
+	UiaHideOnGetObject
+	UiaOnDestroySink
+	UiaOnGetObject
+	UiaOnToolTip
+	*/
 }

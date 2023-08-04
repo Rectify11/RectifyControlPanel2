@@ -69,6 +69,7 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void *lpReserved)
 { 
     if (DLL_PROCESS_ATTACH == dwReason)
     {
+        MessageBox(NULL, "Attach a debugger NOW", "", 0);
         g_hInst = hInstance;
         DisableThreadLibraryCalls(hInstance);
         RegisterContext(hInstance);
@@ -84,7 +85,7 @@ STDAPI DllCanUnloadNow(void)
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
 {
     *ppv = NULL;
-
+    
     HRESULT hr = E_OUTOFMEMORY;
     CFolderViewImplClassFactory* pClassFactory = new CFolderViewImplClassFactory(rclsid);
     if (pClassFactory)
@@ -152,7 +153,7 @@ STDAPI DllRegisterServer()
         HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"InfoTip",                 (LPBYTE)L"Customize Rectify11 settings such as theme settings",   REG_SZ,
         HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"System.ApplicationName",  (LPBYTE)L"Rectify11.ControlPanelMain",   REG_SZ,
         HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"System.ControlPanel.Category",(LPBYTE)L"5",   REG_SZ,
-        HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"System.Software.TasksFileUrl",(LPBYTE)L"Internal",   REG_SZ,
+        HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"System.Software.TasksFileUrl",(LPBYTE)L"%s,1",   REG_SZ,
         HKEY_CLASSES_ROOT,  L"CLSID\\%s\\InprocServer32", szFolderViewImplClassID, NULL,                       (LPBYTE)L"C:\\Windows\\System32\\Shdocvw.dll",          REG_SZ,
         HKEY_CLASSES_ROOT,  L"CLSID\\%s\\InprocServer32", szFolderViewImplClassID, L"ThreadingModel",          (LPBYTE)L"Apartment",   REG_SZ,
         HKEY_CLASSES_ROOT,  L"CLSID\\%s\\DefaultIcon",    szFolderViewImplClassID, NULL,                       (LPBYTE)L"%s,0",        REG_SZ,

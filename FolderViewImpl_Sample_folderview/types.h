@@ -1,6 +1,4 @@
 #pragma once
-#include <ShlObj.h>
-
 //forward declares
 namespace DirectUI
 {
@@ -25,11 +23,7 @@ namespace DirectUI
 	class RefcountBase;
 
 	// Elements
-	class Element
-	{
-	public:
-		Element::Element();
-	};
+	class Element;
 	class ElementWithHWND;
 	class UnknownElement;
 	class HWNDElement;
@@ -150,7 +144,28 @@ namespace DirectUI
 
 	// Interfaces
 	class IElementListener {};
-	struct IClassInfo;
+	struct IClassInfo
+	{
+		virtual void AddChild();
+		virtual void AddRef();
+		virtual void AssertPIZeroRef() const;
+		static bool ClassExist(IClassInfo**, PropertyInfo const* const*, unsigned int, IClassInfo*, HINSTANCE, unsigned short const*, bool);
+		virtual void Destroy();
+		virtual PropertyInfo const* EnumPropertyInfo(unsigned int);
+		virtual PropertyInfo const* GetByClassIndex(unsigned int);
+		virtual int GetChildren() const;
+		virtual unsigned int GetGlobalIndex() const;
+		virtual HINSTANCE GetModule() const;
+		virtual unsigned short const* GetName() const;
+		virtual unsigned int GetPICount() const;
+		long Initialize(HINSTANCE, unsigned short const*, bool, PropertyInfo const* const*, unsigned int);
+		virtual bool IsGlobal() const;
+		virtual bool IsSubclassOf(IClassInfo*) const;
+		virtual bool IsValidProperty(PropertyInfo const*) const;
+		long Register();
+		virtual int Release();
+		virtual void RemoveChild();
+	};
 	class IDataEngine;
 	class IDataEntry;
 	class IProvider;
@@ -188,7 +203,6 @@ namespace DirectUI
 	class AutoVariant;
 
 	// Misc
-	class CritSecLock;
 	class LinkedList;
 	class DeferCycle;
 	class UID;
@@ -230,5 +244,4 @@ namespace DirectUI
 	class TaskPage;
 	class TextGraphic;
 	class XBaby;
-	interface IXBaby;
 }
