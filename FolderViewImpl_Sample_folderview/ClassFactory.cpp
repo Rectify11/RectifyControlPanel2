@@ -14,6 +14,7 @@
 #include "ClassFactory.h"
 #include "ShellFolder.h"
 #include "Guid.h"
+#include "pch.h"
 #include "CElementWithSite.h"
 
 CFolderViewImplClassFactory::CFolderViewImplClassFactory(REFCLSID rclsid) : m_cRef(1), m_rclsid(rclsid)
@@ -58,7 +59,7 @@ HRESULT CElementProvider_CreateInstance(__in REFIID riid, __deref_out void** ppv
     if (SUCCEEDED(hr))
     {
         hr = pElementProvider->QueryInterface(riid, ppv);
-        CElementWithSite::Register();
+        CElementWithSite::Register(GetModuleHandle(NULL), (const unsigned short*)GetModuleHandle(NULL), FALSE, NULL,0);
         pElementProvider->Release();
     }
     return hr;

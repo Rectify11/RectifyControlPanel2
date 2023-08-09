@@ -15,7 +15,7 @@
 
 #include "FolderViewImpl.h"
 #include "undoc.h"
-#include "directui.h"
+#include "pch.h"
 
 class CElementProvider :public DirectUI::XProvider, public IDUIElementProviderInit, public IFrameNotificationClient, public IFrameShellViewClient, public IObjectWithSite, public IServiceProvider
 {

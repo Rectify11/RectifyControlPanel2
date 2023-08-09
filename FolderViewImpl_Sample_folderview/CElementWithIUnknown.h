@@ -1,10 +1,12 @@
 #pragma once
-#include "types.h"
-#include "directui.h"
+#include "pch.h"
 using namespace DirectUI;
-class CElementWithIUnknown
+class CElementWithIUnknown : public DirectUI::ClassInfoBase
 {
-	static HRESULT Register();
+public:
+	static HRESULT Create(HINSTANCE hInstance, unsigned short const* unknown, bool unknown2, PropertyInfo const* const* unknown3, UINT flags, void** result);
+	static HRESULT Register(HINSTANCE, unsigned short const*, bool, PropertyInfo const* const*, void** result);
+
 	static IClassInfo* Class;
 };
 

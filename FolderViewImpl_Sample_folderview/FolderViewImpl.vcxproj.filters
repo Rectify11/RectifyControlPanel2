@@ -7,6 +7,12 @@
     <ClCompile Include="Register.cpp" />
     <ClCompile Include="ShellFolder.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="CElementWithSite.cpp">
+      <Filter>DirectUIRegister</Filter>
+    </ClCompile>
+    <ClCompile Include="CElementWithIUnknown.cpp">
+      <Filter>DirectUIRegister</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Category.h" />
@@ -17,39 +23,13 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="ShellFolder.h" />
     <ClInclude Include="Utils.h" />
-    <ClInclude Include="types.h">
-      <Filter>DirectUI</Filter>
+    <ClInclude Include="CElementWithSite.h">
+      <Filter>DirectUIRegister</Filter>
     </ClInclude>
-    <ClInclude Include="provider.h">
-      <Filter>DirectUI</Filter>
+    <ClInclude Include="CElementWithIUnknown.h">
+      <Filter>DirectUIRegister</Filter>
     </ClInclude>
-    <ClInclude Include="accessibility.h">
-      <Filter>DirectUI</Filter>
-    </ClInclude>
-    <ClInclude Include="base.h">
-      <Filter>DirectUI</Filter>
-    </ClInclude>
-    <ClInclude Include="element.h">
-      <Filter>DirectUI</Filter>
-    </ClInclude>
-    <ClInclude Include="host.h">
-      <Filter>DirectUI</Filter>
-    </ClInclude>
-    <ClInclude Include="layout.h">
-      <Filter>DirectUI</Filter>
-    </ClInclude>
-    <ClInclude Include="misc.h">
-      <Filter>DirectUI</Filter>
-    </ClInclude>
-    <ClInclude Include="parser.h">
-      <Filter>DirectUI</Filter>
-    </ClInclude>
-    <ClInclude Include="directui.h">
-      <Filter>DirectUI</Filter>
-    </ClInclude>
-    <ClInclude Include="event.h">
-      <Filter>DirectUI</Filter>
-    </ClInclude>
+    <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="FolderViewImpl.rc" />
@@ -65,8 +45,8 @@
     <None Include="uifile.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="DirectUI">
-      <UniqueIdentifier>{589e13ad-1b59-44b3-969b-9f197eb520d8}</UniqueIdentifier>
+    <Filter Include="DirectUIRegister">
+      <UniqueIdentifier>{3ab49b30-1de5-42f7-be6d-8ccd22f2c209}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

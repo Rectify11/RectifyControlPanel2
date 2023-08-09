@@ -8,14 +8,11 @@
 #include "FolderViewImpl.h"
 #include "ElementProvider.h"
 #include "resource.h"
-#include "directui.h"
+#include "pch.h"
 
 //3072    <<not bound>>
 typedef HRESULT(*Dui70_XProvider_QueryInterface)(REFIID riid, __out void** ppv);
 Dui70_XProvider_QueryInterface Dui70_XProvider_QueryInterface_Func;
-
-InitThread InitThread_Func;
-InitProcessPriv InitProcessPriv_Func;
 
 
 #define NOT_IMPLEMENTED MessageBox(NULL, TEXT(__FUNCTION__), TEXT("Non implementented function in CElementProvider"), 0)
@@ -24,32 +21,11 @@ InitProcessPriv InitProcessPriv_Func;
 
 CElementProvider::CElementProvider() : _cRef(1), _punkSite(NULL), _pdtobj(NULL)
 {
-	//get pointers to functions
-	HINSTANCE handle = GetModuleHandle("dui70.dll");
-	if (!handle)
-	{
-		SHOW_ERROR("Could not find dui70.dll pointer\n");
-		return;
-	}
-	InitProcessPriv_Func = (InitProcessPriv)GetProcAddress(handle, "InitProcessPriv");
-	if (!InitProcessPriv_Func)
-	{
-		SHOW_ERROR("Could not load InitProcessPriv_Func\n");
-		return;
-	}
-	InitThread_Func = (InitThread)GetProcAddress(handle, "InitThread");
-	if (!InitThread_Func)
-	{
-		SHOW_ERROR("Could not load InitProcessPriv_Func\n");
-		return;
-	}
-
-
-	if (FAILED(InitProcessPriv_Func(14, NULL, 1, true)))
+	if (FAILED(InitProcessPriv(14, NULL, 1, true)))
 	{
 		SHOW_ERROR("Failed to initialize DirectUI\n");
 	}
-	if (FAILED(InitThread_Func(2)))
+	if (FAILED(InitThread(2)))
 	{
 		SHOW_ERROR("Failed to initialize DirectUI for thread\n");
 	}
