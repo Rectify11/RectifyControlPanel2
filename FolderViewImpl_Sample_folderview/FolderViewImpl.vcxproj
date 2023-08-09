@@ -128,7 +128,7 @@
       <ProgramDatabaseFile>$(OutDir)FolderViewImpl.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <ImportLibrary>$(OutDir)FolderViewImpl.lib</ImportLibrary>
-      <AdditionalDependencies>$(SolutionDir)\$(IntDir)\DirectUIx64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Message>Copy property descriptions to the output directory</Message>

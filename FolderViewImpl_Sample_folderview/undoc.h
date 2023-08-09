@@ -2,7 +2,7 @@
 #include <windows.h>
 
 MIDL_INTERFACE("E1F5EC9F-F933-492B-A242-C3CDAC6ECFBD")
-IDUIElementProviderInit: public IUnknown //: public DirectUI::XProvider
+IDUIElementProviderInit: public IUnknown
 {
 public:
     virtual HRESULT STDMETHODCALLTYPE SetResourceID(UINT id) = 0;

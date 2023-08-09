@@ -17,7 +17,7 @@
 #include "undoc.h"
 #include "pch.h"
 
-class CElementProvider :public DirectUI::XProvider, public IDUIElementProviderInit, public IFrameNotificationClient, public IFrameShellViewClient, public IObjectWithSite, public IServiceProvider
+class CElementProvider : public DirectUI::XProvider, public IDUIElementProviderInit, public IFrameNotificationClient, public IFrameShellViewClient, public IObjectWithSite, public IServiceProvider
 {
 public:
 	CElementProvider();
@@ -45,9 +45,12 @@ public:
 	virtual HRESULT STDMETHODCALLTYPE OnContentsChanged();
 	virtual HRESULT STDMETHODCALLTYPE OnFolderChanged();
 
+
+
 	//IServiceProvider
 
 	virtual HRESULT STDMETHODCALLTYPE QueryService(REFGUID guidService, REFIID riid, void** ppvObject);
+
 
 	//IobjectWithSite
 	virtual HRESULT STDMETHODCALLTYPE SetSite(IUnknown* pUnkSite);

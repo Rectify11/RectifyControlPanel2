@@ -5,7 +5,7 @@
 #include <olectl.h>
 #include <strsafe.h>
 #include "Utils.h"
-
+#include "pch.h"
 // The GUID for the FolderViewImpl
 #include "GUID.h"
 
@@ -69,6 +69,11 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void *lpReserved)
 { 
     if (DLL_PROCESS_ATTACH == dwReason)
     {
+        if (sizeof(XProvider) != 0x28)
+        {
+            MessageBox(NULL, "Fatal error: unexpected size of XProvider class", "", 0);
+            return FALSE;
+        }
         MessageBox(NULL, "Attach a debugger NOW", "", 0);
         g_hInst = hInstance;
         DisableThreadLibraryCalls(hInstance);

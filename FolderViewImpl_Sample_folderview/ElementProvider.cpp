@@ -29,8 +29,8 @@ CElementProvider::CElementProvider() : _cRef(1), _punkSite(NULL), _pdtobj(NULL)
 	{
 		SHOW_ERROR("Failed to initialize DirectUI for thread\n");
 	}
-
 	DllAddRef();
+
 }
 
 CElementProvider::~CElementProvider()
@@ -78,14 +78,21 @@ ULONG CElementProvider::AddRef()
 
 ULONG CElementProvider::Release()
 {
-	NOT_IMPLEMENTED;
 	return DirectUI::XProvider::Release();
 }
 
-HRESULT CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* h)
+HRESULT CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* result_handle)
 {
 	MessageBox(NULL, TEXT("see title"), TEXT("CElementProvider::CreateDUI TODO"), 0);
-
+	int hr = XProvider::CreateDUI(a, result_handle);
+	if (SUCCEEDED(hr))
+	{
+		DirectUI::XProvider::SetHandleEnterKey(true);
+	}
+	else
+	{
+		MessageBox(NULL, TEXT("Failed to create DirectUI parser"), TEXT("CElementProvider::CreateDUI TODO"), 0);
+	}
 	return 0;
 }
 
@@ -169,12 +176,19 @@ HRESULT STDMETHODCALLTYPE CElementProvider::QueryService(
 
 HRESULT CElementProvider::SetSite(IUnknown* punkSite)
 {
-	NOT_IMPLEMENTED;
+	this->Site = NULL;
+	IUnknown_Set(&this->Site, punkSite);
 	return S_OK;
 }
 
 HRESULT CElementProvider::GetSite(REFIID riid, void** ppvSite)
 {
 	NOT_IMPLEMENTED;
-	return _punkSite ? _punkSite->QueryInterface(riid, ppvSite) : E_FAIL;
+
+	if (Site == NULL)
+	{
+		return E_FAIL;
+	}
+	
+	return Site->QueryInterface(riid, ppvSite);
 }
