@@ -3,7 +3,6 @@
 		<style resid="cp_style">
 			<Button accessible="true" contentalign="wrapleft"/>
 			<Element overhang="false" background="argb(0,0,0,0)"/>
-			<NavigateButton overhang="false" background="argb(0,0,0,0)"/>
 			<CCPushButton transparent="true" accessible="true" minsize="size(76rp,23rp)" font="gtf(CONTROLPANELSTYLE,14,0)" margin="rect(6rp,0rp,0rp,0rp)"/>
 			<CCCheckBox transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
 			<ComboBox transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,14,0)"/>
@@ -98,18 +97,7 @@
 			</if>
 		</style>
 	</stylesheets>
-	<element resid="informationsectiontitle" layoutpos="top" layout="filllayout()" padding="rect(0rp,0rp,0rp,10rp)">
-		<element layout="borderlayout()" padding="rect(0rp,2rp,0rp,5rp)">
-			<element class="cp_content_divider_line" width="1rp"/>
-		</element>
-		<element layout="flowlayout()">
-			<element id="atom(Title)" class="cp_content_divider_header" content="Heres a divder with header"/>
-		</element>
-	</element>
-	<element resid="SystemInfoItem" sheet="cp_style" layoutpos="top" layout="rowlayout(171)" padding="rect(0rp,0rp,0rp,7rp)">
-		<element id="atom(Label)" class="cp_content_text" content="resstr(1586)" width="150rp"/>
-		<element id="atom(Value)" class="cp_content_text" content="resstr(1587)"/>
-	</element>
-	<element resid="WindowsEditionInfo" sheet="cp_style" layoutpos="top" class="cp_content_text" padding="rect(0rp,0rp,0rp,8rp)"/>
 
+	<Element sheet="cp_style" resid="main" layout="borderlayout()" accessible="true" accrole="window" accname="resstr(301)">
+	</Element>
 </duixml>

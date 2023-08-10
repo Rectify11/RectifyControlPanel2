@@ -19,7 +19,7 @@ Dui70_XProvider_QueryInterface Dui70_XProvider_QueryInterface_Func;
 #define SHOW_ERROR(x) MessageBox(NULL, TEXT(x), TEXT("Error in CElementProvider"), 0)
 
 
-CElementProvider::CElementProvider() : _cRef(1), _punkSite(NULL), _pdtobj(NULL)
+CElementProvider::CElementProvider() : _punkSite(NULL)
 {
 	if (FAILED(InitProcessPriv(14, NULL, 1, true)))
 	{
@@ -30,18 +30,15 @@ CElementProvider::CElementProvider() : _cRef(1), _punkSite(NULL), _pdtobj(NULL)
 		SHOW_ERROR("Failed to initialize DirectUI for thread\n");
 	}
 	DllAddRef();
-
 }
 
 CElementProvider::~CElementProvider()
 {
-	// _punkSite should be NULL due to SetSite(NULL).
-
-	if (_pdtobj)
-	{
-		_pdtobj->Release();
-	}
-	DllRelease();
+	//if (-1 < *(int*)&this->initthread_result) {
+		UnInitThread();
+		UnInitProcessPriv((unsigned short*)0x180000000);
+	//}
+	//DllRelease();
 }
 
 HRESULT CElementProvider::QueryInterface(REFIID riid, __out void** ppv)
@@ -73,12 +70,26 @@ HRESULT CElementProvider::QueryInterface(REFIID riid, __out void** ppv)
 
 ULONG CElementProvider::AddRef()
 {
-	return DirectUI::XProvider::AddRef();
+	int i = 0;
+	;
+	 i =DirectUI::XProvider::AddRef();
+
+	 return i;
 }
 
 ULONG CElementProvider::Release()
 {
-	return DirectUI::XProvider::Release();
+	DWORD ret = refCount;
+	ret--;
+	if (ret == 0)
+	{
+		delete this;
+	}
+	else
+	{
+		refCount = ret;
+	}
+	return ret;
 }
 
 HRESULT CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* result_handle)
@@ -102,10 +113,11 @@ HRESULT STDMETHODCALLTYPE CElementProvider::SetResourceID(UINT id)
 
 	sprintf(szGuid, "%d", id);
 	MessageBox(NULL, szGuid, TEXT("CElementProvider::SetResourceId start"), 0);
-	int hr = DirectUI::XResourceProvider::Create(GetModuleHandle(NULL), (unsigned short const*)id, (unsigned short const*)(IFrameShellViewClient*)this, 0, &this->resourceProvider);
+	IFrameShellViewClient* client = this;
+	int hr = DirectUI::XResourceProvider::Create(g_hInst, (unsigned short const*)id, (unsigned short const*)&client, 0, &this->resourceProvider);
 	if (SUCCEEDED(hr))
 	{
-		hr = DirectUI::XProvider::Initialize(&this->element, NULL);
+		hr = DirectUI::XProvider::Initialize(NULL, (IXProviderCP*)this->resourceProvider);
 		if (!SUCCEEDED(hr))
 		{
 			MessageBox(NULL, szGuid, TEXT("CElementProvider::SetResourceId Failed to initialize xprovider"), 0);
@@ -176,8 +188,7 @@ HRESULT STDMETHODCALLTYPE CElementProvider::QueryService(
 
 HRESULT CElementProvider::SetSite(IUnknown* punkSite)
 {
-	this->Site = NULL;
-	IUnknown_Set(&this->Site, punkSite);
+	IUnknown_Set((IUnknown**)&this->Site, punkSite);
 	return S_OK;
 }
 

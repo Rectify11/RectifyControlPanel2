@@ -69,12 +69,22 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void *lpReserved)
 { 
     if (DLL_PROCESS_ATTACH == dwReason)
     {
+        MessageBox(NULL, "Attach a debugger NOW", "", 0);
         if (sizeof(XProvider) != 0x28)
         {
             MessageBox(NULL, "Fatal error: unexpected size of XProvider class", "", 0);
             return FALSE;
         }
-        MessageBox(NULL, "Attach a debugger NOW", "", 0);
+        int ptr = 1001;
+        HRSRC x = FindResourceW(hInstance, (LPWSTR)(1001), L"UIFILE");
+        if (!x)
+        {
+            int i = GetLastError();
+            MessageBox(NULL, "Fatal error: unexpected error while trying to check if UIFILE loading works", "", 0);
+            return FALSE;
+
+        }
+     
         g_hInst = hInstance;
         DisableThreadLibraryCalls(hInstance);
         RegisterContext(hInstance);

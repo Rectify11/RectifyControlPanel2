@@ -27,7 +27,7 @@ public:
 	IFACEMETHODIMP_(ULONG) AddRef();
 	IFACEMETHODIMP_(ULONG) Release();
 
-	long CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* h);
+	virtual long CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* hwnd);
 
 	// IDUIElementProviderInit
 	virtual HRESULT STDMETHODCALLTYPE SetResourceID(UINT id);
@@ -58,11 +58,9 @@ public:
 	virtual HRESULT STDMETHODCALLTYPE GetSite(REFIID riid, void** ppvSite);
 
 private:
-	long    _cRef;
-	IDataObject* _pdtobj;
 	IUnknown* _punkSite;
 	DirectUI::XResourceProvider* resourceProvider = NULL;
-	DirectUI::Element element;
-
+	DirectUI::Element* element;
+	DirectUI::IXProviderCP** provider = NULL;
 	~CElementProvider();
 };
