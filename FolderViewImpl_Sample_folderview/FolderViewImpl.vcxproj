@@ -186,6 +186,7 @@
     <ClCompile Include="CElementWithSite.cpp" />
     <ClCompile Include="ClassFactory.cpp" />
     <ClCompile Include="ElementProvider.cpp" />
+    <ClCompile Include="CRectifyMainCPLPage.cpp" />
     <ClCompile Include="Register.cpp" />
     <ClCompile Include="ShellFolder.cpp" />
     <ClCompile Include="Utils.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="ElementProvider.h" />
     <ClInclude Include="Guid.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="CRectifyMainCPLPage.h" />
     <ClInclude Include="undoc.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ShellFolder.h" />

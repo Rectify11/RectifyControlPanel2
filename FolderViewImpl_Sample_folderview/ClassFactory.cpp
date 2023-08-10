@@ -59,7 +59,8 @@ HRESULT CElementProvider_CreateInstance(__in REFIID riid, __deref_out void** ppv
     if (SUCCEEDED(hr))
     {
         hr = pElementProvider->QueryInterface(riid, ppv);
-        CElementWithSite::Register(GetModuleHandle(NULL), (const unsigned short*)GetModuleHandle(NULL), FALSE, NULL,0);
+        CElementWithSite::Register(g_hInst, (const unsigned short*)g_hInst, FALSE, NULL,0);
+        ClassInfo_CRectifyMainCPLPage::Register(g_hInst, (const unsigned short*)g_hInst, FALSE, NULL, 0, FALSE);
         pElementProvider->Release();
     }
     return hr;

@@ -13,6 +13,9 @@
     <ClCompile Include="CElementWithIUnknown.cpp">
       <Filter>DirectUIRegister</Filter>
     </ClCompile>
+    <ClCompile Include="CRectifyMainCPLPage.cpp">
+      <Filter>Elements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Category.h" />
@@ -30,6 +33,9 @@
       <Filter>DirectUIRegister</Filter>
     </ClInclude>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="CRectifyMainCPLPage.h">
+      <Filter>Elements</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="FolderViewImpl.rc" />
@@ -47,6 +53,9 @@
   <ItemGroup>
     <Filter Include="DirectUIRegister">
       <UniqueIdentifier>{3ab49b30-1de5-42f7-be6d-8ccd22f2c209}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Elements">
+      <UniqueIdentifier>{08d315e0-4b77-460f-a865-249eb0fa8b1f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

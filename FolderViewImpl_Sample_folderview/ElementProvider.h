@@ -60,7 +60,6 @@ public:
 private:
 	IUnknown* _punkSite;
 	DirectUI::XResourceProvider* resourceProvider = NULL;
-	DirectUI::Element* element;
 	DirectUI::IXProviderCP** provider = NULL;
 	~CElementProvider();
 };

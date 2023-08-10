@@ -83,7 +83,7 @@ ULONG CElementProvider::Release()
 	ret--;
 	if (ret == 0)
 	{
-		delete this;
+		//delete this;
 	}
 	else
 	{
@@ -94,7 +94,7 @@ ULONG CElementProvider::Release()
 
 HRESULT CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* result_handle)
 {
-	MessageBox(NULL, TEXT("see title"), TEXT("CElementProvider::CreateDUI TODO"), 0);
+	MessageBox(NULL, TEXT("see title"), TEXT("CElementProvider::CreateDUI started"), 0);
 	int hr = XProvider::CreateDUI(a, result_handle);
 	if (SUCCEEDED(hr))
 	{
@@ -102,7 +102,21 @@ HRESULT CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* result_handl
 	}
 	else
 	{
-		MessageBox(NULL, TEXT("Failed to create DirectUI parser"), TEXT("CElementProvider::CreateDUI TODO"), 0);
+		CHAR buffer[2000];
+		if (hr == 0x800403EF)
+		{
+			sprintf(buffer, "Failed to create DirectUI parser: A required property is missing.");
+		}
+		else if (hr == 0x8004005A)
+		{
+			sprintf(buffer, "Failed to create DirectUI parser: Probaby can't find the UIFILE?");
+		}
+		else
+		{
+			sprintf(buffer, "Failed to create DirectUI parser: Error %X", hr);
+		}
+		MessageBox(NULL, buffer, TEXT("CElementProvider::CreateDUI TODO"), 0);
+		
 	}
 	return 0;
 }
@@ -114,7 +128,14 @@ HRESULT STDMETHODCALLTYPE CElementProvider::SetResourceID(UINT id)
 	sprintf(szGuid, "%d", id);
 	MessageBox(NULL, szGuid, TEXT("CElementProvider::SetResourceId start"), 0);
 	IFrameShellViewClient* client = this;
-	int hr = DirectUI::XResourceProvider::Create(g_hInst, (unsigned short const*)id, (unsigned short const*)&client, 0, &this->resourceProvider);
+
+	WCHAR buffer[264];
+	StringCchCopyW(buffer, 260, L"main");
+
+	//First parmeter: hinstance of module
+	//2nd: Resource ID of uifile
+	//3rd param: The main resid value
+	int hr = DirectUI::XResourceProvider::Create(g_hInst, (unsigned short const*)id, (unsigned short const*)buffer, 0, &this->resourceProvider);
 	if (SUCCEEDED(hr))
 	{
 		hr = DirectUI::XProvider::Initialize(NULL, (IXProviderCP*)this->resourceProvider);

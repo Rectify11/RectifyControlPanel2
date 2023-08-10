@@ -35,7 +35,7 @@ BOOL RegisterContext(HINSTANCE hInstance)
 {
     if (hInstance == NULL)
     {
-        hInstance = GetModuleHandle(NULL);
+        hInstance = g_hInst;// GetModuleHandle(NULL);
     }
 
     WCHAR moduleFileName[264];
@@ -74,15 +74,6 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void *lpReserved)
         {
             MessageBox(NULL, "Fatal error: unexpected size of XProvider class", "", 0);
             return FALSE;
-        }
-        int ptr = 1001;
-        HRSRC x = FindResourceW(hInstance, (LPWSTR)(1001), L"UIFILE");
-        if (!x)
-        {
-            int i = GetLastError();
-            MessageBox(NULL, "Fatal error: unexpected error while trying to check if UIFILE loading works", "", 0);
-            return FALSE;
-
         }
      
         g_hInst = hInstance;
