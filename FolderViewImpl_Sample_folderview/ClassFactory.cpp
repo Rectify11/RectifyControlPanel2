@@ -8,7 +8,6 @@
 **************************************************************************/
 #include <shlobj.h>
 #include <shlwapi.h>
-#include "Utils.h"
 #include "FolderViewImpl.h"
 #include "ElementProvider.h"
 #include "ClassFactory.h"

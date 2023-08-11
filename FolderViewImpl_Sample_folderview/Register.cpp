@@ -4,7 +4,6 @@
 #include <Shlobj.h>
 #include <olectl.h>
 #include <strsafe.h>
-#include "Utils.h"
 #include "pch.h"
 // The GUID for the FolderViewImpl
 #include "GUID.h"
@@ -15,6 +14,7 @@
 #pragma comment(lib, "propsys.lib")
 #pragma comment(lib, "shlwapi.lib")
 
+#include "pch.h"
 #define CONTROLPANEL_NAMESPACE_GUID L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ControlPanel\\NameSpace\\%s"
 #define SHELL_EXT_APPROVED        L"Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved\\%s"
 

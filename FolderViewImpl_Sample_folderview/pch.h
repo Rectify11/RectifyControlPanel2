@@ -14,10 +14,11 @@ extern HINSTANCE g_hInst;
 #pragma comment(lib,"dui70.lib")
 #include "..\dui70\DirectUI\DirectUI.h"
 using namespace DirectUI;
-
+#include "Utils.h"
 #include "CElementWithIUnknown.h"
 #include "CElementWithSite.h"
 #include "CRectifyMainCPLPage.h"
+
 
 
 namespace DirectUI {
@@ -48,7 +49,7 @@ static HRESULT Register(HINSTANCE hInstance, unsigned short const* unknownname, 
 	}\
 	else\
 	{\
-		DirectUI::Element::GetClassInfoPtr()->AddChild();\
+		DirectUI::Element::GetClassInfoPtr()->AddRef();\
 	}\
 	if (SUCCEEDED(hr))\
 	{\
@@ -86,7 +87,7 @@ IClassInfo* WINAPI GetBaseClass()\
 }\
 	} \
 
-#define DEFINE_DIRECTUI_CLASS_CUSTOM_BASE(name, baseClass) class ClassInfo_##name## : ClassInfoBase \
+#define DEFINE_DIRECTUI_CLASS_CUSTOMBASE(name, baseClass) class ClassInfo_##name## : ClassInfoBase \
 	{ \
 public: \
 	static HRESULT Create(HINSTANCE hInstance, unsigned short const* unknown, bool unknown2, PropertyInfo const* const* unknown3, UINT flags, ClassInfo_##name##** Resullt) \
@@ -112,7 +113,7 @@ static HRESULT Register(HINSTANCE hInstance, unsigned short const* unknownname, 
 	}\
 	else\
 	{\
-		##baseClass##::Class->AddChild();\
+		##baseClass##::Class->AddRef();\
 	}\
 	if (SUCCEEDED(hr))\
 	{\
@@ -176,14 +177,14 @@ static HRESULT Register(HINSTANCE hInstance, unsigned short const* unknownname, 
 	}\
 	else\
 	{\
-		##baseClass##::Class->AddChild();\
+		##baseClass##::Class->AddRef();\
 	}\
 	if (SUCCEEDED(hr))\
 	{\
 		auto ElementPointer = ##baseClass##::Class;\
 		auto lock = DirectUI::Element::GetFactoryLock();\
 		auto lock2 = new DirectUI::CritSecLock(lock);\
-		if (DirectUI::ClassInfoBase::ClassExist(&ElementPointer, NULL, 0, ElementPointer, g_hInst, (unsigned short const*)L#name, FALSE))\
+		if (DirectUI::ClassInfoBase::ClassExist(&ElementPointer, NULL, 0, ##baseClass##::Class, g_hInst, (unsigned short const*)L#name, FALSE))\
 		{\
 			 ##name##::Class = ElementPointer;\
 		}\
@@ -215,6 +216,6 @@ IClassInfo* WINAPI GetBaseClass()\
 	}
 
 	DEFINE_DIRECTUI_CLASS_ELEMENTBASE(CElementWithIUnknown);
-	DEFINE_DIRECTUI_CLASS_CUSTOM_BASE(CElementWithSite, CElementWithIUnknown);
+	DEFINE_DIRECTUI_CLASS_CUSTOMBASE(CElementWithSite, CElementWithIUnknown);
 	DEFINE_DIRECTUI_CLASS_CUSTOM_BASE_WITH_CLASS(CRectifyMainCPLPage, CElementWithSite);
 }

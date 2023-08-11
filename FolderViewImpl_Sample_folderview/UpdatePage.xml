@@ -1,0 +1,11 @@
+<duixml>
+	<stylesheets>
+		<style resid="cp_style">
+			<Button accessible="true" contentalign="wrapleft"/>
+			<Element overhang="false" background="argb(0,0,0,0)"/>
+		</style>
+	</stylesheets>
+	<CRectifyMainCPLPage resid="main" layout="borderlayout()" accessible="true" accrole="window">
+		<button class="WizardLink" id="Atom(SXWizardLegalLink)" content="Legal information" />
+	</CRectifyMainCPLPage>
+</duixml>

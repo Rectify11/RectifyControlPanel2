@@ -1,4 +1,8 @@
 <pagedefinition>
 	<properties elementprovider="{BB8F539D-3B97-4473-9E07-C8248C53248E}" layout="1001" icon="themecpl.dll,-1" displayname="@themecpl.dll,-1" navpane="true" helptopic="mshelp://windows/?id=22CE1F24-0318-46BD-BC17-D0EF889F466B" canonicalname="pageRectifyHub" />
-	
+	<childpages>
+		<pagedefinition>
+			<properties layout="1002" icon="powercpl.dll,-1"  displayname="@powercpl.dll,-51"  helptopic="mshelp://windows/?id=495c2226-19f1-49eb-9fd8-6dd7f2c0b49e" canonicalname="pageRectifyUpdate"/>
+		</pagedefinition>
+	</childpages>
 </pagedefinition>

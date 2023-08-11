@@ -16,9 +16,7 @@
 
 #include "FolderViewImpl.h"
 #include "resource.h"
-#include "Utils.h"
 #include "ShellFolder.h"
-#include "Category.h"
 #include "Guid.h"
 #include "undoc.h"
 

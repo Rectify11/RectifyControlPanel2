@@ -47,7 +47,7 @@ HRESULT STDMETHODCALLTYPE CRectifyMainCPLPage::OnInnerElementDestroyed() {
 
 IClassInfo* CRectifyMainCPLPage::GetClassInfoW()
 {
-	return CElementWithSite::Class;
+	return CRectifyMainCPLPage::Class;
 }
 
 //IUnknown

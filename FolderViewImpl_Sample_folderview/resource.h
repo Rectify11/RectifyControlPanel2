@@ -12,6 +12,7 @@
 #define IDS_OPEN_HELP                   107
 #define IDS_ONE                         108
 #define IDR_XMLFILE3                    1001
+#define IDR_XMLFILE4                    1002
 #define IDS_TWO                         109
 #define IDS_THREE                       110
 #define IDS_FOUR                        111

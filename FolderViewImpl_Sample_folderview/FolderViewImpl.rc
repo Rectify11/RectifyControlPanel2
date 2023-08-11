@@ -62,7 +62,9 @@ IDI_ICON1               ICON                    "icon1.ico"
 
 IDR_XMLFILE2            XMLFILE                 "tasks.xml"
 
-IDR_XMLFILE3            UIFILE                  "uifile.xml"
+IDR_XMLFILE3            UIFILE                  "MainPage.xml"
+
+IDR_XMLFILE4            UIFILE                  "UpdatePage.xml"
 
 
 /////////////////////////////////////////////////////////////////////////////

@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Category.cpp" />
     <ClCompile Include="ClassFactory.cpp" />
     <ClCompile Include="ElementProvider.cpp" />
     <ClCompile Include="Register.cpp" />
@@ -18,7 +17,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Category.h" />
     <ClInclude Include="ClassFactory.h" />
     <ClInclude Include="ElementProvider.h" />
     <ClInclude Include="Guid.h" />
@@ -42,13 +40,14 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="tasks.xml" />
+    <Xml Include="UpdatePage.xml" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FolderViewImpl.def" />
-    <None Include="uifile.xml" />
+    <None Include="MainPage.xml" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="DirectUIRegister">

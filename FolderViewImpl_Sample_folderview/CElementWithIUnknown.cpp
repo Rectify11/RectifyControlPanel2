@@ -4,13 +4,33 @@
 
 using namespace DirectUI;
 IClassInfo* CElementWithIUnknown::Class = NULL;
-
+typedef IClassInfo*(*minfunc)() ;
 
 
 IUnknown* CElementWithIUnknown::GetUnknownFromElement(Element* t)
 {
-	MessageBox(NULL, TEXT("GetUnknownFromElement called"), TEXT(""), 0);
-	return NULL;
+	IClassInfo* classInfo = t->GetClassInfoPtr();
+
+	//check if it inherits CElementWithIUnknown
+	while (true)
+	{
+		if (classInfo == NULL)
+		{
+			return NULL;
+		}
+		LPCWCH name = (LPCWCH)classInfo->GetName();
+		LPCWCH name2 = (LPCWCH)CElementWithIUnknown::Class->GetName();
+		
+
+		if (CompareStringOrdinal(name, -1, name2, -1, false) == CSTR_EQUAL)
+		{
+			break;
+		}
+		IClassInfo* newClass = classInfo->GetBaseClass();
+		classInfo = newClass;
+	}
+
+	return (IUnknown*)(t + 200);
 }
 //
 //IClassInfo* WINAPI CElementWithIUnknown::GetBaseClass()

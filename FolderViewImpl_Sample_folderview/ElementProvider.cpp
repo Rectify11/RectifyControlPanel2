@@ -63,7 +63,7 @@ HRESULT CElementProvider::QueryInterface(REFIID riid, __out void** ppv)
 
 		sprintf(szGuid, "{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}", riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7]);
 
-		MessageBox(NULL, szGuid, TEXT("Unknown interface in CElementProvider::QueryInterface()"), 0);
+		//MessageBox(NULL, szGuid, TEXT("Unknown interface in CElementProvider::QueryInterface()"), 0);
 	}
 	return hr;
 }
@@ -83,7 +83,7 @@ ULONG CElementProvider::Release()
 	ret--;
 	if (ret == 0)
 	{
-		//delete this;
+		delete this;
 	}
 	else
 	{
@@ -94,7 +94,6 @@ ULONG CElementProvider::Release()
 
 HRESULT CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* result_handle)
 {
-	MessageBox(NULL, TEXT("see title"), TEXT("CElementProvider::CreateDUI started"), 0);
 	int hr = XProvider::CreateDUI(a, result_handle);
 	if (SUCCEEDED(hr))
 	{
@@ -115,8 +114,6 @@ HRESULT CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* result_handl
 		{
 			sprintf(buffer, "Failed to create DirectUI parser: Error %X", hr);
 		}
-		MessageBox(NULL, buffer, TEXT("CElementProvider::CreateDUI TODO"), 0);
-		
 	}
 	return 0;
 }
@@ -126,7 +123,6 @@ HRESULT STDMETHODCALLTYPE CElementProvider::SetResourceID(UINT id)
 	char szGuid[40] = { 0 };
 
 	sprintf(szGuid, "%d", id);
-	MessageBox(NULL, szGuid, TEXT("CElementProvider::SetResourceId start"), 0);
 	IFrameShellViewClient* client = this;
 
 	WCHAR buffer[264];
@@ -153,22 +149,30 @@ HRESULT STDMETHODCALLTYPE CElementProvider::SetResourceID(UINT id)
 
 HRESULT STDMETHODCALLTYPE CElementProvider::OptionallyTakeInitialFocus(BOOL* result)
 {
-	NOT_IMPLEMENTED;
 	*result = 0;
+	Element* root = DirectUI::XProvider::GetRoot();
+	if (root != NULL)
+	{
+		//root->GetClassInfoPtr();
+		//TODO
+	}
 	return 0;
 }
 
 HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
 {
-	NOT_IMPLEMENTED;
+	Element* root = XProvider::GetRoot();
+	//DUI_WalkIUnknownElements(root, (DUI_Callback)DUI_SetSiteOnUnknown, (IUnknown*)(IObjectWithSite*)this);
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param) {
-	NOT_IMPLEMENTED;
+	//NOT_IMPLEMENTED;
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnNavigateAway() {
-	NOT_IMPLEMENTED;
+	DirectUI::XProvider::SetHandleEnterKey(false);
+	SetDefaultButtonTracking(false);
+	
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnInnerElementDestroyed() {
@@ -183,17 +187,17 @@ HRESULT STDMETHODCALLTYPE CElementProvider::OnSelectedItemChanged()
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnSelectionChanged()
 {
-	NOT_IMPLEMENTED;
+	//NOT_IMPLEMENTED;
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnContentsChanged()
 {
-	NOT_IMPLEMENTED;
+	//NOT_IMPLEMENTED;
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnFolderChanged()
 {
-	NOT_IMPLEMENTED;
+	//NOT_IMPLEMENTED;
 	return 0;
 }
 

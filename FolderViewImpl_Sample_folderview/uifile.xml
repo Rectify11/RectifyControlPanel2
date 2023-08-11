@@ -1,5 +1,0 @@
-<duixml>
-<CRectifyMainCPLPage resid="main" layout="borderlayout()" accessible="true" accrole="window">
-<Button contentalign="wrapleft | focusrect"/>
-</CRectifyMainCPLPage>
-</duixml>
