@@ -166,13 +166,13 @@ HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param) {
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnNavigateAway() {
+	//TODO: this causes a crash
 	//DirectUI::XProvider::SetHandleEnterKey(false);
-//	SetDefaultButtonTracking(false);
+	//SetDefaultButtonTracking(false);
 
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnInnerElementDestroyed() {
-	NOT_IMPLEMENTED;
 	return 0;
 }
 
