@@ -97,7 +97,8 @@
 		</if>
 	</style>
 </stylesheets>
-<element resid="main" layout="borderlayout()" accessible="true" accrole="window" layoutpos="client">
-<Button content="Coming soon"></Button>
+<element resid="main" layout="borderlayout()" accessible="true" accrole="window" layoutpos="top" sheet="cp_style">
+<element layoutpos="top" id="Atom(RThemeTxt)" content="Theme:"/>
+<Combobox id="Atom(RThemeCmb)" accessible="true" accrole="combobox" padding="rect(0rp,5rp,0rp,5rp)" width="150rp"/>
 </element>
 </duixml>

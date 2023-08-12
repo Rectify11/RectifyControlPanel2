@@ -154,10 +154,84 @@ HRESULT STDMETHODCALLTYPE CElementProvider::OptionallyTakeInitialFocus(BOOL* res
 	}
 	return 0;
 }
+class InputListener : public IElementListener {
+public:
+	using handler_t = std::function<void(Element*, InputEvent*)>;
+
+	handler_t f;
+
+	InputListener(handler_t f) : f(f) { }
+
+	void OnListenerAttach(Element* elem) override { }
+	void OnListenerDetach(Element* elem) override { }
+	bool OnPropertyChanging(Element* elem, const PropertyInfo* prop, int unk, Value* v1, Value* v2) override {
+		return true;
+	}
+	void OnListenedPropertyChanged(Element* elem, const PropertyInfo* prop, int type, Value* v1, Value* v2) override { }
+	void OnListenedEvent(Element* elem, struct Event* ev) override { }
+	void OnListenedInput(Element* elem, struct InputEvent* iev) override {
+		f(elem, iev);
+	}
+};
+
+void CElementProvider::InitNavLinks()
+{
+	auto links = new CControlPanelNavLinks();
+	if (!SUCCEEDED(links->AddLinkShellEx(L"Update Rectify11")))
+	{
+		MessageBox(NULL, TEXT("Failed to insert navigation pane object"), TEXT("CElementProvider::InitNavLinks"), 0);
+	}
+	GUID SID_PerLayoutPropertyBag = {};
+	HRESULT hr = CLSIDFromString(L"{a46e5c25-c09c-4ca8-9a53-49cf7f865525}", (LPCLSID)&SID_PerLayoutPropertyBag);
+	if (SUCCEEDED(hr))
+	{
+		IPropertyBag* bag;
+		int hr = IUnknown_QueryService(_punkSite, SID_PerLayoutPropertyBag, IID_IPropertyBag, (LPVOID*)&bag);
+		if (SUCCEEDED(hr))
+		{
+			if (SUCCEEDED(PSPropertyBag_WriteUnknown(bag, L"ControlPanelNavLinks", links)))
+			{
+
+			}
+			else {
+				MessageBox(NULL, TEXT("Failed to write property bag for navigation links"), TEXT("CElementProvider::InitNavLinks"), 0);
+			}
+			bag->Release();
+		}
+		else {
+			MessageBox(NULL, TEXT("Failed to get property bag for navigation links"), TEXT("CElementProvider::InitNavLinks"), 0);
+		}
+	}
+	else
+	{
+		MessageBox(NULL, TEXT("Failed to parse hardcoded GUID (SID_PerLayoutPropertyBag)"), TEXT("CElementProvider::InitNavLinks"), 0);
+	}
+}
 
 HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
 {
 	Element* root = XProvider::GetRoot();
+
+	InitNavLinks();
+	Combobox* ThemeCombo = (Combobox*)root->FindDescendent(StrToID((UCString)L"RThemeCmb"));
+	if (ThemeCombo != NULL)
+	{
+		static InputListener accept_listener([&](Element* elem, InputEvent* iev) {
+			if (iev->event_id == *Combobox::SelectionChange().pId)
+			{
+				MessageBox(NULL, TEXT("Combobox selection changed!"), TEXT("CElementProvider::LayoutInitialized"), 0);
+			}
+			});
+		if (ThemeCombo->AddListener(&accept_listener) != S_OK)
+		{
+			MessageBox(NULL, TEXT("Failed to add"), TEXT("CElementProvider::LayoutInitialized"), 0);
+		}
+		ThemeCombo->AddString((UCString)L"Test");
+		ThemeCombo->SetSelection(0);
+	}
+	else {
+		MessageBox(NULL, TEXT("Unable to locate RThemeCmb in UIFILE"), TEXT("CElementProvider::LayoutInitialized"), 0);
+	}
 	//DUI_WalkIUnknownElements(root, (DUI_Callback)DUI_SetSiteOnUnknown, (IUnknown*)(IObjectWithSite*)this);
 	return 0;
 }
@@ -209,7 +283,15 @@ HRESULT STDMETHODCALLTYPE CElementProvider::QueryService(
 
 HRESULT CElementProvider::SetSite(IUnknown* punkSite)
 {
-	IUnknown_Set((IUnknown**)&this->Site, punkSite);
+
+
+	if (punkSite != NULL)
+	{
+		IUnknown_Set((IUnknown**)&this->Site, punkSite);
+		IUnknown_Set((IUnknown**)&this->_punkSite, punkSite);
+	}
+
+
 	return S_OK;
 }
 

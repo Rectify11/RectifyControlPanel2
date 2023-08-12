@@ -28,3 +28,15 @@ public:
     virtual HRESULT STDMETHODCALLTYPE OnContentsChanged() = 0;
     virtual HRESULT STDMETHODCALLTYPE OnFolderChanged() = 0;
 };
+
+enum CPNAV_LIST {
+    CPNAV_Normal = 0,
+    CPNAV_SeeAlso = 1,
+    CPNAV_SomethingElse=2
+};
+
+enum CPNAVTYPE {
+    CPNAVTYPE_None = 0,
+    CPNAVTYPE_ShellExec = 1,
+    CPNAVTYPE_Navigate = 2
+};

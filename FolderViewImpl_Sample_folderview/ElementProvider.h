@@ -57,6 +57,8 @@ public:
 
 	virtual HRESULT STDMETHODCALLTYPE GetSite(REFIID riid, void** ppvSite);
 
+	void CElementProvider::InitNavLinks();
+
 private:
 	IUnknown* _punkSite;
 	DirectUI::XResourceProvider* resourceProvider = NULL;

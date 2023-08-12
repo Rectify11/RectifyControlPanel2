@@ -15,6 +15,12 @@
     <ClCompile Include="CRectifyMainCPLPage.cpp">
       <Filter>Elements</Filter>
     </ClCompile>
+    <ClCompile Include="CControlPanelNavLink.cpp">
+      <Filter>NavPane</Filter>
+    </ClCompile>
+    <ClCompile Include="CControlPanelNavLinks.cpp">
+      <Filter>NavPane</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClassFactory.h" />
@@ -33,6 +39,12 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="CRectifyMainCPLPage.h">
       <Filter>Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="CControlPanelNavLinks.h">
+      <Filter>NavPane</Filter>
+    </ClInclude>
+    <ClInclude Include="CControlPanelNavLink.h">
+      <Filter>NavPane</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -55,6 +67,9 @@
     </Filter>
     <Filter Include="Elements">
       <UniqueIdentifier>{08d315e0-4b77-460f-a865-249eb0fa8b1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NavPane">
+      <UniqueIdentifier>{712cae3b-234c-4430-a089-cd94c0fd803a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -18,7 +18,15 @@ using namespace DirectUI;
 #include "CElementWithIUnknown.h"
 #include "CElementWithSite.h"
 #include "CRectifyMainCPLPage.h"
+#include <fstream>
+#include <sstream>
+#include <format>
+#include <functional>
+#include <filesystem>
 
+#include "CControlPanelNavLinkCommand.h"
+#include "CControlPanelNavLink.h"
+#include "CControlPanelNavLinks.h"
 
 
 namespace DirectUI {

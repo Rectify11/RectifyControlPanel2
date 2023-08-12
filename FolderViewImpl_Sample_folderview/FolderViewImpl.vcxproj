@@ -128,7 +128,7 @@
       <ProgramDatabaseFile>$(OutDir)FolderViewImpl.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <ImportLibrary>$(OutDir)FolderViewImpl.lib</ImportLibrary>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Message>Copy property descriptions to the output directory</Message>
@@ -181,6 +181,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CControlPanelNavLink.cpp" />
+    <ClCompile Include="CControlPanelNavLinks.cpp" />
     <ClCompile Include="CElementWithIUnknown.cpp" />
     <ClCompile Include="CElementWithSite.cpp" />
     <ClCompile Include="ClassFactory.cpp" />
@@ -195,6 +197,8 @@
     <None Include="MainPage.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CControlPanelNavLink.h" />
+    <ClInclude Include="CControlPanelNavLinks.h" />
     <ClInclude Include="CElementWithIUnknown.h" />
     <ClInclude Include="CElementWithSite.h" />
     <ClInclude Include="ClassFactory.h" />
