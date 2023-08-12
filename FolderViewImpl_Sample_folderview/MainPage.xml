@@ -97,7 +97,7 @@
 		</if>
 	</style>
 </stylesheets>
-<Element resid="main" layout="borderlayout()" accessible="true" accrole="window" layoutpos="client">
+<element resid="main" layout="borderlayout()" accessible="true" accrole="window" layoutpos="client">
 <Button content="Coming soon"></Button>
-</Element>
+</element>
 </duixml>

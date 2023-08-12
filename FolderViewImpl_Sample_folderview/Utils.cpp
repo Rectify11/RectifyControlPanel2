@@ -27,7 +27,6 @@ void DUI_WalkIUnknownElements(Element* root, DUI_Callback cb, void* data)
 		Element* dataPtr;
 		if (cap != 0)
 		{
-			Element* ptr2;
 			while (i < cap)
 			{
 				if ((flags & 0x10000000) == 0)

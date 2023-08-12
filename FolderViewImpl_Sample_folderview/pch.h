@@ -68,7 +68,7 @@ static HRESULT Register(HINSTANCE hInstance, unsigned short const* unknownname, 
 			if (SUCCEEDED(hr))\
 			{\
 				hr = ((ClassInfoBase*)ptr)->Register();\
-				if (hr < 0) {\
+				if (FAILED(hr)) {\
 					hr = ((ClassInfoBase*)ptr)->Initialize((HINSTANCE)ptr, NULL, false, (PropertyInfo const* const*)ElementPointer, 0x80000000);\
 					return hr;\
 				}\
@@ -76,6 +76,7 @@ static HRESULT Register(HINSTANCE hInstance, unsigned short const* unknownname, 
 			}\
 		}\
 	}\
+	return hr;\
 }\
 HRESULT WINAPI CreateInstance(Element*, unsigned long*, Element**)\
 {\
@@ -137,7 +138,7 @@ static HRESULT Register(HINSTANCE hInstance, unsigned short const* unknownname, 
 			if (SUCCEEDED(hr))\
 			{\
 				hr = ((ClassInfoBase*)ptr)->Register();\
-				if (hr < 0) {\
+				if (FAILED(hr)) {\
 					hr = ((ClassInfoBase*)ptr)->Initialize((HINSTANCE)ptr, NULL, false, (PropertyInfo const* const*)ElementPointer, 0x80000000);\
 					return hr;\
 				}\
@@ -145,6 +146,7 @@ static HRESULT Register(HINSTANCE hInstance, unsigned short const* unknownname, 
 			}\
 		}\
 	}\
+	return hr;\
 }\
 HRESULT WINAPI CreateInstance(Element*, unsigned long*, Element**)\
 {\
@@ -207,7 +209,7 @@ static HRESULT Register(HINSTANCE hInstance, unsigned short const* unknownname, 
 			if (SUCCEEDED(hr))\
 			{\
 				hr = ((ClassInfoBase*)ptr)->Register();\
-				if (hr < 0) {\
+				if (FAILED(hr)) {\
 					hr = ((ClassInfoBase*)ptr)->Initialize((HINSTANCE)ptr, NULL, false, (PropertyInfo const* const*)ElementPointer, 0x80000000);\
 					return hr;\
 				}\
@@ -215,6 +217,7 @@ static HRESULT Register(HINSTANCE hInstance, unsigned short const* unknownname, 
 			}\
 		}\
 	}\
+	return hr;\
 }\
 HRESULT WINAPI CreateInstance(Element* a, unsigned long* b, Element** c)\
 {\

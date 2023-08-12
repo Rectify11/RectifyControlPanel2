@@ -12,16 +12,16 @@ CRectifyMainCPLPage::~CRectifyMainCPLPage()
 {
 	DllRelease();
 }
-HRESULT CRectifyMainCPLPage::Create(Element* a, unsigned long* b, Element** c)
+HRESULT CRectifyMainCPLPage::Create(Element* rootElement, unsigned long* unknown, Element** newElement)
 {
 	int hr = E_OUTOFMEMORY;
 	CRectifyMainCPLPage* instance = new CRectifyMainCPLPage();
 	if (instance != NULL)
 	{
-		hr = instance->Initialize(0, a, b);
+		hr = instance->Initialize(0, rootElement, unknown);
 		if (SUCCEEDED(hr))
 		{
-			*c = instance;
+			*newElement = instance;
 			instance = NULL;
 		}
 		if (instance != NULL)
