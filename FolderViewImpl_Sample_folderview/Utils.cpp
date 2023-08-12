@@ -20,34 +20,38 @@ void DUI_WalkIUnknownElements(Element* root, DUI_Callback cb, void* data)
 	Value* children = NULL;
 	DynamicArray<Element*, 0>* childs = root->GetChildren(&children);
 	int i = 0;
-	UINT flags = *(UINT*)childs;
-	int cap = (flags & 0xfffffff);
-	Element* dataPtr;
-	if (cap != 0)
+	if (childs != NULL)
 	{
-		Element* ptr2;
-		while (i < cap)
+		UINT flags = *(UINT*)childs;
+		int cap = (flags & 0xfffffff);
+		Element* dataPtr;
+		if (cap != 0)
 		{
-			if ((flags >> 0x1c & 1) == 0)
+			Element* ptr2;
+			while (i < cap)
 			{
-				dataPtr = (Element*)(childs + 2);
+				if ((flags & 0x10000000) == 0)
+				{
+					dataPtr = childs->classs[i];//(Element*)(childs + 2);
+				}
+				else
+				{
+					dataPtr = (Element*)*(void**)(childs + 1);
+				}
+				Element* theElement = &dataPtr[2 * i];
+				IUnknown* unknown = CElementWithIUnknown::GetUnknownFromElement(theElement);
+				if (unknown != NULL)
+				{
+					cb(unknown, data);
+				}
+				DUI_WalkIUnknownElements(theElement, cb, data);
+				flags = *(UINT*)childs;
+				i++;
+				return;
 			}
-			else
-			{
-				dataPtr = (Element*)*(void**)(childs + 2);
-			}
-			Element* theElement = *(DirectUI::Element**)&dataPtr[2 * i];
-			IUnknown* unknown = CElementWithIUnknown::GetUnknownFromElement(theElement);
-			if (unknown != NULL)
-			{
-				cb(unknown, data);
-			}
-			DUI_WalkIUnknownElements(theElement, cb, data);
-			flags = *(UINT*)childs;
-			i++;
-			return;
 		}
 	}
+
 
 }
 

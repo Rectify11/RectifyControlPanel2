@@ -35,10 +35,10 @@ CElementProvider::CElementProvider() : _punkSite(NULL)
 CElementProvider::~CElementProvider()
 {
 	//if (-1 < *(int*)&this->initthread_result) {
-		UnInitThread();
-		UnInitProcessPriv((unsigned short*)0x180000000);
+	UnInitThread();
+	UnInitProcessPriv((unsigned short*)0x180000000);
 	//}
-	//DllRelease();
+	DllRelease();
 }
 
 HRESULT CElementProvider::QueryInterface(REFIID riid, __out void** ppv)
@@ -70,11 +70,7 @@ HRESULT CElementProvider::QueryInterface(REFIID riid, __out void** ppv)
 
 ULONG CElementProvider::AddRef()
 {
-	int i = 0;
-	;
-	 i =DirectUI::XProvider::AddRef();
-
-	 return i;
+	return DirectUI::XProvider::AddRef();
 }
 
 ULONG CElementProvider::Release()
@@ -170,9 +166,9 @@ HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param) {
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnNavigateAway() {
-	DirectUI::XProvider::SetHandleEnterKey(false);
-	SetDefaultButtonTracking(false);
-	
+	//DirectUI::XProvider::SetHandleEnterKey(false);
+//	SetDefaultButtonTracking(false);
+
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnInnerElementDestroyed() {
@@ -225,6 +221,6 @@ HRESULT CElementProvider::GetSite(REFIID riid, void** ppvSite)
 	{
 		return E_FAIL;
 	}
-	
+
 	return Site->QueryInterface(riid, ppvSite);
 }

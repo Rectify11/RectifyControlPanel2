@@ -1,9 +1,17 @@
 #include "pch.h"
 #include "CRectifyMainCPLPage.h"
-
+#include "FolderViewImpl.h"
 IClassInfo* CRectifyMainCPLPage::Class = NULL;
 #define NOT_IMPLEMENTED MessageBox(NULL, TEXT(__FUNCTION__), TEXT("Non implementented function in CRectifyMainCPLPage"), 0)
 
+CRectifyMainCPLPage::CRectifyMainCPLPage()
+{
+	DllAddRef();
+}
+CRectifyMainCPLPage::~CRectifyMainCPLPage()
+{
+	DllRelease();
+}
 HRESULT CRectifyMainCPLPage::Create(Element* a, unsigned long* b, Element** c)
 {
 	int hr = E_OUTOFMEMORY;

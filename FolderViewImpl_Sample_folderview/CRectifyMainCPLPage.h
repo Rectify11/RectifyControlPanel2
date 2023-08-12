@@ -19,5 +19,8 @@ public:
 	virtual HRESULT STDMETHODCALLTYPE Notify(WORD* param);
 	virtual HRESULT STDMETHODCALLTYPE OnNavigateAway();
 	virtual HRESULT STDMETHODCALLTYPE OnInnerElementDestroyed();
+
+	CRectifyMainCPLPage();
+	~CRectifyMainCPLPage();
 };
 

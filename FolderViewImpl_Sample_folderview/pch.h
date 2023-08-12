@@ -85,6 +85,11 @@ IClassInfo* WINAPI GetBaseClass()\
 {\
 	return Element::GetClassInfoPtr();\
 }\
+void WINAPI Destroy()\
+{\
+delete this;\
+##name##::Class = NULL;\
+}\
 	} \
 
 #define DEFINE_DIRECTUI_CLASS_CUSTOMBASE(name, baseClass) class ClassInfo_##name## : ClassInfoBase \
@@ -149,6 +154,11 @@ IClassInfo* WINAPI GetBaseClass()\
 {\
 	return baseClass::Class;\
 }\
+void WINAPI Destroy()\
+{\
+delete this;\
+##name##::Class = NULL;\
+}\
 	}
 
 #define DEFINE_DIRECTUI_CLASS_CUSTOM_BASE_WITH_CLASS(name, baseClass) class ClassInfo_##name## : ClassInfoBase \
@@ -165,6 +175,7 @@ public: \
 	}\
 	else\
 	{\
+	DebugBreak();\
 	}\
 	return hr;\
 }\
@@ -213,7 +224,12 @@ IClassInfo* WINAPI GetBaseClass()\
 {\
 	return baseClass::Class;\
 }\
-	}
+void WINAPI Destroy()\
+{\
+delete this;\
+##name##::Class = NULL;\
+}\
+}
 
 	DEFINE_DIRECTUI_CLASS_ELEMENTBASE(CElementWithIUnknown);
 	DEFINE_DIRECTUI_CLASS_CUSTOMBASE(CElementWithSite, CElementWithIUnknown);
