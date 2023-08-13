@@ -11,6 +11,7 @@ public:
 	HRESULT AddLinkControlPanel();
 	HRESULT AddLinkShellEx(LPCWSTR name);
 	HRESULT Add(CControlPanelNavLink* link);
+	virtual ~CControlPanelNavLinks();
 private:
 	HDPA m_dpaList;
 	ULONGLONG m_refCount;

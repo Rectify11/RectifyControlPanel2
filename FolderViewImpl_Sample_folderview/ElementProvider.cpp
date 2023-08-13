@@ -185,7 +185,7 @@ void CElementProvider::InitNavLinks()
 	HRESULT hr = CLSIDFromString(L"{a46e5c25-c09c-4ca8-9a53-49cf7f865525}", (LPCLSID)&SID_PerLayoutPropertyBag);
 	if (SUCCEEDED(hr))
 	{
-		IPropertyBag* bag;
+		IPropertyBag* bag = NULL;
 		int hr = IUnknown_QueryService(_punkSite, SID_PerLayoutPropertyBag, IID_IPropertyBag, (LPVOID*)&bag);
 		if (SUCCEEDED(hr))
 		{
@@ -229,14 +229,36 @@ HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
 		ThemeCombo->AddString((UCString)L"Test");
 		ThemeCombo->SetSelection(0);
 	}
-	else {
-		MessageBox(NULL, TEXT("Unable to locate RThemeCmb in UIFILE"), TEXT("CElementProvider::LayoutInitialized"), 0);
+
+	//helpHub
+	Button* HelpButton = (Button*)root->FindDescendent(StrToID((UCString)L"helpHub"));
+	if (HelpButton != NULL)
+	{
+		static InputListener help_listener([&](Element* elem, InputEvent* iev) {
+			if (iev->event_id == *Button::Click().pId)
+			{
+				ShellExecute(0, 0, TEXT("http://rectify11.net"), 0, 0, SW_SHOW);
+			}
+			});
+		if (HelpButton->AddListener(&help_listener) != S_OK)
+		{
+			MessageBox(NULL, TEXT("Failed to add helpbutton licenser"), TEXT("CElementProvider::LayoutInitialized"), 0);
+		}
 	}
-	//DUI_WalkIUnknownElements(root, (DUI_Callback)DUI_SetSiteOnUnknown, (IUnknown*)(IObjectWithSite*)this);
 	return 0;
 }
-HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param) {
-	//NOT_IMPLEMENTED;
+HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param)
+{
+	//the param is text
+
+	WCHAR buffer[2000];
+	swprintf(buffer, 1990, L"Notification: %s", param);
+	//MessageBoxW(NULL, buffer, L"Notification", 0);
+
+	if (!StrCmpCW((LPCWSTR)param, L"SettingsChanged"))
+	{
+		//This is invoked when the UI is refreshed!
+	}
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnNavigateAway() {

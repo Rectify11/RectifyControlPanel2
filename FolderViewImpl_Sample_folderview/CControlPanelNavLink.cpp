@@ -10,6 +10,7 @@ HRESULT __cdecl CControlPanelNavLink::Create(CPNAV_LIST list, CControlPanelNavLi
 		navLink->m_Icon = NULL;
 		navLink->m_Name = NULL;
 		navLink->m_ExecType = CPNAVTYPE_None;
+		navLink->m_Type = list;
 		*result = navLink;
 		return S_OK;
 	}

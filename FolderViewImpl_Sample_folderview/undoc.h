@@ -29,13 +29,13 @@ public:
     virtual HRESULT STDMETHODCALLTYPE OnFolderChanged() = 0;
 };
 
-enum CPNAV_LIST {
+enum CPNAV_LIST : int {
     CPNAV_Normal = 0,
     CPNAV_SeeAlso = 1,
     CPNAV_SomethingElse=2
 };
 
-enum CPNAVTYPE {
+enum CPNAVTYPE : int{
     CPNAVTYPE_None = 0,
     CPNAVTYPE_ShellExec = 1,
     CPNAVTYPE_Navigate = 2

@@ -5,7 +5,7 @@
 			<Element overhang="false" background="argb(0,0,0,0)"/>
 		</style>
 	</stylesheets>
-	<CRectifyMainCPLPage resid="main" layout="borderlayout()" accessible="true" accrole="window">
-		<button class="WizardLink" id="Atom(SXWizardLegalLink)" content="Legal information" />
-	</CRectifyMainCPLPage>
+	<element resid="main" layout="borderlayout()" accessible="true" accrole="window">
+		<button class="WizardLink" id="Atom(SXWizardLegalLink)" content="Fatal error: this page is not yet implemented!" />
+	</element>
 </duixml>

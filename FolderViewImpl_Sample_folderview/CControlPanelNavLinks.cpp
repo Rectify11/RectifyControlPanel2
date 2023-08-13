@@ -8,6 +8,19 @@ CControlPanelNavLinks::CControlPanelNavLinks()
 	m_refCount = 1;
 }
 
+void NavLinksDPA_DeleteCB(CControlPanelNavLink* p, void* pData)
+{
+	delete p;
+}
+
+CControlPanelNavLinks::~CControlPanelNavLinks()
+{
+	if (this->m_dpaList != NULL) {
+		DPA_DestroyCallback(this->m_dpaList, (PFNDAENUMCALLBACKCONST)NavLinksDPA_DeleteCB, NULL);
+		this->m_dpaList = (HDPA)0x0;
+	}
+}
+
 IFACEMETHODIMP CControlPanelNavLinks::QueryInterface(REFIID riid, __out void** ppv)
 {
 	*ppv = NULL;
@@ -39,15 +52,15 @@ HRESULT CControlPanelNavLinks::AddLinkShellEx(LPCWSTR name)
 	{
 		link->SetName(name);
 		
-		SHSTOCKICONINFO icon;
+		SHSTOCKICONINFO icon = {};
 		icon.cbSize = sizeof(SHSTOCKICONINFO);
-		SHGetStockIconInfo(SIID_LOCK, SHGSI_ICON, &icon);
+		SHGetStockIconInfo(SIID_SHIELD, 0x101, &icon);
 
 		link->m_Icon = icon.hIcon;
 		link->m_ExecType = CPNAVTYPE_ShellExec;
 		//link->IsBulletPoint = 0;
-		SHStrDupW(L"c:\\windows\\notepad.exe", &link->m_Name);
-		SHStrDupW(L"c:\\windows\\notepad.exe", &link->m_Name2);
+		SHStrDupW(L"Update Rectify11", &link->m_Name);
+		SHStrDupW(L"c:\\windows\\notepad.exe", &link->m_args);
 		return Add(link);
 	}
 	else
