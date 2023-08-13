@@ -240,9 +240,7 @@ STDAPI DllRegisterServer()
                     lResult = RegSetValueExW(hKey, NULL, 0, REG_SZ, (LPBYTE)szData, (lstrlenW(szData) + 1) * sizeof(szData[0]));
                     RegCloseKey(hKey);
                 
-                    // It is assumed at this point that we are running on Windows XP or later
-                    // and therefore the extension needs to be registered as approved.
-                    PCWSTR rgszApprovedClassIDs[] = { szFolderViewImplClassID, szElementClassID };
+                    PCWSTR rgszApprovedClassIDs[] = { szFolderViewImplClassID };
                     for (int i = 0; SUCCEEDED(hr) && i < ARRAYSIZE(rgszApprovedClassIDs); i++)
                     {
                         hr = StringCchPrintfW(szSubKey, ARRAYSIZE(szSubKey), SHELL_EXT_APPROVED, szFolderViewImplClassID);
@@ -293,23 +291,20 @@ STDAPI DllRegisterServer()
 //
 STDAPI DllUnregisterServer()
 {
-    WCHAR szSubKey[MAX_PATH], szFolderClassID[MAX_PATH], szContextMenuClassID[MAX_PATH];
+    WCHAR szSubKey[MAX_PATH], szFolderClassID[MAX_PATH], szElementID[MAX_PATH];
     
     //Delete the context menu entries.
     HRESULT hrCM = StringFromGUID2(CLSID_FolderViewImplElement,
-                                  szContextMenuClassID, 
-                                  ARRAYSIZE(szContextMenuClassID));
+                                  szElementID, 
+                                  ARRAYSIZE(szElementID));
     if (SUCCEEDED(hrCM))
     {
-        hrCM = StringCchPrintfW(szSubKey, ARRAYSIZE(szSubKey), L"CLSID\\%s", szContextMenuClassID);
+        hrCM = StringCchPrintfW(szSubKey, ARRAYSIZE(szSubKey), L"CLSID\\%s", szElementID);
         if (SUCCEEDED(hrCM))
         {
             hrCM = SHDeleteKeyW(HKEY_CLASSES_ROOT, szSubKey);
         }
     }
-
-    //Delete the foldertype key.
-    HRESULT hrFT = SHDeleteKeyW(HKEY_CLASSES_ROOT, L"FolderViewSampleType");
  
     // Delete the namespace extension entries
     StringFromGUID2(CLSID_FolderViewImpl, szFolderClassID, ARRAYSIZE(szFolderClassID));
@@ -339,8 +334,23 @@ STDAPI DllUnregisterServer()
         }
     }
 
-    // Remove the property description
-    HRESULT hrPS = PSUnregisterPropertySchema(L"FolderViewImpl.propdesc");
+    //Delete the approved key
+    HRESULT hr = StringCchPrintfW(szSubKey, ARRAYSIZE(szSubKey), SHELL_EXT_APPROVED, szFolderClassID);
+    LSTATUS lResult;
+    HKEY hKey;
+    if (SUCCEEDED(hr))
+    {
+        lResult = RegCreateKeyExW(HKEY_LOCAL_MACHINE, szSubKey, 0, NULL, REG_OPTION_NON_VOLATILE,
+            KEY_WRITE, NULL, &hKey, NULL);
+        if (S_OK == lResult)
+        {
+            lResult = RegDeleteValueW(hKey, szFolderClassID);
+
+            hr = S_OK;
+
+            RegCloseKey(hKey);
+        }
+    }
     
-    return (SUCCEEDED(hrPS) && SUCCEEDED(hrCM) && SUCCEEDED(hrSF) && SUCCEEDED(hrFT)) ? S_OK : SELFREG_E_CLASS;
+    return (SUCCEEDED(hrCM) && SUCCEEDED(hrSF)) ? S_OK : SELFREG_E_CLASS;
 }
