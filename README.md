@@ -5,7 +5,7 @@
   <a href="./Rectify11CPL">Source Code</a> | 
   <a href="[https://](https://discord.gg/rectify11-community-1077324213142175744)">Discord</a> | 
   <br><br>
-  <img src="Images/screenshot.png"><br><br>
+  <img src="Images/Screenshot.png"><br><br>
 </p>
 
 ## Usage
