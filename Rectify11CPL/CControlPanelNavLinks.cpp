@@ -44,21 +44,17 @@ IFACEMETHODIMP_(ULONG) CControlPanelNavLinks::Release()
 	}
 	return ref;
 }
-HRESULT CControlPanelNavLinks::AddLinkShellEx(LPCWSTR name, LPCWSTR file, LPCWSTR arguments, CPNAV_LIST DisplayType, SHSTOCKICONID iconType)
+HRESULT CControlPanelNavLinks::AddLinkShellEx(LPCWSTR name, LPCWSTR file, LPCWSTR arguments, CPNAV_LIST DisplayType, HICON icon)
 {
 	CControlPanelNavLink* link = NULL;
 	HRESULT hr = CControlPanelNavLink::Create(DisplayType, &link);
 	if (SUCCEEDED(hr))
 	{
 		link->SetName(name);
-		
-		if (iconType != 0)
-		{
-			SHSTOCKICONINFO icon = {};
-			icon.cbSize = sizeof(SHSTOCKICONINFO);
-			SHGetStockIconInfo(iconType, 0x101, &icon);
 
-			link->m_Icon = icon.hIcon;
+		if (icon != NULL)
+		{
+			link->m_Icon = icon;
 		}
 
 		link->m_ExecType.m_ExecType = CPNAVTYPE_ShellExec;
@@ -71,7 +67,7 @@ HRESULT CControlPanelNavLinks::AddLinkShellEx(LPCWSTR name, LPCWSTR file, LPCWST
 		return hr;
 	}
 }
-HRESULT CControlPanelNavLinks::AddLinkControlPanel(LPCWSTR name, LPCWSTR path, LPCWSTR arguments, CPNAV_LIST DisplayType, SHSTOCKICONID iconType)
+HRESULT CControlPanelNavLinks::AddLinkControlPanel(LPCWSTR name, LPCWSTR path, LPCWSTR arguments, CPNAV_LIST DisplayType, HICON icon)
 {
 	CControlPanelNavLink* link = NULL;
 	HRESULT hr = CControlPanelNavLink::Create(DisplayType, &link);
@@ -79,13 +75,9 @@ HRESULT CControlPanelNavLinks::AddLinkControlPanel(LPCWSTR name, LPCWSTR path, L
 	{
 		link->SetName(name);
 
-		if (iconType != 0)
+		if (icon != NULL)
 		{
-			SHSTOCKICONINFO icon = {};
-			icon.cbSize = sizeof(SHSTOCKICONINFO);
-			SHGetStockIconInfo(iconType, 0x101, &icon);
-
-			link->m_Icon = icon.hIcon;
+			link->m_Icon = icon;
 		}
 
 		link->m_ExecType.m_ExecType = CPNAVTYPE_Navigate;

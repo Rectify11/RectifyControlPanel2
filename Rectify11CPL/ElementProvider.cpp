@@ -34,10 +34,9 @@ CElementProvider::CElementProvider() : _punkSite(NULL)
 
 CElementProvider::~CElementProvider()
 {
-	//if (-1 < *(int*)&this->initthread_result) {
 	UnInitThread();
 	UnInitProcessPriv((unsigned short*)0x180000000);
-	//}
+
 	DllRelease();
 }
 
@@ -177,8 +176,8 @@ public:
 void CElementProvider::InitNavLinks()
 {
 	auto links = new CControlPanelNavLinks();
-	links->AddLinkControlPanel(L"Update Rectify11", L"Rectify11.SettingsCPL", L"pageRectifyUpdate", CPNAV_Normal, SIID_STACK);
-	links->AddLinkControlPanel(L"Power options", L"Microsoft.PowerOptions", L"", CPNAV_SeeAlso, SIID_DOCNOASSOC);
+	links->AddLinkControlPanel(L"Update Rectify11", L"Rectify11.SettingsCPL", L"pageRectifyUpdate", CPNAV_Normal, (HICON)LoadImageW(g_hInst, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON,32,32,0));
+	//links->AddLinkControlPanel(L"Power options", L"Microsoft.PowerOptions", L"", CPNAV_SeeAlso, SIID_DOCNOASSOC);
 	GUID SID_PerLayoutPropertyBag = {};
 	HRESULT hr = CLSIDFromString(L"{a46e5c25-c09c-4ca8-9a53-49cf7f865525}", (LPCLSID)&SID_PerLayoutPropertyBag);
 	if (SUCCEEDED(hr))
