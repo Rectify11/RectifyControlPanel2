@@ -59,6 +59,8 @@ public:
 
 	void InitNavLinks();
 
+	void InitMainPage();
+
 private:
 	IUnknown* _punkSite;
 	DirectUI::XResourceProvider* resourceProvider = NULL;

@@ -213,16 +213,9 @@ void CElementProvider::InitNavLinks()
 	}
 }
 
-HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
+void CElementProvider::InitMainPage()
 {
 	Element* root = XProvider::GetRoot();
-
-	InitNavLinks();
-	HRESULT hr = themetool_init();
-	if (FAILED(hr) && hr != HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED))
-	{
-		MessageBox(NULL, TEXT("Failed to initialize SecureUXTheme ThemeTool. Theme information will not be loaded."), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-	}
 	ThemeCombo = (Combobox*)root->FindDescendent(StrToID((UCString)L"RThemeCmb"));
 
 	static vector<wstring> themes;
@@ -280,15 +273,28 @@ HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
 			MessageBox(NULL, TEXT("Failed to add helpbutton licenser"), TEXT("CElementProvider::LayoutInitialized"), 0);
 		}
 	}
+}
+
+HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
+{
+	InitNavLinks();
+	HRESULT hr = themetool_init();
+	if (FAILED(hr) && hr != HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED))
+	{
+		MessageBox(NULL, TEXT("Failed to initialize SecureUXTheme ThemeTool. Theme information will not be loaded."), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
+	}
+	Element* root = XProvider::GetRoot();
+	if (root->FindDescendent(StrToID((UCString)L"RThemeCmb")) != NULL)
+	{
+		InitMainPage();
+	}
+
+	
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param)
 {
 	//the param is text
-
-	WCHAR buffer[2000];
-	swprintf(buffer, 1990, L"Notification: %s", param);
-	//MessageBoxW(NULL, buffer, L"Notification", 0);
 
 	if (!StrCmpCW((LPCWSTR)param, L"SettingsChanged"))
 	{
