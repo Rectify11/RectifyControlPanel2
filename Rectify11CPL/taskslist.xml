@@ -29,6 +29,13 @@
 
 		<!-- Category assignments -->
 
+		<!-- Appearance and Personalization -->
+		<category id="1">
+			<!-- These idref attributes refer to the GUIDs of the tasks defined above. A maximum of five tasks are shown per category. -->
+			<sh:task idref="{3B75A7AE-C4E4-4E5A-9420-7CECCDA75425}"/>
+			<sh:task idref="{BF46D6AA-B5E6-4EE1-9E5B-ED017272B9F9}"/>
+		</category>
+		
 		<!-- System and Security -->
 		<category id="5">
 			<!-- These idref attributes refer to the GUIDs of the tasks defined above. A maximum of five tasks are shown per category. -->

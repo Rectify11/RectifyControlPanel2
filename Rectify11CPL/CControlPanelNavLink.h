@@ -2,7 +2,7 @@
 class CControlPanelNavLink
 {
 public:
-	static HRESULT CControlPanelNavLink::Create(CPNAV_LIST list, CControlPanelNavLink** result);
+	static HRESULT Create(CPNAV_LIST list, CControlPanelNavLink** result);
 	void SetName(LPCWSTR name);
 	CPNAV_LIST m_Type; //0x00
 	DWORD m_Unknown; //0x04

@@ -116,6 +116,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)Rectify11CPL.dll</OutputFile>
@@ -179,6 +180,7 @@
     <ClCompile Include="ClassFactory.cpp" />
     <ClCompile Include="ElementProvider.cpp" />
     <ClCompile Include="Register.cpp" />
+    <ClCompile Include="theme.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Rectify11CPL.def" />
@@ -193,6 +195,7 @@
     <ClInclude Include="Rectify11CPL.h" />
     <ClInclude Include="Guid.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="theme.h" />
     <ClInclude Include="undoc.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>

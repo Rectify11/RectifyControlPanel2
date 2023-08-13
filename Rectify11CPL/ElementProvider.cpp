@@ -176,7 +176,7 @@ public:
 void CElementProvider::InitNavLinks()
 {
 	auto links = new CControlPanelNavLinks();
-	links->AddLinkControlPanel(L"Update Rectify11", L"Rectify11.SettingsCPL", L"pageRectifyUpdate", CPNAV_Normal, (HICON)LoadImageW(g_hInst, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON,32,32,0));
+	links->AddLinkControlPanel(L"Update Rectify11", L"Rectify11.SettingsCPL", L"pageRectifyUpdate", CPNAV_Normal, (HICON)LoadImageW(g_hInst, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 32, 32, 0));
 	//links->AddLinkControlPanel(L"Power options", L"Microsoft.PowerOptions", L"", CPNAV_SeeAlso, SIID_DOCNOASSOC);
 	GUID SID_PerLayoutPropertyBag = {};
 	HRESULT hr = CLSIDFromString(L"{a46e5c25-c09c-4ca8-9a53-49cf7f865525}", (LPCLSID)&SID_PerLayoutPropertyBag);
@@ -210,22 +210,52 @@ HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
 	Element* root = XProvider::GetRoot();
 
 	InitNavLinks();
+	HRESULT hr = themetool_init();
+	if (FAILED(hr) && hr != HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED))
+	{
+		MessageBox(NULL, TEXT("Failed to initialize SecureUXTheme ThemeTool. Theme information will not be loaded."), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
+	}
 	ThemeCombo = (Combobox*)root->FindDescendent(StrToID((UCString)L"RThemeCmb"));
+
+	static vector<wstring> themes;
 	if (ThemeCombo != NULL)
 	{
 		static InputListener accept_listener([&](Element* elem, InputEvent* iev) {
 			if (iev->event_id == *Combobox::SelectionChange().pId)
 			{
 				//MessageBox(NULL, TEXT("Combobox selection changed!"), TEXT("CElementProvider::LayoutInitialized"), 0);
+				int selection = ((Combobox*)iev->target)->GetSelection();
+				themetool_set_active(NULL, selection, TRUE, 0, 0);
 			}
 			});
 		if (ThemeCombo->AddListener(&accept_listener) != S_OK)
 		{
 			MessageBox(NULL, TEXT("Failed to add"), TEXT("CElementProvider::LayoutInitialized"), 0);
 		}
-		ThemeCombo->AddString((UCString)L"Test");
-		ThemeCombo->SetSelection(0);
+
+		ULONG themeCount = 0;
+		if (SUCCEEDED(themetool_get_theme_count(&themeCount)))
+		{
+			for (ULONG i = 0; i < themeCount; i++)
+			{
+				ITheme* theme = NULL;
+				if (SUCCEEDED(themetool_get_theme(i, &theme)))
+				{
+					std::wstring nameBuffer = std::wstring(1024, '\0');
+					theme->GetDisplayName(nameBuffer);
+					ThemeCombo->AddString((UString)nameBuffer.c_str());
+				}
+			}
+			int theme = -1;
+			themetool_get_manager()->GetCurrentTheme(&theme);
+			ThemeCombo->SetSelection(theme);
+		}
+		else {
+			MessageBox(NULL, TEXT("Failed to count the amount of themes"), TEXT("CElementProvider::LayoutInitialized"), 0);
+		}
 	}
+
+
 
 	//helpHub
 	Button* HelpButton = (Button*)root->FindDescendent(StrToID((UCString)L"helpHub"));

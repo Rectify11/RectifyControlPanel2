@@ -6,6 +6,9 @@
 #include <Shlobj.h>
 #include <olectl.h>
 #include <strsafe.h>
+#include <atlcomcli.h>
+#include <string>
+#include <winternl.h>
 #include "undoc.h"
 
 extern HINSTANCE g_hInst;
@@ -19,7 +22,10 @@ using namespace DirectUI;
 #include <format>
 #include <functional>
 #include <filesystem>
+namespace fs = std::filesystem;
+using namespace std;
 
 #include "CControlPanelNavLinkCommand.h"
 #include "CControlPanelNavLink.h"
 #include "CControlPanelNavLinks.h"
+#include "theme.h"

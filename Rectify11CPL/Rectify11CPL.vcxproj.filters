@@ -13,6 +13,7 @@
     <ClCompile Include="CControlPanelNavLinks.cpp">
       <Filter>Navpane</Filter>
     </ClCompile>
+    <ClCompile Include="theme.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClassFactory.h" />
@@ -31,6 +32,7 @@
     <ClInclude Include="CControlPanelNavLinks.h">
       <Filter>Navpane</Filter>
     </ClInclude>
+    <ClInclude Include="theme.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Rectify11CPL.rc" />
