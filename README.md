@@ -10,3 +10,6 @@
 
 ## Usage
 Build the Rectify11CPL project, and then register it using regsrv32 inside of admin command prompt. Make sure to restart explorer.
+
+## Libaries used
+https://github.com/seven-mile/dui70 - DirectUI library
