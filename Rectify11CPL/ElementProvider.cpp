@@ -176,8 +176,16 @@ public:
 void CElementProvider::InitNavLinks()
 {
 	auto links = new CControlPanelNavLinks();
-	links->AddLinkControlPanel(L"Update Rectify11", L"Rectify11.SettingsCPL", L"pageRectifyUpdate", CPNAV_Normal, (HICON)LoadImageW(g_hInst, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 32, 32, 0));
-	//links->AddLinkControlPanel(L"Power options", L"Microsoft.PowerOptions", L"", CPNAV_SeeAlso, SIID_DOCNOASSOC);
+
+	//load uac icon
+	SHSTOCKICONINFO icon = {};
+	icon.cbSize = sizeof(SHSTOCKICONINFO);
+	SHGetStockIconInfo(SIID_SHIELD, 0x101, &icon);
+
+	links->AddLinkControlPanel(L"Update Rectify11", L"Rectify11.SettingsCPL", L"pageRectifyUpdate", CPNAV_Normal, icon.hIcon);
+	links->AddLinkControlPanel(L"System information", L"Microsoft.System", L"", CPNAV_SeeAlso, NULL);
+
+
 	GUID SID_PerLayoutPropertyBag = {};
 	HRESULT hr = CLSIDFromString(L"{a46e5c25-c09c-4ca8-9a53-49cf7f865525}", (LPCLSID)&SID_PerLayoutPropertyBag);
 	if (SUCCEEDED(hr))
@@ -285,6 +293,44 @@ HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param)
 	if (!StrCmpCW((LPCWSTR)param, L"SettingsChanged"))
 	{
 		//This is invoked when the UI is refreshed!
+	}
+
+	if (!StrCmpCW((LPCWSTR)param, L"SearchText"))
+	{
+		//Sent when search text modified/added
+		WCHAR value[264] = {0};
+		WCHAR path[48];
+		GUID IID_IFrameManager = {};
+		GUID SID_STopLevelBrowser = {};
+		CLSIDFromString(L"{4c96be40-915c-11cf-99d3-00aa004ae837}", (LPCLSID)&SID_STopLevelBrowser);
+
+		HRESULT hr = CLSIDFromString(L"{31e4fa78-02b4-419f-9430-7b7585237c77}", (LPCLSID)&IID_IFrameManager);
+		if (SUCCEEDED(hr))
+		{
+			IPropertyBag* bag = NULL;
+			HRESULT hr = IUnknown_QueryService(_punkSite, IID_IFrameManager, IID_IPropertyBag, (LPVOID*)&bag);
+			if (SUCCEEDED(hr))
+			{
+				if (SUCCEEDED(PSPropertyBag_ReadStr(bag, L"SearchText", value, 260)) && value[0])
+				{
+					if (SUCCEEDED(StringCchPrintfW(path, 41, L"::%s", L"{26ee0668-a00a-44d7-9371-beb064c98683}")))
+					{
+						LPITEMIDLIST pidlist;
+						if (SUCCEEDED(SHParseDisplayName(path, NULL, &pidlist, 0, NULL)))
+						{
+							IShellBrowser* browser;
+							if (SUCCEEDED(IUnknown_QueryService(_punkSite, SID_STopLevelBrowser, IID_IShellBrowser, (LPVOID*)&browser)))
+							{
+								hr = browser->BrowseObject(pidlist, 1572865);
+								browser->Release();
+							}
+						}
+						ILFree(pidlist);
+					}
+				}
+			}
+		}
+
 	}
 	return 0;
 }
