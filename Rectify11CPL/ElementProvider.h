@@ -63,5 +63,7 @@ private:
 	IUnknown* _punkSite;
 	DirectUI::XResourceProvider* resourceProvider = NULL;
 	DirectUI::IXProviderCP** provider = NULL;
+
+	Combobox* ThemeCombo = NULL;
 	~CElementProvider();
 };

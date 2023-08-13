@@ -36,8 +36,9 @@
     <ResourceCompile Include="Rectify11CPL.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="tasks.xml" />
+    <Xml Include="pages.xml" />
     <Xml Include="UpdatePage.xml" />
+    <Xml Include="taskslist.xml" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico" />

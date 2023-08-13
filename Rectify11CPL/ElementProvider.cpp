@@ -210,7 +210,7 @@ HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
 	Element* root = XProvider::GetRoot();
 
 	InitNavLinks();
-	Combobox* ThemeCombo = (Combobox*)root->FindDescendent(StrToID((UCString)L"RThemeCmb"));
+	ThemeCombo = (Combobox*)root->FindDescendent(StrToID((UCString)L"RThemeCmb"));
 	if (ThemeCombo != NULL)
 	{
 		static InputListener accept_listener([&](Element* elem, InputEvent* iev) {

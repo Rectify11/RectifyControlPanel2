@@ -60,11 +60,19 @@ IDI_ICON1               ICON                    "icon1.ico"
 // XMLFILE
 //
 
-IDR_XMLFILE2            XMLFILE                 "tasks.xml"
+IDR_PAGEDEF             XMLFILE                 "pages.xml"
 
-IDR_XMLFILE3            UIFILE                  "MainPage.xml"
+IDR_TASK                XML                 "taskslist.xml"
 
-IDR_XMLFILE4            UIFILE                  "UpdatePage.xml"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// UIFILE
+//
+
+IDR_MAINPAGE            UIFILE                  "MainPage.xml"
+
+IDR_UPDATEPAGE          UIFILE                  "UpdatePage.xml"
 
 
 /////////////////////////////////////////////////////////////////////////////

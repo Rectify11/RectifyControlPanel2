@@ -203,7 +203,8 @@
     <Image Include="icon1.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="tasks.xml" />
+    <Xml Include="pages.xml" />
+    <Xml Include="taskslist.xml" />
     <Xml Include="UpdatePage.xml" />
   </ItemGroup>
   <ItemGroup>

@@ -1,8 +1,8 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by FolderViewImpl.rc
+// Used by Rectify11CPL.rc
 //
-#define IDR_XMLFILE2                    100
+#define IDR_PAGEDEF                     100
 #define IDI_ICON1                       101
 #define IDS_EXPLORE                     103
 #define IDS_OPEN                        104
@@ -11,9 +11,8 @@
 #define IDR_XMLFILE1                    106
 #define IDS_OPEN_HELP                   107
 #define IDS_ONE                         108
-#define IDR_XMLFILE3                    1001
-#define IDR_XMLFILE4                    1002
 #define IDS_TWO                         109
+#define IDR_TASK                        109
 #define IDS_THREE                       110
 #define IDS_FOUR                        111
 #define IDS_FIVE                        112
@@ -40,12 +39,14 @@
 #define IDS_TITLE                       132
 #define IDS_DISPLAY                     133
 #define IDS_UNSPECIFIED                 134
+#define IDR_MAINPAGE                    1001
+#define IDR_UPDATEPAGE                  1002
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        109
+#define _APS_NEXT_RESOURCE_VALUE        110
 #define _APS_NEXT_COMMAND_VALUE         40001
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           101

@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<applications xmlns="http://schemas.microsoft.com/windows/cpltasks/v1"
+              xmlns:sh="http://schemas.microsoft.com/windows/tasks/v1">
+
+	<!-- Notepad -->
+	<application id="{542EEE1B-A254-46F7-B980-35BECF6076A4}">
+		<!-- This GUID must match the GUID you created for your Control Panel item,
+         and registered in namespace -->
+
+		<!-- Theme change -->
+		<sh:task id="{3B75A7AE-C4E4-4E5A-9420-7CECCDA75425}">
+			<!-- This is a generated GUID, specific to this task link -->
+			<sh:name>Change the theme of Rectify11</sh:name>
+			<sh:keywords>theme;rectify11</sh:keywords>
+			<sh:controlpanel name="Rectify11.SettingsCPL" page="pageRectifyHub"/>
+		</sh:task>
+
+		<!-- Update -->
+		<sh:task id="{BF46D6AA-B5E6-4EE1-9E5B-ED017272B9F9}" needsElevation="true">
+			<!-- This is a generated GUID, specific to this task link -->
+			<!-- The needsElevation="true" attribute means that the task 
+                 appears with a shield icon next to it. Adding this attribute 
+                 does not cause the .exe to require elevation - it just adds an 
+                 icon to tell users that the command already requires it -->
+			<sh:name>Update Rectify11</sh:name>
+			<sh:keywords>update;rectify11</sh:keywords>
+			<sh:controlpanel name="Rectify11.SettingsCPL" page="pageRectifyUpdate"/>
+		</sh:task>
+
+		<!-- Category assignments -->
+
+		<!-- System and Security -->
+		<category id="5">
+			<!-- These idref attributes refer to the GUIDs of the tasks defined above. A maximum of five tasks are shown per category. -->
+			<sh:task idref="{3B75A7AE-C4E4-4E5A-9420-7CECCDA75425}"/>
+			<sh:task idref="{BF46D6AA-B5E6-4EE1-9E5B-ED017272B9F9}"/>
+		</category>
+	</application>
+</applications>
