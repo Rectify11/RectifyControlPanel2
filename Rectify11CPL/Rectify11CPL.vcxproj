@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -176,14 +176,9 @@
     <ClCompile Include="CControlPanelNavLink.cpp" />
     <ClCompile Include="CControlPanelNavLinkCommand.cpp" />
     <ClCompile Include="CControlPanelNavLinks.cpp" />
-    <ClCompile Include="CElementWithIUnknown.cpp" />
-    <ClCompile Include="CElementWithSite.cpp" />
     <ClCompile Include="ClassFactory.cpp" />
     <ClCompile Include="ElementProvider.cpp" />
-    <ClCompile Include="CRectifyMainCPLPage.cpp" />
     <ClCompile Include="Register.cpp" />
-    <ClCompile Include="ShellFolder.cpp" />
-    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Rectify11CPL.def" />
@@ -193,18 +188,13 @@
     <ClInclude Include="CControlPanelNavLink.h" />
     <ClInclude Include="CControlPanelNavLinkCommand.h" />
     <ClInclude Include="CControlPanelNavLinks.h" />
-    <ClInclude Include="CElementWithIUnknown.h" />
-    <ClInclude Include="CElementWithSite.h" />
     <ClInclude Include="ClassFactory.h" />
     <ClInclude Include="ElementProvider.h" />
     <ClInclude Include="Rectify11CPL.h" />
     <ClInclude Include="Guid.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="CRectifyMainCPLPage.h" />
     <ClInclude Include="undoc.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="ShellFolder.h" />
-    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Rectify11CPL.rc" />

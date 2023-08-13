@@ -11,10 +11,8 @@
 #include "Rectify11CPL.h"
 #include "ElementProvider.h"
 #include "ClassFactory.h"
-#include "ShellFolder.h"
 #include "Guid.h"
 #include "pch.h"
-#include "CElementWithSite.h"
 
 CFolderViewImplClassFactory::CFolderViewImplClassFactory(REFCLSID rclsid) : m_cRef(1), m_rclsid(rclsid)
 {
@@ -73,28 +71,17 @@ HRESULT CFolderViewImplClassFactory::CreateInstance(__in_opt IUnknown* punkOuter
     HRESULT hr = !punkOuter ? S_OK : CLASS_E_NOAGGREGATION;
     if (SUCCEEDED(hr))
     {
-        //if (CLSID_FolderViewImpl == m_rclsid)
-        //{
-        //    CFolderViewImplFolder* pFolderViewImplShellFolder = new CFolderViewImplFolder(0);
-        //    hr = pFolderViewImplShellFolder ? S_OK : E_OUTOFMEMORY;
-        //    if (SUCCEEDED(hr))
-        //    {          
-        //        hr = pFolderViewImplShellFolder->QueryInterface(riid, ppv);
-        //        pFolderViewImplShellFolder->Release();
-        //    }
-        //}
         if (CLSID_FolderViewImplElement == m_rclsid)
         {
             hr = CElementProvider_CreateInstance(riid, ppv);
-           
         }
         else
         {
             hr = E_NOINTERFACE;
 
-            char szGuid[40] = { 0 };
+            WCHAR szGuid[40] = { 0 };
 
-            sprintf(szGuid, "{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}", riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7]);
+            swprintf(szGuid, L"{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}", riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7]);
 
             MessageBox(NULL, szGuid, TEXT("Unknown interface in CFolderViewImplClassFactory::CreateInstance()"), 0);
         }

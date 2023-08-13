@@ -116,9 +116,9 @@ HRESULT CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* result_handl
 
 HRESULT STDMETHODCALLTYPE CElementProvider::SetResourceID(UINT id)
 {
-	char szGuid[40] = { 0 };
+	WCHAR szGuid[40] = { 0 };
 
-	sprintf(szGuid, "%d", id);
+	swprintf(szGuid, L"%d", id);
 	IFrameShellViewClient* client = this;
 
 	WCHAR buffer[264];

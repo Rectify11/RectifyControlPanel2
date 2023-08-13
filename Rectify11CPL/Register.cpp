@@ -72,7 +72,7 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void *lpReserved)
         //MessageBox(NULL, "Attach a debugger NOW", "", 0);
         if (sizeof(XProvider) != 0x28)
         {
-            MessageBox(NULL, "Fatal error: unexpected size of XProvider class", "", 0);
+            MessageBox(NULL, TEXT("Fatal error: unexpected size of XProvider class"), TEXT(""), 0);
             return FALSE;
         }
      
@@ -101,9 +101,9 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
     }
     if (hr)
     {
-        char szGuid[40] = { 0 };
+        WCHAR szGuid[40] = { 0 };
 
-        sprintf(szGuid, "{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}", riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7]);
+        swprintf(szGuid, L"{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}", riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7]);
 
         MessageBox(NULL, szGuid, TEXT("Unknown interface in DllGetClassObject()"), 0);
     }
