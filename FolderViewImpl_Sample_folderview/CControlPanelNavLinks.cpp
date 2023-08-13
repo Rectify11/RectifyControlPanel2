@@ -17,7 +17,7 @@ CControlPanelNavLinks::~CControlPanelNavLinks()
 {
 	if (this->m_dpaList != NULL) {
 		DPA_DestroyCallback(this->m_dpaList, (PFNDAENUMCALLBACKCONST)NavLinksDPA_DeleteCB, NULL);
-		this->m_dpaList = (HDPA)0x0;
+		this->m_dpaList = NULL;
 	}
 }
 
@@ -44,23 +44,26 @@ IFACEMETHODIMP_(ULONG) CControlPanelNavLinks::Release()
 	}
 	return ref;
 }
-HRESULT CControlPanelNavLinks::AddLinkShellEx(LPCWSTR name)
+HRESULT CControlPanelNavLinks::AddLinkShellEx(LPCWSTR name, LPCWSTR file, LPCWSTR arguments, CPNAV_LIST DisplayType, SHSTOCKICONID iconType)
 {
 	CControlPanelNavLink* link = NULL;
-	HRESULT hr = CControlPanelNavLink::Create(CPNAV_Normal, &link);
+	HRESULT hr = CControlPanelNavLink::Create(DisplayType, &link);
 	if (SUCCEEDED(hr))
 	{
 		link->SetName(name);
 		
-		SHSTOCKICONINFO icon = {};
-		icon.cbSize = sizeof(SHSTOCKICONINFO);
-		SHGetStockIconInfo(SIID_SHIELD, 0x101, &icon);
+		if (iconType != 0)
+		{
+			SHSTOCKICONINFO icon = {};
+			icon.cbSize = sizeof(SHSTOCKICONINFO);
+			SHGetStockIconInfo(iconType, 0x101, &icon);
 
-		link->m_Icon = icon.hIcon;
-		link->m_ExecType = CPNAVTYPE_ShellExec;
-		//link->IsBulletPoint = 0;
-		SHStrDupW(L"Update Rectify11", &link->m_Name);
-		SHStrDupW(L"c:\\windows\\notepad.exe", &link->m_args);
+			link->m_Icon = icon.hIcon;
+		}
+
+		link->m_ExecType.m_ExecType = CPNAVTYPE_ShellExec;
+		SHStrDupW(file, &link->m_ExecType.m_AppletOrCommand);
+		SHStrDupW(arguments, &link->m_ExecType.m_Arguments);
 		return Add(link);
 	}
 	else
@@ -68,9 +71,32 @@ HRESULT CControlPanelNavLinks::AddLinkShellEx(LPCWSTR name)
 		return hr;
 	}
 }
-HRESULT CControlPanelNavLinks::AddLinkControlPanel()
+HRESULT CControlPanelNavLinks::AddLinkControlPanel(LPCWSTR name, LPCWSTR path, LPCWSTR arguments, CPNAV_LIST DisplayType, SHSTOCKICONID iconType)
 {
-	return S_OK;
+	CControlPanelNavLink* link = NULL;
+	HRESULT hr = CControlPanelNavLink::Create(DisplayType, &link);
+	if (SUCCEEDED(hr))
+	{
+		link->SetName(name);
+
+		if (iconType != 0)
+		{
+			SHSTOCKICONINFO icon = {};
+			icon.cbSize = sizeof(SHSTOCKICONINFO);
+			SHGetStockIconInfo(iconType, 0x101, &icon);
+
+			link->m_Icon = icon.hIcon;
+		}
+
+		link->m_ExecType.m_ExecType = CPNAVTYPE_Navigate;
+		SHStrDupW(path, &link->m_ExecType.m_AppletOrCommand);
+		SHStrDupW(arguments, &link->m_ExecType.m_Arguments);
+		return Add(link);
+	}
+	else
+	{
+		return hr;
+	}
 }
 
 HRESULT CControlPanelNavLinks::Add(CControlPanelNavLink* link)

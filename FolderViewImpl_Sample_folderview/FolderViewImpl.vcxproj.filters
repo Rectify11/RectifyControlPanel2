@@ -21,6 +21,9 @@
     <ClCompile Include="CControlPanelNavLinks.cpp">
       <Filter>NavPane</Filter>
     </ClCompile>
+    <ClCompile Include="CControlPanelNavLinkCommand.cpp">
+      <Filter>NavPane</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClassFactory.h" />
@@ -44,6 +47,9 @@
       <Filter>NavPane</Filter>
     </ClInclude>
     <ClInclude Include="CControlPanelNavLink.h">
+      <Filter>NavPane</Filter>
+    </ClInclude>
+    <ClInclude Include="CControlPanelNavLinkCommand.h">
       <Filter>NavPane</Filter>
     </ClInclude>
   </ItemGroup>

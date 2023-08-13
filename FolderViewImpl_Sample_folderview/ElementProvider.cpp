@@ -177,10 +177,8 @@ public:
 void CElementProvider::InitNavLinks()
 {
 	auto links = new CControlPanelNavLinks();
-	if (!SUCCEEDED(links->AddLinkShellEx(L"Update Rectify11")))
-	{
-		MessageBox(NULL, TEXT("Failed to insert navigation pane object"), TEXT("CElementProvider::InitNavLinks"), 0);
-	}
+	links->AddLinkControlPanel(L"Update Rectify11", L"Rectify11.SettingsCPL", L"pageRectifyUpdate", CPNAV_Normal, SIID_STACK);
+	links->AddLinkControlPanel(L"Power options", L"Microsoft.PowerOptions", L"", CPNAV_SeeAlso, SIID_DOCNOASSOC);
 	GUID SID_PerLayoutPropertyBag = {};
 	HRESULT hr = CLSIDFromString(L"{a46e5c25-c09c-4ca8-9a53-49cf7f865525}", (LPCLSID)&SID_PerLayoutPropertyBag);
 	if (SUCCEEDED(hr))
@@ -219,7 +217,7 @@ HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
 		static InputListener accept_listener([&](Element* elem, InputEvent* iev) {
 			if (iev->event_id == *Combobox::SelectionChange().pId)
 			{
-				MessageBox(NULL, TEXT("Combobox selection changed!"), TEXT("CElementProvider::LayoutInitialized"), 0);
+				//MessageBox(NULL, TEXT("Combobox selection changed!"), TEXT("CElementProvider::LayoutInitialized"), 0);
 			}
 			});
 		if (ThemeCombo->AddListener(&accept_listener) != S_OK)

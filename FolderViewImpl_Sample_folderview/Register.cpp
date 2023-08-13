@@ -69,7 +69,7 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void *lpReserved)
 { 
     if (DLL_PROCESS_ATTACH == dwReason)
     {
-        MessageBox(NULL, "Attach a debugger NOW", "", 0);
+        //MessageBox(NULL, "Attach a debugger NOW", "", 0);
         if (sizeof(XProvider) != 0x28)
         {
             MessageBox(NULL, "Fatal error: unexpected size of XProvider class", "", 0);
@@ -160,6 +160,7 @@ STDAPI DllRegisterServer()
         HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"System.ApplicationName",  (LPBYTE)L"Rectify11.ControlPanelMain",   REG_SZ,
         HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"System.ControlPanel.Category",(LPBYTE)L"5",   REG_SZ,
         HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"System.Software.TasksFileUrl",(LPBYTE)L"%s,1",   REG_SZ,
+        HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"System.ApplicationName",(LPBYTE)L"Rectify11.SettingsCPL",   REG_SZ,
         HKEY_CLASSES_ROOT,  L"CLSID\\%s\\InprocServer32", szFolderViewImplClassID, NULL,                       (LPBYTE)L"C:\\Windows\\System32\\Shdocvw.dll",          REG_SZ,
         HKEY_CLASSES_ROOT,  L"CLSID\\%s\\InprocServer32", szFolderViewImplClassID, L"ThreadingModel",          (LPBYTE)L"Apartment",   REG_SZ,
         HKEY_CLASSES_ROOT,  L"CLSID\\%s\\DefaultIcon",    szFolderViewImplClassID, NULL,                       (LPBYTE)L"%s,0",        REG_SZ,

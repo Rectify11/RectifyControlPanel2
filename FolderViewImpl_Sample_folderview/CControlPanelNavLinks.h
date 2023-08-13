@@ -8,8 +8,8 @@ public:
 	IFACEMETHODIMP_(ULONG) AddRef();
 	IFACEMETHODIMP_(ULONG) Release();
 
-	HRESULT AddLinkControlPanel();
-	HRESULT AddLinkShellEx(LPCWSTR name);
+	HRESULT AddLinkControlPanel(LPCWSTR name, LPCWSTR path, LPCWSTR arguments, CPNAV_LIST DisplayType, SHSTOCKICONID iconType);
+	HRESULT AddLinkShellEx(LPCWSTR name, LPCWSTR file, LPCWSTR arguments, CPNAV_LIST DisplayType, SHSTOCKICONID iconType);
 	HRESULT Add(CControlPanelNavLink* link);
 	virtual ~CControlPanelNavLinks();
 private:

@@ -182,6 +182,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CControlPanelNavLink.cpp" />
+    <ClCompile Include="CControlPanelNavLinkCommand.cpp" />
     <ClCompile Include="CControlPanelNavLinks.cpp" />
     <ClCompile Include="CElementWithIUnknown.cpp" />
     <ClCompile Include="CElementWithSite.cpp" />
@@ -198,6 +199,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CControlPanelNavLink.h" />
+    <ClInclude Include="CControlPanelNavLinkCommand.h" />
     <ClInclude Include="CControlPanelNavLinks.h" />
     <ClInclude Include="CElementWithIUnknown.h" />
     <ClInclude Include="CElementWithSite.h" />
