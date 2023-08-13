@@ -278,21 +278,10 @@ STDAPI DllRegisterServer()
         }
     }
 
-    if (SUCCEEDED(hr))
-    {
-        //Note:  The property description file needs to be in the same
-        // directory as FolderViewImpl.dll when registering the DLL.
-        hr = PSRegisterPropertySchema(L"FolderViewImpl.propdesc");
-    }
-
     if (FAILED(hr))
     {
         //Remove the stuff we added.
         DllUnregisterServer();
-    }
-    else
-    {
-        
     }
 
     return hr;

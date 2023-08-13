@@ -96,18 +96,14 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <OutputFile>$(OutDir)FolderViewImpl.dll</OutputFile>
-      <ModuleDefinitionFile>FolderViewImpl.def</ModuleDefinitionFile>
+      <OutputFile>$(OutDir)Rectify11CPL.dll</OutputFile>
+      <ModuleDefinitionFile>Rectify11CPL.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)FolderViewImpl.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(OutDir)Rectify11CPL.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
-      <ImportLibrary>$(OutDir)FolderViewImpl.lib</ImportLibrary>
+      <ImportLibrary>$(OutDir)Rectify11CPL.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
-    <PostBuildEvent>
-      <Message>Copy property descriptions to the output directory</Message>
-      <Command>copy FolderViewImpl.propdesc $(OutDir)</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -122,18 +118,14 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <OutputFile>$(OutDir)FolderViewImpl.dll</OutputFile>
-      <ModuleDefinitionFile>FolderViewImpl.def</ModuleDefinitionFile>
+      <OutputFile>$(OutDir)Rectify11CPL.dll</OutputFile>
+      <ModuleDefinitionFile>Rectify11CPL.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)FolderViewImpl.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(OutDir)Rectify11CPL.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
-      <ImportLibrary>$(OutDir)FolderViewImpl.lib</ImportLibrary>
+      <ImportLibrary>$(OutDir)Rectify11CPL.lib</ImportLibrary>
       <AdditionalDependencies>Comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Message>Copy property descriptions to the output directory</Message>
-      <Command>copy FolderViewImpl.propdesc $(OutDir)</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -149,12 +141,12 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <OutputFile>$(OutDir)FolderViewImpl.dll</OutputFile>
+      <OutputFile>$(OutDir)Rectify11CPL.dll</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <ImportLibrary>$(OutDir)FolderViewImpl.lib</ImportLibrary>
+      <ImportLibrary>$(OutDir)Rectify11CPL.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
@@ -172,12 +164,12 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <OutputFile>$(OutDir)FolderViewImpl.dll</OutputFile>
+      <OutputFile>$(OutDir)Rectify11CPL.dll</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <ImportLibrary>$(OutDir)FolderViewImpl.lib</ImportLibrary>
+      <ImportLibrary>$(OutDir)Rectify11CPL.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -194,7 +186,7 @@
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="FolderViewImpl.def" />
+    <None Include="Rectify11CPL.def" />
     <None Include="MainPage.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +197,7 @@
     <ClInclude Include="CElementWithSite.h" />
     <ClInclude Include="ClassFactory.h" />
     <ClInclude Include="ElementProvider.h" />
+    <ClInclude Include="Rectify11CPL.h" />
     <ClInclude Include="Guid.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="CRectifyMainCPLPage.h" />
@@ -214,7 +207,7 @@
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="FolderViewImpl.rc" />
+    <ResourceCompile Include="Rectify11CPL.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico" />

@@ -13,7 +13,7 @@
 #include <shlwapi.h>
 #include <strsafe.h>
 
-#include "FolderViewImpl.h"
+#include "Rectify11CPL.h"
 #include "undoc.h"
 #include "pch.h"
 

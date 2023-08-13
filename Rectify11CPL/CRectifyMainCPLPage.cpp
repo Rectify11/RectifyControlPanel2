@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "CRectifyMainCPLPage.h"
-#include "FolderViewImpl.h"
+#include "Rectify11CPL.h"
 IClassInfo* CRectifyMainCPLPage::Class = NULL;
 #define NOT_IMPLEMENTED MessageBox(NULL, TEXT(__FUNCTION__), TEXT("Non implementented function in CRectifyMainCPLPage"), 0)
 

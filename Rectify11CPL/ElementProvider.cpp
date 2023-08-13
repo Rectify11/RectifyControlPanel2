@@ -5,7 +5,7 @@
 #include <strsafe.h>
 #include <shellapi.h>
 
-#include "FolderViewImpl.h"
+#include "Rectify11CPL.h"
 #include "ElementProvider.h"
 #include "resource.h"
 #include "pch.h"
