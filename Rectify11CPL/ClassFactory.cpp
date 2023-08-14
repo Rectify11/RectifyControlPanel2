@@ -12,7 +12,7 @@
 #include "ElementProvider.h"
 #include "ClassFactory.h"
 #include "Guid.h"
-#include "pch.h"
+#include "Rectify11CPL.h"
 
 CFolderViewImplClassFactory::CFolderViewImplClassFactory(REFCLSID rclsid) : m_cRef(1), m_rclsid(rclsid)
 {
