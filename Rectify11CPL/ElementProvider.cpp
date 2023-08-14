@@ -15,8 +15,8 @@ typedef HRESULT(*Dui70_XProvider_QueryInterface)(REFIID riid, __out void** ppv);
 Dui70_XProvider_QueryInterface Dui70_XProvider_QueryInterface_Func;
 
 
-#define NOT_IMPLEMENTED MessageBox(NULL, TEXT(__FUNCTION__), TEXT("Non implementented function in CElementProvider"), 0)
-#define SHOW_ERROR(x) MessageBox(NULL, TEXT(x), TEXT("Error in CElementProvider"), 0)
+#define NOT_IMPLEMENTED MessageBox(NULL, TEXT(__FUNCTION__), TEXT("Non implementented function in CElementProvider"), MB_ICONERROR)
+#define SHOW_ERROR(x) MessageBox(NULL, TEXT(x), TEXT("Error in CElementProvider"), MB_ICONERROR)
 
 
 CElementProvider::CElementProvider() : _punkSite(NULL)
@@ -62,7 +62,7 @@ HRESULT CElementProvider::QueryInterface(REFIID riid, __out void** ppv)
 
 		sprintf(szGuid, "{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}", riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7]);
 
-		//MessageBox(NULL, szGuid, TEXT("Unknown interface in CElementProvider::QueryInterface()"), 0);
+		//MessageBox(NULL, szGuid, TEXT("Unknown interface in CElementProvider::QueryInterface()"), MB_ICONERROR);
 	}
 	return hr;
 }
@@ -96,19 +96,21 @@ HRESULT CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* result_handl
 	}
 	else
 	{
-		CHAR buffer[2000];
+		WCHAR buffer[2000];
 		if (hr == 0x800403EF)
 		{
-			sprintf(buffer, "Failed to create DirectUI parser: A required property is missing.");
+			swprintf(buffer, L"Failed to create DirectUI parser: A required property is missing.");
 		}
 		else if (hr == 0x8004005A)
 		{
-			sprintf(buffer, "Failed to create DirectUI parser: Probaby can't find the UIFILE?");
+			swprintf(buffer, L"Failed to create DirectUI parser: Probaby can't find the UIFILE?");
 		}
 		else
 		{
-			sprintf(buffer, "Failed to create DirectUI parser: Error %X", hr);
+			swprintf(buffer, L"Failed to create DirectUI parser: Error %X", hr);
 		}
+
+		MessageBox(NULL, buffer, TEXT("CElementProvider::CreateDUI failed"), MB_ICONERROR);
 	}
 	return 0;
 }
@@ -132,12 +134,12 @@ HRESULT STDMETHODCALLTYPE CElementProvider::SetResourceID(UINT id)
 		hr = DirectUI::XProvider::Initialize(NULL, (IXProviderCP*)this->resourceProvider);
 		if (!SUCCEEDED(hr))
 		{
-			MessageBox(NULL, szGuid, TEXT("CElementProvider::SetResourceId Failed to initialize xprovider"), 0);
+			MessageBox(NULL, szGuid, TEXT("CElementProvider::SetResourceId Failed to initialize xprovider"), MB_ICONERROR);
 		}
 	}
 	else
 	{
-		MessageBox(NULL, szGuid, TEXT("CElementProvider::SetResourceId failed to create xprovider"), 0);
+		MessageBox(NULL, szGuid, TEXT("CElementProvider::SetResourceId failed to create xprovider"), MB_ICONERROR);
 	}
 	return hr;
 }
@@ -182,7 +184,7 @@ void CElementProvider::InitNavLinks()
 	icon.cbSize = sizeof(SHSTOCKICONINFO);
 	SHGetStockIconInfo(SIID_SHIELD, 0x101, &icon);
 
-	links->AddLinkControlPanel(L"Update Rectify11", L"Rectify11.SettingsCPL", L"pageRectifyUpdate", CPNAV_Normal, icon.hIcon);
+	links->AddLinkControlPanel(GetString(IDS_UPDATE), L"Rectify11.SettingsCPL", L"pageRectifyUpdate", CPNAV_Normal, icon.hIcon);
 	links->AddLinkControlPanel(L"System information", L"Microsoft.System", L"", CPNAV_SeeAlso, NULL);
 
 
@@ -224,14 +226,13 @@ void CElementProvider::InitMainPage()
 		static InputListener accept_listener([&](Element* elem, InputEvent* iev) {
 			if (iev->event_id == *Combobox::SelectionChange().pId)
 			{
-				//MessageBox(NULL, TEXT("Combobox selection changed!"), TEXT("CElementProvider::LayoutInitialized"), 0);
 				int selection = ((Combobox*)iev->target)->GetSelection();
 				themetool_set_active(NULL, selection, TRUE, 0, 0);
 			}
 			});
 		if (ThemeCombo->AddListener(&accept_listener) != S_OK)
 		{
-			MessageBox(NULL, TEXT("Failed to add"), TEXT("CElementProvider::LayoutInitialized"), 0);
+			MessageBox(NULL, TEXT("Failed to add"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
 		}
 
 		ULONG themeCount = 0;
@@ -252,7 +253,7 @@ void CElementProvider::InitMainPage()
 			ThemeCombo->SetSelection(theme);
 		}
 		else {
-			MessageBox(NULL, TEXT("Failed to count the amount of themes"), TEXT("CElementProvider::LayoutInitialized"), 0);
+			MessageBox(NULL, TEXT("Failed to count the amount of themes"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
 		}
 	}
 
@@ -270,7 +271,7 @@ void CElementProvider::InitMainPage()
 			});
 		if (HelpButton->AddListener(&help_listener) != S_OK)
 		{
-			MessageBox(NULL, TEXT("Failed to add helpbutton licenser"), TEXT("CElementProvider::LayoutInitialized"), 0);
+			MessageBox(NULL, TEXT("Failed to add helpbutton licenser"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
 		}
 	}
 }
@@ -384,8 +385,6 @@ HRESULT STDMETHODCALLTYPE CElementProvider::QueryService(
 
 HRESULT CElementProvider::SetSite(IUnknown* punkSite)
 {
-
-
 	if (punkSite != NULL)
 	{
 		IUnknown_Set((IUnknown**)&this->Site, punkSite);

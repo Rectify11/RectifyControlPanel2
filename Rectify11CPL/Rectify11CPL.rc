@@ -88,7 +88,11 @@ IDR_UPDATEPAGE          UIFILE                  "UpdatePage.xml"
 
 STRINGTABLE
 BEGIN
-    IDS_EXPLORE             "Explore"
+    IDS_THEMEHOOKFAIL       "Failed to initialize SecureUXTheme ThemeTool. Theme information will not be loaded."
+    IDS_CPLTITLE            "Change Rectify11 Settings"
+    IDS_THEME               "Theme:"
+    IDS_UPDATE              "Update Rectify11"
+    IDS_CPLNAME             "Rectify11 Settings"
 END
 
 #endif    // English (United States) resources

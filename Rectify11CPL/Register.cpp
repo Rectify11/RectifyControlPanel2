@@ -62,12 +62,13 @@ BOOL RegisterContext(HINSTANCE hInstance)
     return FALSE;
 }
 
-const WCHAR g_szExtTitle[] =  L"Rectify11 settings";
+WCHAR g_szExtTitle[1024];
 
 STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void *lpReserved)
 { 
     if (DLL_PROCESS_ATTACH == dwReason)
     {
+        wcscpy(g_szExtTitle, GetString(IDS_CPLNAME));
         //MessageBox(NULL, "Attach a debugger NOW", "", 0);
         if (sizeof(XProvider) != 0x28)
         {
@@ -352,4 +353,15 @@ STDAPI DllUnregisterServer()
     }
     
     return (SUCCEEDED(hrCM) && SUCCEEDED(hrSF)) ? S_OK : SELFREG_E_CLASS;
+}
+
+LPCWSTR GetString(int id)
+{
+    WCHAR buffer[1024];
+    if (FAILED(LoadStringW(g_hInst, id, buffer, 1023)))
+    {
+        wcscpy(buffer, L"Failed to load localized string");
+    }
+
+    return buffer;
 }

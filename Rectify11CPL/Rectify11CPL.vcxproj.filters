@@ -14,14 +14,12 @@
       <Filter>Navpane</Filter>
     </ClCompile>
     <ClCompile Include="theme.cpp" />
-    <ClCompile Include="Localization.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClassFactory.h" />
     <ClInclude Include="ElementProvider.h" />
     <ClInclude Include="Rectify11CPL.h" />
     <ClInclude Include="Guid.h" />
-    <ClInclude Include="pch.h" />
     <ClInclude Include="undoc.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="CControlPanelNavLink.h">
@@ -34,7 +32,6 @@
       <Filter>Navpane</Filter>
     </ClInclude>
     <ClInclude Include="theme.h" />
-    <ClInclude Include="Localization.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Rectify11CPL.rc" />

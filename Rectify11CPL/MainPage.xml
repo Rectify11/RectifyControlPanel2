@@ -98,7 +98,7 @@
 		</style>
 	</stylesheets>
 	<element resid="main" layout="borderlayout()" accessible="true" accrole="window" layoutpos="top" sheet="cp_style">
-		<Element sheet="cp_style" class="cp_topbox" layout="borderlayout()" layoutpos="client" accname="Change Rectify11 Settings">
+		<Element sheet="cp_style" class="cp_topbox" layout="borderlayout()" layoutpos="client" accname="resstr(104)">
 			<ScrollViewer xscrollable="false" layoutpos="top" sheet="common" accessible="true" accrole="pane">
 				<Element layout="borderlayout()" sheet="cp_style" class="cp_hub_frame">
 					<Element layoutpos="top" layout="borderlayout()">
@@ -108,13 +108,13 @@
 					</Element>
 					<Element id="atom(startLinks)" class="cp_content_pane" layoutpos="left" layout="borderlayout()">
 						<Element layoutpos="top" layout="borderlayout()">
-							<Element class="cp_content_instruction" content="Change Rectify11 Settings" layoutpos="top" />
+							<Element class="cp_content_instruction" content="resstr(104)" layoutpos="top" />
 						</Element>
 						<Element layoutpos="top" class="cp_content_v_spacer" />
 						<Element layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,10rp)" />
 						<Element layoutpos="top" class="cp_content_v_spacer" />
 
-						<element layoutpos="top" id="Atom(RThemeTxt)" content="Theme:"/>
+						<element layoutpos="top" id="Atom(RThemeTxt)" content="resstr(105)"/>
 						<Combobox id="Atom(RThemeCmb)" accessible="true" accrole="combobox" padding="rect(0rp,5rp,0rp,5rp)" width="50rp"/>
 					</Element>
 				</Element>

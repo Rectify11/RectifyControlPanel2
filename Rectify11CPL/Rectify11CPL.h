@@ -10,6 +10,7 @@
 #include <string>
 #include <winternl.h>
 #include "undoc.h"
+#include "resource.h"
 
 extern HINSTANCE g_hInst;
 
@@ -35,3 +36,4 @@ extern HINSTANCE g_hInst;
 void DllAddRef();
 void DllRelease();
 
+LPCWSTR GetString(int id);
