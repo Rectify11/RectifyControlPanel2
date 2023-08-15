@@ -152,7 +152,7 @@ STDAPI DllRegisterServer()
 
     // This will setup and register the basic ClassIDs. 
     DWORD dwData = 0xa0000000;// SFGAO_FOLDER | SFGAO_HASSUBFOLDER | SFGAO_CANDELETE;
-    DWORD dwResourceId = 100;
+    DWORD dwResourceId = IDR_PAGEDEF;
     REGSTRUCT rgRegEntries[] = 
     {
         HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, NULL,                       (LPBYTE)g_szExtTitle,   REG_SZ,    
