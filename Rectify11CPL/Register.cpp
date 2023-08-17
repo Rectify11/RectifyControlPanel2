@@ -155,11 +155,11 @@ STDAPI DllRegisterServer()
     DWORD dwResourceId = IDR_PAGEDEF;
     REGSTRUCT rgRegEntries[] = 
     {
-        HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, NULL,                       (LPBYTE)g_szExtTitle,   REG_SZ,    
+        HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, NULL,                       (LPBYTE)L"@%s,-107",   REG_SZ,
         HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"InfoTip",                 (LPBYTE)L"Customize Rectify11 settings such as theme settings",   REG_SZ,
         HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"System.ApplicationName",  (LPBYTE)L"Rectify11.ControlPanelMain",   REG_SZ,
         HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"System.ControlPanel.Category",(LPBYTE)L"1,5",   REG_SZ,
-        HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"System.Software.TasksFileUrl",(LPBYTE)L"%s,-109",   REG_SZ,
+        HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"System.Software.TasksFileUrl",(LPBYTE)L"%s,-110",   REG_SZ,
         HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"System.ApplicationName",(LPBYTE)L"Rectify11.SettingsCPL",   REG_SZ,
         HKEY_CLASSES_ROOT,  L"CLSID\\%s\\InprocServer32", szFolderViewImplClassID, NULL,                       (LPBYTE)L"C:\\Windows\\System32\\Shdocvw.dll",          REG_SZ,
         HKEY_CLASSES_ROOT,  L"CLSID\\%s\\InprocServer32", szFolderViewImplClassID, L"ThreadingModel",          (LPBYTE)L"Apartment",   REG_SZ,
@@ -355,7 +355,7 @@ STDAPI DllUnregisterServer()
     return (SUCCEEDED(hrCM) && SUCCEEDED(hrSF)) ? S_OK : SELFREG_E_CLASS;
 }
 
-LPCWSTR GetString(int id)
+LPCWSTR GetString(WORD id)
 {
     WCHAR buffer[1024];
     if (FAILED(LoadStringW(g_hInst, id, buffer, 1023)))

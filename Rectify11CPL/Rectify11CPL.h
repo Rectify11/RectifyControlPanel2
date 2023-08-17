@@ -36,4 +36,4 @@ extern HINSTANCE g_hInst;
 void DllAddRef();
 void DllRelease();
 
-LPCWSTR GetString(int id);
+LPCWSTR GetString(WORD id);

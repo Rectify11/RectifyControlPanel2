@@ -11,6 +11,7 @@
 #define IDS_UPDATE                      106
 #define IDS_STRING107                   107
 #define IDS_CPLNAME                     107
+#define IDR_TASK                        110
 #define IDR_MAINPAGE                    1001
 #define IDR_UPDATEPAGE                  1002
 
@@ -18,7 +19,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        110
+#define _APS_NEXT_RESOURCE_VALUE        111
 #define _APS_NEXT_COMMAND_VALUE         40001
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           101
