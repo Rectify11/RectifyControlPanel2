@@ -220,21 +220,16 @@ void CElementProvider::InitMainPage()
 	Element* root = XProvider::GetRoot();
 	ThemeCombo = (Combobox*)root->FindDescendent(StrToID((UCString)L"RThemeCmb"));
 
-	static vector<wstring> themes;
+	// orig
 	if (ThemeCombo != NULL)
 	{
-		static InputListener accept_listener([&](Element* elem, InputEvent* iev) {
-			if (iev->event_id == *Combobox::SelectionChange().pId)
-			{
-				int selection = ((Combobox*)iev->target)->GetSelection();
-				themetool_set_active(NULL, selection, TRUE, 0, 0);
-			}
-			});
-		if (ThemeCombo->AddListener(&accept_listener) != S_OK)
-		{
-			MessageBox(NULL, TEXT("Failed to add"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-		}
-
+		static vector<ULONG> themes;
+		WCHAR value[255];
+		PVOID pvData = value;
+		DWORD size = sizeof(value);
+		RegGetValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\ThemeManager", L"DllName", RRF_RT_REG_SZ, 0, pvData, &size);
+		std::wstring msstylePath = std::wstring((LPCWSTR)pvData);
+		int k = 0;
 		ULONG themeCount = 0;
 		if (SUCCEEDED(themetool_get_theme_count(&themeCount)))
 		{
@@ -243,17 +238,40 @@ void CElementProvider::InitMainPage()
 				ITheme* theme = NULL;
 				if (SUCCEEDED(themetool_get_theme(i, &theme)))
 				{
-					std::wstring nameBuffer = std::wstring(1024, '\0');
+					std::wstring nameBuffer = std::wstring(255, '\0');
 					theme->GetDisplayName(nameBuffer);
-					ThemeCombo->AddString((UString)nameBuffer.c_str());
+					if (nameBuffer.starts_with(L"Rectify11"))
+					{
+						ThemeCombo->AddString((UString)nameBuffer.c_str());
+						std::wstring pathBuff = std::wstring();
+						theme->GetVisualStyle(pathBuff);
+						std::wstring msstylePath = std::wstring((LPCWSTR)pvData);
+						if (pathBuff == msstylePath)
+						{
+							ThemeCombo->SetSelection(k);
+						}
+						themes.push_back(i);
+						k++;
+					}
 				}
+				themetool_theme_release(theme);
 			}
-			int theme = -1;
-			themetool_get_manager()->GetCurrentTheme(&theme);
-			ThemeCombo->SetSelection(theme);
 		}
 		else {
 			MessageBox(NULL, TEXT("Failed to count the amount of themes"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
+		}
+
+		static InputListener accept_listener([&](Element* elem, InputEvent* iev) {
+			if (iev->event_id == *Combobox::SelectionChange().pId)
+			{
+				int selection = ((Combobox*)iev->target)->GetSelection();
+				themetool_set_active(NULL, themes[selection], TRUE, 0, 0);
+			}
+			});
+
+		if (ThemeCombo->AddListener(&accept_listener) != S_OK)
+		{
+			MessageBox(NULL, TEXT("Failed to add"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
 		}
 	}
 
@@ -390,7 +408,6 @@ HRESULT CElementProvider::SetSite(IUnknown* punkSite)
 		IUnknown_Set((IUnknown**)&this->Site, punkSite);
 		IUnknown_Set((IUnknown**)&this->_punkSite, punkSite);
 	}
-
 
 	return S_OK;
 }
