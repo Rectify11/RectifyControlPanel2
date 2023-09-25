@@ -127,6 +127,9 @@
       <ImportLibrary>$(OutDir)Rectify11CPL.lib</ImportLibrary>
       <AdditionalDependencies>Comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /Y $(OutDir)Rectify11CPL.dll $(SolutionDir)\Rectify11Installer\Resources\</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
