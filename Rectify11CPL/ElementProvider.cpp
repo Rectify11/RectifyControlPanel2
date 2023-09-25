@@ -155,24 +155,24 @@ HRESULT STDMETHODCALLTYPE CElementProvider::OptionallyTakeInitialFocus(BOOL* res
 	}
 	return 0;
 }
-class InputListener : public IElementListener {
-public:
-	using handler_t = std::function<void(Element*, InputEvent*)>;
+class EventListener : public IElementListener {
+	
+	using handler_t = std::function<void(Element*, Event*)>;
 
 	handler_t f;
+public:
+	EventListener(handler_t f) : f(f) { }
 
-	InputListener(handler_t f) : f(f) { }
-
-	void OnListenerAttach(Element* elem) override { }
-	void OnListenerDetach(Element* elem) override { }
-	bool OnPropertyChanging(Element* elem, const PropertyInfo* prop, int unk, Value* v1, Value* v2) override {
+	void OnListenerAttach(Element *elem) override { }
+	void OnListenerDetach(Element *elem) override { }
+	bool OnPropertyChanging(Element* elem, const PropertyInfo *prop, int unk, Value* v1, Value* v2) override {
 		return true;
 	}
-	void OnListenedPropertyChanged(Element* elem, const PropertyInfo* prop, int type, Value* v1, Value* v2) override { }
-	void OnListenedEvent(Element* elem, struct Event* ev) override { }
-	void OnListenedInput(Element* elem, struct InputEvent* iev) override {
+	void OnListenedPropertyChanged(Element *elem, const PropertyInfo*prop, int type, Value*v1, Value*v2) override { }
+	void OnListenedEvent(Element*elem, struct Event*iev) override {
 		f(elem, iev);
 	}
+	void OnListenedInput(Element*elem, struct InputEvent*ev) override { }
 };
 
 void CElementProvider::InitNavLinks()
@@ -261,8 +261,8 @@ void CElementProvider::InitMainPage()
 			MessageBox(NULL, TEXT("Failed to count the amount of themes"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
 		}
 
-		static InputListener accept_listener([&](Element* elem, InputEvent* iev) {
-			if (iev->event_id == *Combobox::SelectionChange().pId)
+		static EventListener accept_listener([&](Element* elem, Event* iev) {
+			if (iev->type == Combobox::SelectionChange)
 			{
 				int selection = ((Combobox*)iev->target)->GetSelection();
 				themetool_set_active(NULL, themes[selection], TRUE, 0, 0);
@@ -281,8 +281,8 @@ void CElementProvider::InitMainPage()
 	Button* HelpButton = (Button*)root->FindDescendent(StrToID((UCString)L"helpHub"));
 	if (HelpButton != NULL)
 	{
-		static InputListener help_listener([&](Element* elem, InputEvent* iev) {
-			if (iev->event_id == *Button::Click().pId)
+		static EventListener help_listener([&](Element* elem, Event* iev) {
+			if (iev->type == Button::Click)
 			{
 				ShellExecute(0, 0, TEXT("http://rectify11.net"), 0, 0, SW_SHOW);
 			}
