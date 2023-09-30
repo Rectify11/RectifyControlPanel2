@@ -16,6 +16,7 @@
 #include "Rectify11CPL.h"
 #include "undoc.h"
 #include "pch.h"
+#include "CRectifyUtil.h"
 
 class CElementProvider : public DirectUI::XProvider, public IDUIElementProviderInit, public IFrameNotificationClient, public IFrameShellViewClient, public IObjectWithSite, public IServiceProvider
 {

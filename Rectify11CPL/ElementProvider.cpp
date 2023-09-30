@@ -10,9 +10,7 @@
 #include "resource.h"
 #include "pch.h"
 
-//3072    <<not bound>>
-typedef HRESULT(*Dui70_XProvider_QueryInterface)(REFIID riid, __out void** ppv);
-Dui70_XProvider_QueryInterface Dui70_XProvider_QueryInterface_Func;
+static vector<ULONG> themes;
 
 
 #define NOT_IMPLEMENTED MessageBox(NULL, TEXT(__FUNCTION__), TEXT("Non implementented function in CElementProvider"), MB_ICONERROR)
@@ -156,23 +154,23 @@ HRESULT STDMETHODCALLTYPE CElementProvider::OptionallyTakeInitialFocus(BOOL* res
 	return 0;
 }
 class EventListener : public IElementListener {
-	
+
 	using handler_t = std::function<void(Element*, Event*)>;
 
 	handler_t f;
 public:
 	EventListener(handler_t f) : f(f) { }
 
-	void OnListenerAttach(Element *elem) override { }
-	void OnListenerDetach(Element *elem) override { }
-	bool OnPropertyChanging(Element* elem, const PropertyInfo *prop, int unk, Value* v1, Value* v2) override {
+	void OnListenerAttach(Element* elem) override { }
+	void OnListenerDetach(Element* elem) override { }
+	bool OnPropertyChanging(Element* elem, const PropertyInfo* prop, int unk, Value* v1, Value* v2) override {
 		return true;
 	}
-	void OnListenedPropertyChanged(Element *elem, const PropertyInfo*prop, int type, Value*v1, Value*v2) override { }
-	void OnListenedEvent(Element*elem, struct Event*iev) override {
+	void OnListenedPropertyChanged(Element* elem, const PropertyInfo* prop, int type, Value* v1, Value* v2) override { }
+	void OnListenedEvent(Element* elem, struct Event* iev) override {
 		f(elem, iev);
 	}
-	void OnListenedInput(Element*elem, struct InputEvent*ev) override { }
+	void OnListenedInput(Element* elem, struct InputEvent* ev) override { }
 };
 
 void CElementProvider::InitNavLinks()
@@ -215,15 +213,60 @@ void CElementProvider::InitNavLinks()
 	}
 }
 
+
+void MicaChk_OnEvent(Element* elem, Event* iev)
+{
+	CCCheckBox* MicaForEveryoneCheckbox = (CCCheckBox*)elem;
+	CCCheckBox* TabbedCheckbox = (CCCheckBox*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"TabChk"));
+
+	if (iev->type == PushButton::Click)
+	{
+		bool MicaEnabled2 = MicaForEveryoneCheckbox->GetSelected();
+		CRectifyUtil::SetMicaForEveryoneEnabled(MicaEnabled2);
+
+		// Enable/disable the tabbed checkbox
+		if (TabbedCheckbox != NULL)
+			TabbedCheckbox->SetEnabled(MicaEnabled2);
+	}
+}
+
+void TabChk_OnEvent(Element* elem, Event* iev)
+{
+	CCCheckBox* TabbedCheckbox = (CCCheckBox*)elem;
+
+	if (iev->type == PushButton::Click)
+	{
+		CRectifyUtil::SetTabbedEnabled(TabbedCheckbox->GetSelected());
+	}
+}
+
+void HelpButton_OnEvent(Element* elem, Event* iev)
+{
+	if (iev->type == Button::Click)
+	{
+		ShellExecute(0, 0, TEXT("http://rectify11.net"), 0, 0, SW_SHOW);
+	}
+}
+
+void ThemeCmb_OnEvent(Element* elem, Event* iev)
+{
+	if (iev->type == Combobox::SelectionChange)
+	{
+		int selection = ((Combobox*)iev->target)->GetSelection();
+		themetool_set_active(NULL, themes[selection], TRUE, 0, 0);
+	}
+}
+
 void CElementProvider::InitMainPage()
 {
 	Element* root = XProvider::GetRoot();
-	ThemeCombo = (Combobox*)root->FindDescendent(StrToID((UCString)L"RThemeCmb"));
+	ThemeCombo = (Combobox*)root->FindDescendent(StrToID((UCString)L"ThemeCmb"));
+	Button* HelpButton = (Button*)root->FindDescendent(StrToID((UCString)L"helpHub"));
+	CCCheckBox* MicaForEveryoneCheckbox = (CCCheckBox*)root->FindDescendent(StrToID((UCString)L"MicaChk"));
+	CCCheckBox* TabbedCheckbox = (CCCheckBox*)root->FindDescendent(StrToID((UCString)L"TabChk"));
 
-	// orig
 	if (ThemeCombo != NULL)
 	{
-		static vector<ULONG> themes;
 		WCHAR value[255];
 		PVOID pvData = value;
 		DWORD size = sizeof(value);
@@ -240,6 +283,7 @@ void CElementProvider::InitMainPage()
 				{
 					std::wstring nameBuffer = std::wstring(255, '\0');
 					theme->GetDisplayName(nameBuffer);
+
 					if (nameBuffer.starts_with(L"Rectify11"))
 					{
 						ThemeCombo->AddString((UString)nameBuffer.c_str());
@@ -261,13 +305,7 @@ void CElementProvider::InitMainPage()
 			MessageBox(NULL, TEXT("Failed to count the amount of themes"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
 		}
 
-		static EventListener accept_listener([&](Element* elem, Event* iev) {
-			if (iev->type == Combobox::SelectionChange)
-			{
-				int selection = ((Combobox*)iev->target)->GetSelection();
-				themetool_set_active(NULL, themes[selection], TRUE, 0, 0);
-			}
-			});
+		static EventListener accept_listener(ThemeCmb_OnEvent);
 
 		if (ThemeCombo->AddListener(&accept_listener) != S_OK)
 		{
@@ -275,21 +313,41 @@ void CElementProvider::InitMainPage()
 		}
 	}
 
-
-
 	//helpHub
-	Button* HelpButton = (Button*)root->FindDescendent(StrToID((UCString)L"helpHub"));
 	if (HelpButton != NULL)
 	{
-		static EventListener help_listener([&](Element* elem, Event* iev) {
-			if (iev->type == Button::Click)
-			{
-				ShellExecute(0, 0, TEXT("http://rectify11.net"), 0, 0, SW_SHOW);
-			}
-			});
+		static EventListener help_listener(HelpButton_OnEvent);
 		if (HelpButton->AddListener(&help_listener) != S_OK)
 		{
 			MessageBox(NULL, TEXT("Failed to add helpbutton licenser"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
+		}
+	}
+
+	if (MicaForEveryoneCheckbox != NULL)
+	{
+		bool MicaEnabled = CRectifyUtil::CheckIfMicaForEveryoneIsEnabled();
+		MicaForEveryoneCheckbox->SetSelected(MicaEnabled);
+
+		if (!MicaEnabled && TabbedCheckbox != NULL)
+		{
+			TabbedCheckbox->SetEnabled(FALSE);
+		}
+
+		static EventListener mica_listener(MicaChk_OnEvent);
+		if (MicaForEveryoneCheckbox->AddListener(&mica_listener) != S_OK)
+		{
+			MessageBox(NULL, TEXT("Failed to add mica checkbox licenser"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
+		}
+	}
+
+	if (TabbedCheckbox != NULL)
+	{
+		TabbedCheckbox->SetSelected(CRectifyUtil::GetTabbedEnabled());
+
+		static EventListener tab_listener(TabChk_OnEvent);
+		if (TabbedCheckbox->AddListener(&tab_listener) != S_OK)
+		{
+			MessageBox(NULL, TEXT("Failed to add mica tab checkbox licenser"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
 		}
 	}
 }
@@ -303,12 +361,12 @@ HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
 		MessageBox(NULL, TEXT("Failed to initialize SecureUXTheme ThemeTool. Theme information will not be loaded."), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
 	}
 	Element* root = XProvider::GetRoot();
-	if (root->FindDescendent(StrToID((UCString)L"RThemeCmb")) != NULL)
+	if (root->FindDescendent(StrToID((UCString)L"ThemeCmb")) != NULL)
 	{
 		InitMainPage();
 	}
 
-	
+
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param)
@@ -323,39 +381,40 @@ HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param)
 	if (!StrCmpCW((LPCWSTR)param, L"SearchText"))
 	{
 		//Sent when search text modified/added
-		WCHAR value[264] = {0};
+		WCHAR value[264] = { 0 };
 		WCHAR path[48];
 		GUID IID_IFrameManager = {};
 		GUID SID_STopLevelBrowser = {};
-		CLSIDFromString(L"{4c96be40-915c-11cf-99d3-00aa004ae837}", (LPCLSID)&SID_STopLevelBrowser);
-
-		HRESULT hr = CLSIDFromString(L"{31e4fa78-02b4-419f-9430-7b7585237c77}", (LPCLSID)&IID_IFrameManager);
+		HRESULT hr = CLSIDFromString(L"{4c96be40-915c-11cf-99d3-00aa004ae837}", (LPCLSID)&SID_STopLevelBrowser);
 		if (SUCCEEDED(hr))
 		{
-			IPropertyBag* bag = NULL;
-			HRESULT hr = IUnknown_QueryService(_punkSite, IID_IFrameManager, IID_IPropertyBag, (LPVOID*)&bag);
+			hr = CLSIDFromString(L"{31e4fa78-02b4-419f-9430-7b7585237c77}", (LPCLSID)&IID_IFrameManager);
 			if (SUCCEEDED(hr))
 			{
-				if (SUCCEEDED(PSPropertyBag_ReadStr(bag, L"SearchText", value, 260)) && value[0])
+				IPropertyBag* bag = NULL;
+				HRESULT hr = IUnknown_QueryService(_punkSite, IID_IFrameManager, IID_IPropertyBag, (LPVOID*)&bag);
+				if (SUCCEEDED(hr))
 				{
-					if (SUCCEEDED(StringCchPrintfW(path, 41, L"::%s", L"{26ee0668-a00a-44d7-9371-beb064c98683}")))
+					if (SUCCEEDED(PSPropertyBag_ReadStr(bag, L"SearchText", value, 260)) && value[0])
 					{
-						LPITEMIDLIST pidlist;
-						if (SUCCEEDED(SHParseDisplayName(path, NULL, &pidlist, 0, NULL)))
+						if (SUCCEEDED(StringCchPrintfW(path, 41, L"::%s", L"{26ee0668-a00a-44d7-9371-beb064c98683}")))
 						{
-							IShellBrowser* browser;
-							if (SUCCEEDED(IUnknown_QueryService(_punkSite, SID_STopLevelBrowser, IID_IShellBrowser, (LPVOID*)&browser)))
+							LPITEMIDLIST pidlist;
+							if (SUCCEEDED(SHParseDisplayName(path, NULL, &pidlist, 0, NULL)))
 							{
-								hr = browser->BrowseObject(pidlist, 1572865);
-								browser->Release();
+								IShellBrowser* browser;
+								if (SUCCEEDED(IUnknown_QueryService(_punkSite, SID_STopLevelBrowser, IID_IShellBrowser, (LPVOID*)&browser)))
+								{
+									hr = browser->BrowseObject(pidlist, SBSP_ACTIVATE_NOFOCUS | SBSP_SAMEBROWSER | SBSP_CREATENOHISTORY);
+									browser->Release();
+								}
 							}
+							ILFree(pidlist);
 						}
-						ILFree(pidlist);
 					}
 				}
 			}
 		}
-
 	}
 	return 0;
 }

@@ -184,6 +184,7 @@
     <ClCompile Include="CControlPanelNavLinkCommand.cpp" />
     <ClCompile Include="CControlPanelNavLinks.cpp" />
     <ClCompile Include="ClassFactory.cpp" />
+    <ClCompile Include="CRectifyUtil.cpp" />
     <ClCompile Include="ElementProvider.cpp" />
     <ClCompile Include="Register.cpp" />
     <ClCompile Include="theme.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="CControlPanelNavLinkCommand.h" />
     <ClInclude Include="CControlPanelNavLinks.h" />
     <ClInclude Include="ClassFactory.h" />
+    <ClInclude Include="CRectifyUtil.h" />
     <ClInclude Include="ElementProvider.h" />
     <ClInclude Include="Rectify11CPL.h" />
     <ClInclude Include="Guid.h" />

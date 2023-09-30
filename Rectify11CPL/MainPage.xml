@@ -110,12 +110,19 @@
 						<Element layoutpos="top" layout="borderlayout()">
 							<Element class="cp_content_instruction" content="resstr(104)" layoutpos="top" />
 						</Element>
-						<Element layoutpos="top" class="cp_content_v_spacer" />
+						<element layoutpos="top" class="cp_content_v_spacer"/>
 						<Element layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,10rp)" />
-						<Element layoutpos="top" class="cp_content_v_spacer" />
+						<element layoutpos="top" class="cp_content_v_spacer"/>
+						<Element resid="Settings" layout="borderlayout()" margin="rect(0,4rp,0,4rp)">
+							<element layoutpos="top" id="atom(ThemeTxt)" content="resstr(105)" class="cp_content_text"/>
+							<Combobox layoutpos="top" id="atom(ThemeCmb)" sheet="cp_style" width="150rp"/>
 
-						<element layoutpos="top" id="Atom(RThemeTxt)" content="resstr(105)"/>
-						<Combobox id="Atom(RThemeCmb)" accessible="true" accrole="combobox" padding="rect(0rp,5rp,0rp,5rp)" width="50rp"/>
+							<!--Spacing-->
+							<Element layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,5rp)" />
+							
+							<CCCheckBox layoutpos="top" id="Atom(MicaChk)" accessible="true" selected="false" content="Enable Mica"></CCCheckBox>
+							<CCCheckBox layoutpos="top" id="Atom(TabChk)" accessible="true" selected="false" content="Use tabbed instead of Mica"></CCCheckBox>
+						</Element>
 					</Element>
 				</Element>
 			</ScrollViewer>
