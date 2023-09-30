@@ -36,3 +36,15 @@ void CRectifyUtil::SetTabbedEnabled(BOOL enabled)
 {
 	// TODO
 }
+
+BOOL CRectifyUtil::IsDarkTheme()
+{
+	WCHAR value[255];
+	PVOID pvData = value;
+	DWORD size = sizeof(value);
+	RegGetValueW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\ThemeManager", L"DllName", RRF_RT_REG_SZ, 0, pvData, &size);
+	std::wstring msstylePath = std::wstring((LPCWSTR)pvData);
+
+	int result = msstylePath.find(L"Dark");
+	return result > 0 ? TRUE : FALSE;
+}

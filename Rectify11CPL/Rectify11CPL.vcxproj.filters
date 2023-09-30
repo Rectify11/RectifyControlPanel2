@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico" />
+    <Image Include="preview_light.bmp" />
+    <Image Include="preview_dark.bmp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Rectify11CPL.def" />

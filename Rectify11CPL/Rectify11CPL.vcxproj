@@ -178,9 +178,9 @@
       <AdditionalDependencies>comctl32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>Rectify11CPL.def</ModuleDefinitionFile>
     </Link>
-	<PostBuildEvent>
+    <PostBuildEvent>
       <Command>copy /Y $(OutDir)Rectify11CPL.dll $(SolutionDir)\Rectify11Installer\Resources\</Command>
-	</PostBuildEvent>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CControlPanelNavLink.cpp" />
@@ -214,6 +214,8 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico" />
+    <Image Include="preview_dark.bmp" />
+    <Image Include="preview_light.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="pages.xml" />

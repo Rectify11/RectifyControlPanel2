@@ -182,7 +182,13 @@ void CElementProvider::InitNavLinks()
 	icon.cbSize = sizeof(SHSTOCKICONINFO);
 	SHGetStockIconInfo(SIID_SHIELD, 0x101, &icon);
 
-	links->AddLinkControlPanel(GetString(IDS_UPDATE), L"Rectify11.SettingsCPL", L"pageRectifyUpdate", CPNAV_Normal, icon.hIcon);
+	WCHAR buffer[1024];
+	if (FAILED(LoadStringW(g_hInst, IDS_UPDATE, buffer, 1023)))
+	{
+		wcscpy(buffer, L"Failed to load localized string");
+	}
+
+	links->AddLinkControlPanel(buffer, L"Rectify11.SettingsCPL", L"pageRectifyUpdate", CPNAV_Normal, icon.hIcon);
 	links->AddLinkControlPanel(L"System information", L"Microsoft.System", L"", CPNAV_SeeAlso, NULL);
 
 
@@ -254,6 +260,7 @@ void ThemeCmb_OnEvent(Element* elem, Event* iev)
 	{
 		int selection = ((Combobox*)iev->target)->GetSelection();
 		themetool_set_active(NULL, themes[selection], TRUE, 0, 0);
+		CElementProvider::UpdateThemeGraphic(elem->GetRoot());
 	}
 }
 
@@ -261,7 +268,7 @@ void CElementProvider::InitMainPage()
 {
 	Element* root = XProvider::GetRoot();
 	ThemeCombo = (Combobox*)root->FindDescendent(StrToID((UCString)L"ThemeCmb"));
-	Button* HelpButton = (Button*)root->FindDescendent(StrToID((UCString)L"helpHub"));
+	Button* HelpButton = (Button*)root->FindDescendent(StrToID((UCString)L"buttonHelp"));
 	CCCheckBox* MicaForEveryoneCheckbox = (CCCheckBox*)root->FindDescendent(StrToID((UCString)L"MicaChk"));
 	CCCheckBox* TabbedCheckbox = (CCCheckBox*)root->FindDescendent(StrToID((UCString)L"TabChk"));
 
@@ -350,6 +357,24 @@ void CElementProvider::InitMainPage()
 			MessageBox(NULL, TEXT("Failed to add mica tab checkbox licenser"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
 		}
 	}
+
+	UpdateThemeGraphic(root);
+}
+
+void CElementProvider::UpdateThemeGraphic(Element* root)
+{
+	LPCWSTR id = CRectifyUtil::IsDarkTheme() ? MAKEINTRESOURCE(IDB_DARKPREVIEW) : MAKEINTRESOURCE(IDB_LIGHTPREVIEW);
+	HBITMAP bmp = (HBITMAP)LoadImage(g_hInst, id, IMAGE_BITMAP, 256, 256, 0);
+	if (bmp == NULL)
+	{
+		SHOW_ERROR("failure to load bitmap");
+		return;
+	}
+	Value* bitmap = DirectUI::Value::CreateGraphic(bmp, 3, 0xffffffff, false, false, false);
+	Element* PreviewElement = root->FindDescendent(StrToID((UCString)L"ThemePreview"));
+	if (PreviewElement != NULL)
+		PreviewElement->SetValue(Element::ContentProp, 1, bitmap);
+	bitmap->Release();
 }
 
 HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
@@ -376,6 +401,7 @@ HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param)
 	if (!StrCmpCW((LPCWSTR)param, L"SettingsChanged"))
 	{
 		//This is invoked when the UI is refreshed!
+		UpdateThemeGraphic(GetRoot());
 	}
 
 	if (!StrCmpCW((LPCWSTR)param, L"SearchText"))

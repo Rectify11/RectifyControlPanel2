@@ -97,35 +97,82 @@
 			</if>
 		</style>
 	</stylesheets>
-	<element resid="main" layout="borderlayout()" accessible="true" accrole="window" layoutpos="top" sheet="cp_style">
-		<Element sheet="cp_style" class="cp_topbox" layout="borderlayout()" layoutpos="client" accname="resstr(104)">
-			<ScrollViewer xscrollable="false" layoutpos="top" sheet="common" accessible="true" accrole="pane">
-				<Element layout="borderlayout()" sheet="cp_style" class="cp_hub_frame">
-					<Element layoutpos="top" layout="borderlayout()">
-						<Viewer layoutpos="right">
-							<Button class="cp_help_glyph" id="atom(helpHub)" accname="Help" />
-						</Viewer>
-					</Element>
-					<Element id="atom(startLinks)" class="cp_content_pane" layoutpos="left" layout="borderlayout()">
-						<Element layoutpos="top" layout="borderlayout()">
-							<Element class="cp_content_instruction" content="resstr(104)" layoutpos="top" />
-						</Element>
-						<element layoutpos="top" class="cp_content_v_spacer"/>
-						<Element layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,10rp)" />
-						<element layoutpos="top" class="cp_content_v_spacer"/>
-						<Element resid="Settings" layout="borderlayout()" margin="rect(0,4rp,0,4rp)">
-							<element layoutpos="top" id="atom(ThemeTxt)" content="resstr(105)" class="cp_content_text"/>
-							<Combobox layoutpos="top" id="atom(ThemeCmb)" sheet="cp_style" width="150rp"/>
 
-							<!--Spacing-->
-							<Element layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,5rp)" />
-							
-							<CCCheckBox layoutpos="top" id="Atom(MicaChk)" accessible="true" selected="false" content="Enable Mica"></CCCheckBox>
-							<CCCheckBox layoutpos="top" id="Atom(TabChk)" accessible="true" selected="false" content="Use tabbed instead of Mica"></CCCheckBox>
-						</Element>
-					</Element>
+	<!--This defines the Themes_________ headers-->
+	<element resid="informationsectiontitle" layoutpos="top" layout="filllayout()" padding="rect(0rp,0rp,0rp,10rp)">
+		<element layout="borderlayout()" padding="rect(0rp,2rp,0rp,5rp)">
+			<element class="cp_content_divider_line" width="1rp"/>
+		</element>
+		<element layout="flowlayout()">
+			<element id="atom(Title)" class="cp_content_divider_header" content="Heres a divder with header"/>
+		</element>
+	</element>
+
+	<element resid="main" layout="borderlayout()" accessible="true" accrole="window" layoutpos="top" sheet="common">
+		<ScrollViewer xscrollable="false" layoutpos="top" sheet="common" accessible="true" accrole="pane" class="cp_topbox">
+			<element sheet="cp_style" class="cp_topbox" width="1000rp" padding="rect(60rp,15rp,10rp,10rp)" layoutpos="client" layout="borderlayout()" accessible="true" accname="resstr(104)">
+
+				<!--Title and help button-->
+				<element layoutpos="top" layout="borderlayout()">
+					<element layoutpos="right" layout="flowlayout(0,0,1)">
+						<button id="atom(buttonHelp)" class="cp_help_glyph" acchelp="resstr(1112)" accName="resstr(1109)" />
+					</element>
+					<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)">
+						<element class="cp_content_instruction" content="resstr(104)" />
+
+					</element>
+				</element>
+
+				<Element id="atom(ThemesSection)" class="cp_content_pane" layoutpos="top" layout="borderlayout()">
+
+
+					<!--Spacing-->
+					<Element layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,25rp)" />
+
+					<!--Themes header line thing-->
+					<macro expand="informationsectiontitle">
+						<bind connect="Title" content="resstr(108)" />
+					</macro>
+
+
+					<!--Theme combobox-->
+
+					<element id="atom(advancedStorageHandlerSettings)" layoutpos="top" layout="verticalflowlayout()">
+						<element resid="indentedMacroHandlerSetting" layoutpos="top" layout="flowlayout()">
+							<element id="atom(ThemeTxt)" class="cp_content_text" width="50rp" contentalign="middleleft" accessible="true" accrole="statictext" tooltip="true" active="mouse" content="resstr(105)" />
+							<ComboBox id="atom(ThemeCmb)" width="200rp" accessible="true" accRole="combobox" font="gtf(CONTROLPANELSTYLE,14,0)" />
+						</element>
+					</element>
+					
+					<!--Theme preview image-->
+					<element id="atom(ThemePreview)" layoutpos="right" accessible="true" accrole="graphic" accname="resstr(301)" />
+					
+					<!--Spacing-->
+					<Element layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,5rp)" />
+					
+					<!--Checkboxes-->
+					<element layoutpos="top" layout="borderlayout()">
+						<!--Spacing-->
+						<Element layoutpos="top" layout="borderlayout()" />
+
+						<CCCheckBox layoutpos="top" id="Atom(MicaChk)" accessible="true" selected="false" content="Enable Mica"></CCCheckBox>
+						<CCCheckBox layoutpos="top" id="Atom(TabChk)" accessible="true" selected="false" content="Use tabbed instead of Mica"></CCCheckBox>
+					</element>
 				</Element>
-			</ScrollViewer>
-		</Element>
+
+				<Element id="atom(InformationSection)" class="cp_content_pane" layoutpos="top" layout="borderlayout()">
+					<!--Spacing-->
+					<Element layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,25rp)" />
+
+					<!--Information header line thing-->
+					<macro expand="informationsectiontitle">
+						<bind connect="Title" content="resstr(109)" />
+					</macro>
+
+
+					<element layoutpos="top" id="atom(RectifyVersion)" content="Rectify11 version: Loading..."></element>
+				</Element>
+			</element>
+		</ScrollViewer>
 	</element>
 </duixml>

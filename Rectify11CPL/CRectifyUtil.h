@@ -7,5 +7,7 @@ public:
 
 	static BOOL GetTabbedEnabled();
 	static void SetTabbedEnabled(BOOL enabled);
+
+	static BOOL IsDarkTheme();
 };
 

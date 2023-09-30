@@ -14,6 +14,6 @@ public:
 	virtual ~CControlPanelNavLinks();
 private:
 	HDPA m_dpaList;
-	ULONGLONG m_refCount;
+	long m_refCount;
 };
 

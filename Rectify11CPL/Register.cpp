@@ -68,8 +68,13 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void *lpReserved)
 { 
     if (DLL_PROCESS_ATTACH == dwReason)
     {
-        wcscpy(g_szExtTitle, GetString(IDS_CPLNAME));
+        if (FAILED(LoadStringW(g_hInst, IDS_CPLNAME, g_szExtTitle, 1023)))
+        {
+            wcscpy(g_szExtTitle, L"Failed to load localized string");
+        }
+
         //MessageBox(NULL, "Attach a debugger NOW", "", 0);
+
         if (sizeof(XProvider) != 0x28)
         {
             MessageBox(NULL, TEXT("Fatal error: unexpected size of XProvider class"), TEXT(""), 0);
@@ -353,15 +358,4 @@ STDAPI DllUnregisterServer()
     }
     
     return (SUCCEEDED(hrCM) && SUCCEEDED(hrSF)) ? S_OK : SELFREG_E_CLASS;
-}
-
-LPCWSTR GetString(WORD id)
-{
-    WCHAR buffer[1024];
-    if (FAILED(LoadStringW(g_hInst, id, buffer, 1023)))
-    {
-        wcscpy(buffer, L"Failed to load localized string");
-    }
-
-    return buffer;
 }

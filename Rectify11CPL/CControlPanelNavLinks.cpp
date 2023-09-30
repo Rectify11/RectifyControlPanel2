@@ -37,7 +37,7 @@ IFACEMETHODIMP_(ULONG) CControlPanelNavLinks::AddRef()
 }
 IFACEMETHODIMP_(ULONG) CControlPanelNavLinks::Release()
 {
-	ULONGLONG ref = InterlockedDecrement(&m_refCount);
+	ULONG ref = InterlockedDecrement(&m_refCount);
 	if (ref == 0)
 	{
 		delete this;

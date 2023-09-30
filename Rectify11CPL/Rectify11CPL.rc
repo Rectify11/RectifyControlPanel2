@@ -83,6 +83,16 @@ IDR_UPDATEPAGE          UIFILE                  "UpdatePage.xml"
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Bitmap
+//
+
+IDB_LIGHTPREVIEW        BITMAP                  "preview_light.bmp"
+
+IDB_DARKPREVIEW         BITMAP                  "preview_dark.bmp"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // String Table
 //
 
@@ -93,6 +103,8 @@ BEGIN
     IDS_THEME               "Theme:"
     IDS_UPDATE              "Update Rectify11"
     IDS_CPLNAME             "Rectify11 Settings"
+    IDS_THEMESHEADER        "Themes"
+    IDS_INFORMATIONHEADER   "Information"
 END
 
 #endif    // English (United States) resources
