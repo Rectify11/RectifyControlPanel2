@@ -58,7 +58,7 @@ HRESULT CElementProvider::QueryInterface(REFIID riid, __out void** ppv)
 	{
 		char szGuid[40] = { 0 };
 
-		sprintf(szGuid, "{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}", riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7]);
+		sprintf_s(szGuid, "{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}", riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7]);
 
 		//MessageBox(NULL, szGuid, TEXT("Unknown interface in CElementProvider::QueryInterface()"), MB_ICONERROR);
 	}
@@ -94,30 +94,28 @@ HRESULT CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* result_handl
 	}
 	else
 	{
-		WCHAR buffer[2000];
+		WCHAR buffer[200];
 		if (hr == 0x800403EF)
 		{
-			swprintf(buffer, L"Failed to create DirectUI parser: A required property is missing.");
+			swprintf(buffer, 200, L"Failed to create DirectUI parser: A required property is missing. (are you sure that resid=main exists?)");
 		}
 		else if (hr == 0x8004005A)
 		{
-			swprintf(buffer, L"Failed to create DirectUI parser: Probaby can't find the UIFILE?");
+			swprintf(buffer, 200, L"Failed to create DirectUI parser: Probaby can't find the UIFILE?");
 		}
 		else
 		{
-			swprintf(buffer, L"Failed to create DirectUI parser: Error %X", hr);
+			swprintf(buffer, 200, L"Failed to create DirectUI parser: Error %X", hr);
 		}
 
 		MessageBox(NULL, buffer, TEXT("CElementProvider::CreateDUI failed"), MB_ICONERROR);
 	}
 	return 0;
 }
-
+#pragma warning( push )
+#pragma warning( disable : 4312 ) // disable warning about compiler complaining about casting ID to pointer
 HRESULT STDMETHODCALLTYPE CElementProvider::SetResourceID(UINT id)
 {
-	WCHAR szGuid[40] = { 0 };
-
-	swprintf(szGuid, L"%d", id);
 	IFrameShellViewClient* client = this;
 
 	WCHAR buffer[264];
@@ -132,15 +130,22 @@ HRESULT STDMETHODCALLTYPE CElementProvider::SetResourceID(UINT id)
 		hr = DirectUI::XProvider::Initialize(NULL, (IXProviderCP*)this->resourceProvider);
 		if (!SUCCEEDED(hr))
 		{
-			MessageBox(NULL, szGuid, TEXT("CElementProvider::SetResourceId Failed to initialize xprovider"), MB_ICONERROR);
+			WCHAR szResource[40] = { 0 };
+			swprintf(szResource, 40, L"%d", id);
+
+			MessageBox(NULL, szResource, TEXT("CElementProvider::SetResourceId Failed to initialize xprovider"), MB_ICONERROR);
 		}
 	}
 	else
 	{
-		MessageBox(NULL, szGuid, TEXT("CElementProvider::SetResourceId failed to create xprovider"), MB_ICONERROR);
+		WCHAR szResource[40] = { 0 };
+		swprintf(szResource, 40, L"%d", id);
+
+		MessageBox(NULL, szResource, TEXT("CElementProvider::SetResourceId failed to create xprovider"), MB_ICONERROR);
 	}
 	return hr;
 }
+#pragma warning( pop )
 
 HRESULT STDMETHODCALLTYPE CElementProvider::OptionallyTakeInitialFocus(BOOL* result)
 {
@@ -185,7 +190,7 @@ void CElementProvider::InitNavLinks()
 	WCHAR buffer[1024];
 	if (FAILED(LoadStringW(g_hInst, IDS_UPDATE, buffer, 1023)))
 	{
-		wcscpy(buffer, L"Failed to load localized string");
+		wcscpy_s(buffer, L"Failed to load localized string");
 	}
 
 	links->AddLinkControlPanel(buffer, L"Rectify11.SettingsCPL", L"pageRectifyUpdate", CPNAV_Normal, icon.hIcon);
@@ -274,7 +279,7 @@ void CElementProvider::InitMainPage()
 
 	if (ThemeCombo != NULL)
 	{
-		WCHAR value[255];
+		WCHAR value[255] = {0};
 		PVOID pvData = value;
 		DWORD size = sizeof(value);
 		RegGetValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\ThemeManager", L"DllName", RRF_RT_REG_SZ, 0, pvData, &size);
@@ -428,7 +433,7 @@ HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param)
 							LPITEMIDLIST pidlist;
 							if (SUCCEEDED(SHParseDisplayName(path, NULL, &pidlist, 0, NULL)))
 							{
-								IShellBrowser* browser;
+								IShellBrowser* browser = NULL;
 								if (SUCCEEDED(IUnknown_QueryService(_punkSite, SID_STopLevelBrowser, IID_IShellBrowser, (LPVOID*)&browser)))
 								{
 									hr = browser->BrowseObject(pidlist, SBSP_ACTIVATE_NOFOCUS | SBSP_SAMEBROWSER | SBSP_CREATENOHISTORY);

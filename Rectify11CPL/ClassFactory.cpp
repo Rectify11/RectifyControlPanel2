@@ -81,7 +81,7 @@ HRESULT CFolderViewImplClassFactory::CreateInstance(__in_opt IUnknown* punkOuter
 
             WCHAR szGuid[40] = { 0 };
 
-            swprintf(szGuid, L"{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}", riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7]);
+            swprintf(szGuid, 40, L"{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}", riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7]);
 
             MessageBox(NULL, szGuid, TEXT("Unknown interface in CFolderViewImplClassFactory::CreateInstance()"), 0);
         }

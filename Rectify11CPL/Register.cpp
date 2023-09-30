@@ -19,6 +19,7 @@
 
 HINSTANCE g_hInst = NULL;
 LONG g_cRefModule = 0;
+WCHAR g_szExtTitle[1024];
 
 void DllAddRef()
 {
@@ -29,40 +30,6 @@ void DllRelease()
 {
     InterlockedDecrement(&g_cRefModule);
 }
-HANDLE g_hActCtx;
-BOOL RegisterContext(HINSTANCE hInstance)
-{
-    if (hInstance == NULL)
-    {
-        hInstance = g_hInst;// GetModuleHandle(NULL);
-    }
-
-    WCHAR moduleFileName[264];
-    GetModuleFileNameW(hInstance, moduleFileName, 260);
-
-    ACTCTXW pActCtx;
-    pActCtx.cbSize = sizeof(ACTCTXW);
-    pActCtx.lpApplicationName = NULL;
-    pActCtx.lpSource = moduleFileName;
-    pActCtx.dwFlags = 0x88;
-    pActCtx.hModule = hInstance;
-    
-    HANDLE ctx = CreateActCtxW(&pActCtx);
-    if (ctx != (HANDLE)-1)
-    {
-        if (_InterlockedCompareExchange((unsigned __int64*)&g_hActCtx, (unsigned long long)ctx, (unsigned long long) -1) != -1)
-        {
-            ReleaseActCtx(ctx);
-        }
-    }
-    if (ctx != (HANDLE)-1)
-    {
-        return TRUE;
-    }
-    return FALSE;
-}
-
-WCHAR g_szExtTitle[1024];
 
 STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void *lpReserved)
 { 
@@ -70,7 +37,7 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void *lpReserved)
     {
         if (FAILED(LoadStringW(g_hInst, IDS_CPLNAME, g_szExtTitle, 1023)))
         {
-            wcscpy(g_szExtTitle, L"Failed to load localized string");
+            wcscpy_s(g_szExtTitle, L"Failed to load localized string");
         }
 
         //MessageBox(NULL, "Attach a debugger NOW", "", 0);
@@ -83,7 +50,6 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void *lpReserved)
      
         g_hInst = hInstance;
         DisableThreadLibraryCalls(hInstance);
-        RegisterContext(hInstance);
     }
     return TRUE;
 }                              
@@ -104,11 +70,11 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
         hr = pClassFactory->QueryInterface(riid, ppv);
         pClassFactory->Release();
     }
-    if (hr)
+    if (FAILED(hr))
     {
         WCHAR szGuid[40] = { 0 };
 
-        swprintf(szGuid, L"{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}", riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7]);
+        swprintf(szGuid, 40, L"{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}", riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7]);
 
         MessageBox(NULL, szGuid, TEXT("Unknown interface in DllGetClassObject()"), 0);
     }
@@ -148,8 +114,14 @@ typedef struct
 STDAPI DllRegisterServer()
 {
     WCHAR szFolderViewImplClassID[64], szElementClassID[64], szSubKey[MAX_PATH], szData[MAX_PATH];
-    StringFromGUID2(CLSID_FolderViewImpl, szFolderViewImplClassID, ARRAYSIZE(szFolderViewImplClassID));      // Convert the IID to a string.
-    StringFromGUID2(CLSID_FolderViewImplElement, szElementClassID, ARRAYSIZE(szElementClassID)); // Convert the IID to a string.
+    if (FAILED(StringFromGUID2(CLSID_FolderViewImpl, szFolderViewImplClassID, ARRAYSIZE(szFolderViewImplClassID))))
+    {
+        return GetLastError();
+    }
+    if (FAILED(StringFromGUID2(CLSID_FolderViewImplElement, szElementClassID, ARRAYSIZE(szElementClassID))))
+    {
+        return GetLastError();
+    }
 
     // Get the path and module name.
     WCHAR szModulePathAndName[MAX_PATH];
@@ -312,27 +284,30 @@ STDAPI DllUnregisterServer()
     }
  
     // Delete the namespace extension entries
-    StringFromGUID2(CLSID_FolderViewImpl, szFolderClassID, ARRAYSIZE(szFolderClassID));
-    HRESULT hrSF = StringCchPrintfW(szSubKey, ARRAYSIZE(szSubKey), CONTROLPANEL_NAMESPACE_GUID, szFolderClassID);
+    HRESULT hrSF = StringFromGUID2(CLSID_FolderViewImpl, szFolderClassID, ARRAYSIZE(szFolderClassID));
     if (SUCCEEDED(hrSF))
     {
-        hrSF = SHDeleteKeyW(HKEY_LOCAL_MACHINE, szSubKey);
+        hrSF = StringCchPrintfW(szSubKey, ARRAYSIZE(szSubKey), CONTROLPANEL_NAMESPACE_GUID, szFolderClassID);
         if (SUCCEEDED(hrSF))
         {
-            // Delete the object's registry entries
-            hrSF = StringCchPrintfW(szSubKey, ARRAYSIZE(szSubKey), L"CLSID\\%s", szFolderClassID);
+            hrSF = SHDeleteKeyW(HKEY_LOCAL_MACHINE, szSubKey);
             if (SUCCEEDED(hrSF))
             {
-                hrSF = SHDeleteKeyW(HKEY_CLASSES_ROOT, szSubKey);
+                // Delete the object's registry entries
+                hrSF = StringCchPrintfW(szSubKey, ARRAYSIZE(szSubKey), L"CLSID\\%s", szFolderClassID);
                 if (SUCCEEDED(hrSF))
                 {
-                    hrSF = StringCchPrintfW(szSubKey, ARRAYSIZE(szSubKey), SHELL_EXT_APPROVED, szFolderClassID);
+                    hrSF = SHDeleteKeyW(HKEY_CLASSES_ROOT, szSubKey);
                     if (SUCCEEDED(hrSF))
                     {
-                        hrSF = SHDeleteKeyW(HKEY_LOCAL_MACHINE, szSubKey);
-               
-                        // Refresh the folder views that might be open
-                        RefreshFolderViews(CSIDL_DRIVES);
+                        hrSF = StringCchPrintfW(szSubKey, ARRAYSIZE(szSubKey), SHELL_EXT_APPROVED, szFolderClassID);
+                        if (SUCCEEDED(hrSF))
+                        {
+                            hrSF = SHDeleteKeyW(HKEY_LOCAL_MACHINE, szSubKey);
+
+                            // Refresh the folder views that might be open
+                            RefreshFolderViews(CSIDL_DRIVES);
+                        }
                     }
                 }
             }
