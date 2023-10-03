@@ -136,7 +136,6 @@
 
 
 					<!--Theme combobox-->
-
 					<element id="atom(advancedStorageHandlerSettings)" layoutpos="top" layout="verticalflowlayout()">
 						<element resid="indentedMacroHandlerSetting" layoutpos="top" layout="flowlayout()">
 							<element id="atom(ThemeTxt)" class="cp_content_text" width="50rp" contentalign="middleleft" accessible="true" accrole="statictext" tooltip="true" active="mouse" content="resstr(105)" />
@@ -145,7 +144,7 @@
 					</element>
 					
 					<!--Theme preview image-->
-					<element id="atom(ThemePreview)" layoutpos="right" accessible="true" accrole="graphic" accname="resstr(301)" />
+					<element id="atom(ThemePreview)" layoutpos="right" accessible="true" accrole="graphic" accname="resstr(301)" width="128rp" height="128rp"/>
 					
 					<!--Spacing-->
 					<Element layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,5rp)" />
@@ -168,7 +167,6 @@
 					<macro expand="informationsectiontitle">
 						<bind connect="Title" content="resstr(109)" />
 					</macro>
-
 
 					<element layoutpos="top" id="atom(RectifyVersion)" content="Rectify11 version: Loading..."></element>
 				</Element>

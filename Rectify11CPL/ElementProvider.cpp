@@ -276,6 +276,7 @@ void CElementProvider::InitMainPage()
 	Button* HelpButton = (Button*)root->FindDescendent(StrToID((UCString)L"buttonHelp"));
 	CCCheckBox* MicaForEveryoneCheckbox = (CCCheckBox*)root->FindDescendent(StrToID((UCString)L"MicaChk"));
 	CCCheckBox* TabbedCheckbox = (CCCheckBox*)root->FindDescendent(StrToID((UCString)L"TabChk"));
+	Element* version = (Element*)root->FindDescendent(StrToID((UCString)L"RectifyVersion"));
 
 	if (ThemeCombo != NULL)
 	{
@@ -316,7 +317,16 @@ void CElementProvider::InitMainPage()
 		else {
 			MessageBox(NULL, TEXT("Failed to count the amount of themes"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
 		}
-
+		if (version != NULL)
+		{
+			WCHAR value[255] = { 0 };
+			PVOID pvData = value;
+			DWORD size = sizeof(value);
+			RegGetValue(HKEY_LOCAL_MACHINE, L"Software\\Rectify11", L"Version", RRF_RT_REG_SZ, 0, pvData, &size);
+			std::wstring vstr = std::wstring(L"Rectify11 version: ");
+			vstr += (LPCWSTR)pvData;
+			version->SetContentString((UCString)vstr.c_str());
+		}
 		static EventListener accept_listener(ThemeCmb_OnEvent);
 
 		if (ThemeCombo->AddListener(&accept_listener) != S_OK)
