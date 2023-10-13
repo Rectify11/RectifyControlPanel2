@@ -335,7 +335,6 @@ void CElementProvider::InitMainPage()
 		}
 	}
 
-	//helpHub
 	if (HelpButton != NULL)
 	{
 		static EventListener help_listener(HelpButton_OnEvent);
