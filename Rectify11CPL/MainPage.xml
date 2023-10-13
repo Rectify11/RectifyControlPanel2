@@ -90,6 +90,77 @@
 			<if class="cp_command_button_box">
 				<Element padding="rect(0rp,10rp,10rp,10rp)" width="600rp"/>
 			</if>
+			<TouchButton handleenter="true" font="iconfont;115%" padding="rect(12rp,6rp,12rp,6rp)" minsize="size(96rp,0rp)" borderthickness="rect(0,0,0,0)" contentalign="middlecenter|endellipsis" constrainlayout="NarrowClip" accessible="true" accrole="pushbutton" accdefaction="resstr(104, library(dui70.dll))"/>
+			<if class="primary">
+				<TouchButton background="themeable(dtb(DirectUI::Button, 1, 1), 20102)" foreground="themeable(gtc(DirectUI::Button, 1, 1, 3803), threedface)" bordercolor="themeable(gtc(Communications::Rebar, 0, 0, 3805), threedface)"/>
+				<if mousewithin="true">
+					<TouchButton background="themeable(dtb(DirectUI::Button, 1, 2), 20103)" foreground="themeable(gtc(DirectUI::Button, 1, 2, 3803), threedface)" bordercolor="themeable(gtc(Communications::Rebar, 0, 0, 3805), threedface)"/>
+				</if>
+				<if captured="true">
+					<TouchButton background="themeable(dtb(DirectUI::Button, 1, 5), 20102)" foreground="themeable(gtc(DirectUI::Button, 1, 5, 3803), threedface)" bordercolor="themeable(gtc(Communications::Rebar, 0, 0, 3805), threedface)"/>
+				</if>
+				<if Pressed="true">
+					<TouchButton background="themeable(dtb(DirectUI::Button, 1, 3), 20684)" foreground="themeable(gtc(DirectUI::Button, 1, 3, 3803))" bordercolor="themeable(gtc(Communications::Rebar, 0, 0, 3805), threedface)"/>
+				</if>
+				<if Enabled="false">
+					<TouchButton background="themeable(dtb(DirectUI::Button, 1, 4), 20685)" foreground="themeable(gtc(DirectUI::Button, 1, 4, 3803), threedhighlight)" bordercolor="themeable(gtc(Communications::Rebar, 0, 0, 3805), threedface)"/>
+				</if>
+			</if>
+			<if class="secondary">
+				<TouchButton background="themeable(dtb(DirectUISecondary::Button, 1, 1), 20662)" foreground="themeable(gtc(DirectUISecondary::Button, 1, 1, 3803), buttontext)" bordercolor="themeable(gtc(Communications::Rebar, 0, 0, 3805), threedface)"/>
+				<if mousewithin="true">
+					<TouchButton background="themeable(dtb(DirectUISecondary::Button, 1, 2), 20663)" foreground="themeable(gtc(DirectUISecondary::Button, 1, 2, 3803), buttontext)" bordercolor="themeable(gtc(Communications::Rebar, 0, 0, 3805), threedface)"/>
+				</if>
+				<if captured="true">
+					<TouchButton background="themeable(dtb(DirectUISecondary::Button, 1, 5), 20662)" foreground="themeable(gtc(DirectUISecondary::Button, 1, 5, 3803), buttontext)" bordercolor="themeable(gtc(Communications::Rebar, 0, 0, 3805), threedface)"/>
+				</if>
+				<if Pressed="true">
+					<TouchButton background="themeable(dtb(DirectUISecondary::Button, 1, 3), 20664)" foreground="themeable(gtc(DirectUISecondary::Button, 1, 3, 3803), argb(255, 144, 144, 144))" bordercolor="themeable(gtc(Communications::Rebar, 0, 0, 3805), threedface)"/>
+				</if>
+				<if Enabled="false">
+					<TouchButton background="themeable(dtb(DirectUISecondary::Button, 1, 4), 20665)" foreground="themeable(gtc(DirectUISecondary::Button, 1, 4, 3803))" bordercolor="themeable(gtc(Communications::Rebar, 0, 0, 3805), threedface)"/>
+				</if>
+			</if>
+			<TouchCheckBox contentalign="endellipsis" background="20575" accessible="true" accrole="checkbutton" font="resstr(113, library(duires.dll))" minsize="size(100rp,16rp)" padding="rect(0rp,8rp,0rp,0rp)"/>
+			<if checkedstate="unchecked">
+				<TouchCheckBox accdefaction="resstr(105, library(dui70.dll))"/>
+			</if>
+			<if checkedstate="checked">
+				<TouchCheckBox accdefaction="resstr(106, library(dui70.dll))"/>
+			</if>
+			<if Enabled="false">
+				<TouchCheckBox foreground="10017"/>
+			</if>
+			<if id="atom(TCB_Glyph)">
+				<TouchCheckBoxGlyph contentalign="middlecenter" height="20rp" width="20rp" background="themeable(dtb(DirectUI::Button, 3, 1))" foreground="20646" borderthickness="rect(0rp,0rp,0rp,0rp)" bordercolor="20638" constrainlayout="NarrowClip" font="resstr(114, library(duires.dll))"/>
+				<if mousefocused="true">
+					<TouchCheckBoxGlyph background="themeable(dtb(DirectUI::Button, 3, 2))" foreground="20647" bordercolor="20639"/>
+				</if>
+				<if captured="true">
+					<TouchCheckBoxGlyph background="themeable(dtb(DirectUI::Button, 3, 1))" foreground="20646" bordercolor="20638"/>
+				</if>
+				<if Pressed="true">
+					<TouchCheckBoxGlyph background="themeable(dtb(DirectUI::Button, 3, 3))" foreground="20648" bordercolor="20640"/>
+				</if>
+				<if Enabled="false">
+					<TouchCheckBoxGlyph background="themeable(dtb(DirectUI::Button, 3, 4))" foreground="20649" bordercolor="20641"/>
+				</if>
+				<if checkedstate="checked">
+					<TouchCheckBoxGlyph contentalign="middlecenter" height="20rp" width="20rp" background="themeable(dtb(DirectUI::Button, 3, 5))" foreground="20646" borderthickness="rect(0rp,0rp,0rp,0rp)" bordercolor="20638" constrainlayout="NarrowClip" font="resstr(114, library(duires.dll))"/>
+					<if mousefocused="true">
+						<TouchCheckBoxGlyph background="themeable(dtb(DirectUI::Button, 3, 6))" foreground="20647" bordercolor="20639"/>
+					</if>
+					<if captured="true">
+						<TouchCheckBoxGlyph background="themeable(dtb(DirectUI::Button, 3, 5))" foreground="20646" bordercolor="20638"/>
+					</if>
+					<if Pressed="true">
+						<TouchCheckBoxGlyph background="themeable(dtb(DirectUI::Button, 3, 7))" foreground="20648" bordercolor="20640"/>
+					</if>
+					<if Enabled="false">
+						<TouchCheckBoxGlyph background="themeable(dtb(DirectUI::Button, 3, 8))" foreground="20649" bordercolor="20641"/>
+					</if>
+				</if>
+			</if>
 		</style>
 		<style resid="CPLTaskHubStyle">
 			<if class="ShieldIcon">
@@ -110,7 +181,7 @@
 
 	<element resid="main" layout="borderlayout()" accessible="true" accrole="window" layoutpos="top" sheet="common">
 		<ScrollViewer xscrollable="false" layoutpos="top" sheet="common" accessible="true" accrole="pane" class="cp_topbox">
-			<element sheet="cp_style" class="cp_topbox" width="1000rp" padding="rect(60rp,15rp,10rp,10rp)" layoutpos="client" layout="borderlayout()" accessible="true" accname="resstr(104)">
+			<element sheet="cp_style" class="cp_topbox" width="9999rp" padding="rect(60rp,15rp,10rp,10rp)" layoutpos="client" layout="borderlayout()" accessible="true" accname="resstr(104)">
 
 				<!--Title and help button-->
 				<element layoutpos="top" layout="borderlayout()">
@@ -122,54 +193,78 @@
 
 					</element>
 				</element>
+				<Element id="atom(ThemesSection)" class="cp_content_pane" layoutpos="top" layout="filllayout()">
 
-				<Element id="atom(ThemesSection)" class="cp_content_pane" layoutpos="top" layout="borderlayout()">
+					<element layout="borderlayout()" background="20575">
+						<!--Spacing-->
+						<Element layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,24rp)" />
 
+						<!--Themes header line thing-->
+						<macro expand="informationsectiontitle">
+							<bind connect="Title" font="iconfont;115%" content="resstr(108)" />
+						</macro>
 
-					<!--Spacing-->
-					<Element layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,25rp)" />
-
-					<!--Themes header line thing-->
-					<macro expand="informationsectiontitle">
-						<bind connect="Title" content="resstr(108)" />
-					</macro>
-
-
-					<!--Theme combobox-->
-					<element id="atom(advancedStorageHandlerSettings)" layoutpos="top" layout="verticalflowlayout()">
-						<element resid="indentedMacroHandlerSetting" layoutpos="top" layout="flowlayout()">
-							<element id="atom(ThemeTxt)" class="cp_content_text" width="50rp" contentalign="middleleft" accessible="true" accrole="statictext" tooltip="true" active="mouse" content="resstr(105)" />
-							<ComboBox id="atom(ThemeCmb)" width="200rp" accessible="true" accRole="combobox" font="gtf(CONTROLPANELSTYLE,14,0)" />
+						<!--Theme combobox and preview-->
+						<element layoutpos="top" layout="borderlayout()">
+							<element id="atom(ThemePreview)" width="152rp" height="152rp" layoutpos="right" accessible="true" accrole="graphic" accname="resstr(301)" />
+							<element id="atom(advancedStorageHandlerSettings)" layoutpos="top" layout="verticalflowlayout()" width="600rp">
+								<element resid="indentedMacroHandlerSetting" layoutpos="top" layout="flowlayout(0,0,0,0)">
+									<element id="atom(ThemeTxt)" font="iconfont;115%" contentalign="middleleft" accessible="true" height="40rp" accrole="statictext" tooltip="true" active="mouse" content="resstr(105)" />
+									<ComboBox id="atom(ThemeCmb)" width="300rp" accessible="true" padding="rect(0,8rp,0,8rp)" margin="rect(32rp,0,0,8rp)" accRole="combobox" font="iconfont;115%" />
+								</element>
+							</element>
+							<!--Checkboxes-->
+							<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)" width="400rp">
+								<TouchCheckBox layoutpos="top" id="Atom(MicaChk)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Enable Mica"/>
+								<TouchCheckbox layoutpos="top" id="Atom(TabChk)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Use tabbed instead of Mica"/>
+								<TouchButton layoutpos="top" id="atom(ThemePreferences)" accessible="true" margin="rect(0,16rp,0,8rp)" class="secondary" content="Theme preferences"/>
+							</element>
 						</element>
 					</element>
-					
-					<!--Theme preview image-->
-					<element id="atom(ThemePreview)" layoutpos="right" accessible="true" accrole="graphic" accname="resstr(301)" width="128rp" height="128rp"/>
-					
-					<!--Spacing-->
-					<Element layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,5rp)" />
-					
-					<!--Checkboxes-->
-					<element layoutpos="top" layout="borderlayout()">
-						<!--Spacing-->
-						<Element layoutpos="top" layout="borderlayout()" />
 
-						<CCCheckBox layoutpos="top" id="Atom(MicaChk)" accessible="true" selected="false" content="Enable Mica"></CCCheckBox>
-						<CCCheckBox layoutpos="top" id="Atom(TabChk)" accessible="true" selected="false" content="Use tabbed instead of Mica"></CCCheckBox>
-					</element>
 				</Element>
+				<Element id="atom(MenuSection)" class="cp_content_pane" layoutpos="top" layout="filllayout()">
 
+					<element layout="borderlayout()" background="20575">
+						<!--Spacing-->
+						<Element layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,24rp)" />
+
+						<!--Themes header line thing-->
+						<macro expand="informationsectiontitle">
+							<bind connect="Title" font="iconfont;115%" content="Menus" />
+						</macro>
+
+						<!--Theme combobox and preview-->
+						<element layoutpos="top" layout="borderlayout()">
+							<!--Checkboxes-->
+							<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)" width="400rp">
+								<CCRadioButton layoutpos="top" id="Atom(Win11DefaultMenus)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Windows 11 default"/>
+								<CCRadioButton layoutpos="top" id="Atom(NilesoftSmall)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Enhanced fluent menus"/>
+								<CCRadioButton layoutpos="top" id="Atom(NilesoftFull)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Enhanced fluent menus (all items in root)"/>
+								<CCRadioButton layoutpos="top" id="Atom(Classic)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Classic menus"/>
+								<CCRadioButton layoutpos="top" id="Atom(ClassicTransparent)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Classic menus with transparency"/>
+							</element>
+						</element>
+					</element>
+
+				</Element>
 				<Element id="atom(InformationSection)" class="cp_content_pane" layoutpos="top" layout="borderlayout()">
 					<!--Spacing-->
-					<Element layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,25rp)" />
+					<Element layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,24rp)" />
 
 					<!--Information header line thing-->
 					<macro expand="informationsectiontitle">
-						<bind connect="Title" content="resstr(109)" />
+						<bind connect="Title" font="iconfont;115%" content="resstr(109)" />
 					</macro>
-
-					<element layoutpos="top" id="atom(RectifyVersion)" content="Rectify11 version: Loading..."></element>
-				</Element>
+					<element layoutpos="top" layout="flowlayout(0)" font="iconfont;115%">
+						<element id="atom(RectifyVersion)" content="Rectify11 version: Loading..."/>
+					</element>
+					<!--<element id="atom(UpdateLink)" font="iconfont;115%" layout="flowlayout(0)" background="20575" padding="rect(4rp,4rp,4rp,4rp)" margin="rect(0,8rp,0,0)">
+						<element id="atom(UpdateIcon)" content="icon(81,16rp,16rp,library(imageres.dll))" margin="rect(0,0,4rp,0)"/>
+						<element id="atom(UpdateText)" content="An update is available."/>
+						<TouchButton id="atom(UpdateButton)" accessible="true" margin="rect(12rp,0,0,0)" class="primary" content="Update now"/>
+					</element>-->
+					</Element>
 			</element>
 		</ScrollViewer>
 	</element>

@@ -193,7 +193,7 @@ void CElementProvider::InitNavLinks()
 		wcscpy_s(buffer, L"Failed to load localized string");
 	}
 
-	links->AddLinkControlPanel(buffer, L"Rectify11.SettingsCPL", L"pageRectifyUpdate", CPNAV_Normal, icon.hIcon);
+	//links->AddLinkControlPanel(buffer, L"Rectify11.SettingsCPL", L"pageRectifyUpdate", CPNAV_Normal, icon.hIcon);
 	links->AddLinkControlPanel(L"System information", L"Microsoft.System", L"", CPNAV_SeeAlso, NULL);
 
 
@@ -227,12 +227,12 @@ void CElementProvider::InitNavLinks()
 
 void MicaChk_OnEvent(Element* elem, Event* iev)
 {
-	CCCheckBox* MicaForEveryoneCheckbox = (CCCheckBox*)elem;
-	CCCheckBox* TabbedCheckbox = (CCCheckBox*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"TabChk"));
+	TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)elem;
+	TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"TabChk"));
 
-	if (iev->type == PushButton::Click)
+	if (iev->type == TouchButton::Click)
 	{
-		bool MicaEnabled2 = MicaForEveryoneCheckbox->GetSelected();
+		CheckedStateFlags MicaEnabled2 = MicaForEveryoneCheckbox->GetCheckedState();
 		CRectifyUtil::SetMicaForEveryoneEnabled(MicaEnabled2);
 
 		// Enable/disable the tabbed checkbox
@@ -243,9 +243,9 @@ void MicaChk_OnEvent(Element* elem, Event* iev)
 
 void TabChk_OnEvent(Element* elem, Event* iev)
 {
-	CCCheckBox* TabbedCheckbox = (CCCheckBox*)elem;
+	TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)elem;
 
-	if (iev->type == PushButton::Click)
+	if (iev->type == TouchButton::Click)
 	{
 		CRectifyUtil::SetTabbedEnabled(TabbedCheckbox->GetSelected());
 	}
@@ -274,8 +274,8 @@ void CElementProvider::InitMainPage()
 	Element* root = XProvider::GetRoot();
 	ThemeCombo = (Combobox*)root->FindDescendent(StrToID((UCString)L"ThemeCmb"));
 	Button* HelpButton = (Button*)root->FindDescendent(StrToID((UCString)L"buttonHelp"));
-	CCCheckBox* MicaForEveryoneCheckbox = (CCCheckBox*)root->FindDescendent(StrToID((UCString)L"MicaChk"));
-	CCCheckBox* TabbedCheckbox = (CCCheckBox*)root->FindDescendent(StrToID((UCString)L"TabChk"));
+	TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"MicaChk"));
+	TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"TabChk"));
 	Element* version = (Element*)root->FindDescendent(StrToID((UCString)L"RectifyVersion"));
 
 	if (ThemeCombo != NULL)
@@ -347,8 +347,9 @@ void CElementProvider::InitMainPage()
 
 	if (MicaForEveryoneCheckbox != NULL)
 	{
+		MicaForEveryoneCheckbox->SetToggleOnClick(true);
 		bool MicaEnabled = CRectifyUtil::CheckIfMicaForEveryoneIsEnabled();
-		MicaForEveryoneCheckbox->SetSelected(MicaEnabled);
+		MicaForEveryoneCheckbox->SetCheckedState(MicaEnabled ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
 
 		if (!MicaEnabled && TabbedCheckbox != NULL)
 		{
@@ -364,7 +365,8 @@ void CElementProvider::InitMainPage()
 
 	if (TabbedCheckbox != NULL)
 	{
-		TabbedCheckbox->SetSelected(CRectifyUtil::GetTabbedEnabled());
+		TabbedCheckbox->SetToggleOnClick(true);
+		TabbedCheckbox->SetCheckedState(CRectifyUtil::GetTabbedEnabled() ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
 
 		static EventListener tab_listener(TabChk_OnEvent);
 		if (TabbedCheckbox->AddListener(&tab_listener) != S_OK)
