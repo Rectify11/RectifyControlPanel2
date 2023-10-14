@@ -6,6 +6,7 @@
 #include <comutil.h>
 #pragma comment(lib, "taskschd.lib")
 #pragma comment(lib, "comsupp.lib")
+#pragma comment(lib, "comsuppw.lib")
 
 DWORD FindProcessId(const std::wstring& processName)
 {
@@ -64,6 +65,47 @@ bool deleteTask(std::wstring taskName)
 	pITS->Release();
 
 	if (FAILED(pITF->DeleteTask(_bstr_t(taskName.c_str()), 0))) {
+		pITF->Release();
+		CoUninitialize();
+		return false;
+	}
+
+	pITF->Release();
+
+	CoUninitialize();
+
+	return true;
+}
+
+
+bool createTask(std::wstring taskName, const char* taskxml)
+{
+	if (FAILED(CoInitialize(nullptr))) {
+		return false;
+	}
+
+	ITaskService* pITS;
+	if (FAILED(CoCreateInstance(CLSID_TaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskService, (void**)&pITS))) {
+		CoUninitialize();
+		return false;
+	}
+
+	if (FAILED(pITS->Connect(_variant_t(), _variant_t(), _variant_t(), _variant_t()))) {
+		pITS->Release();
+		CoUninitialize();
+		return false;
+	}
+
+	ITaskFolder* pITF;
+	if (FAILED(pITS->GetFolder(_bstr_t(L"\\"), &pITF))) {
+		pITS->Release();
+		CoUninitialize();
+		return false;
+	}
+
+	pITS->Release();
+	IRegisteredTask* task;
+	if (FAILED(pITF->RegisterTask(_bstr_t(taskName.c_str()), _bstr_t(taskxml), TASK_CREATE_OR_UPDATE, variant_t(), variant_t(), TASK_LOGON_INTERACTIVE_TOKEN, variant_t(), &task))) {
 		pITF->Release();
 		CoUninitialize();
 		return false;
@@ -161,9 +203,9 @@ BOOL CRectifyUtil::CheckIfMicaForEveryoneIsEnabled()
 /// Enable/disable micaforeveryone tool
 /// </summary>
 /// <param name="enabled"></param>
-void CRectifyUtil::SetMicaForEveryoneEnabled(BOOL enabled)
+void CRectifyUtil::SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed)
 {
-	if (enabled)
+	if (micaEnabled)
 	{
 		struct stat sb;
 		if (stat("c:/windows/MicaForEveryone", &sb) == 0)
@@ -177,6 +219,32 @@ void CRectifyUtil::SetMicaForEveryoneEnabled(BOOL enabled)
 					MessageBox(NULL, L"Failed to delete local micaforeveryone folder.", L"Failed to create MFE task", MB_ICONERROR);
 				}
 			}
+
+			if (!createTask(wstring(L"mfe"), "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Task version=\"1.2\" xmlns=\"http://schemas.microsoft.com/windows/2004/02/mit/task\"><RegistrationInfo><URI>\micafix</URI></RegistrationInfo><Triggers><LogonTrigger><Enabled>true</Enabled></LogonTrigger></Triggers><Principals><Principal id=\"Author\"><GroupId>S-1-5-32-545</GroupId><RunLevel>HighestAvailable</RunLevel></Principal></Principals><Settings><MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy><DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries><StopIfGoingOnBatteries>false</StopIfGoingOnBatteries><AllowHardTerminate>true</AllowHardTerminate><StartWhenAvailable>false</StartWhenAvailable><RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable><IdleSettings><StopOnIdleEnd>true</StopOnIdleEnd><RestartOnIdle>false</RestartOnIdle></IdleSettings><AllowStartOnDemand>true</AllowStartOnDemand><Enabled>true</Enabled><Hidden>false</Hidden><RunOnlyIfIdle>false</RunOnlyIfIdle><WakeToRun>false</WakeToRun><ExecutionTimeLimit>PT0S</ExecutionTimeLimit><Priority>5</Priority></Settings><Actions Context=\"Author\"><Exec><Command>%systemroot%\MicaForEveryone\MicaForEveryone.exe</Command></Exec></Actions></Task>"))
+			{
+				MessageBox(NULL, L"Failed to create MFE task.", L"Failed to create MFE task", MB_ICONERROR);
+			}
+
+			STARTUPINFOW si;
+			PROCESS_INFORMATION pi;
+
+			// set the size of the structures
+			ZeroMemory(&si, sizeof(si));
+			si.cb = sizeof(si);
+			ZeroMemory(&pi, sizeof(pi));
+
+			// start the program up
+			CreateProcessW(L"%systemroot%\MicaForEveryone\MicaForEveryone.exe",
+				NULL,        // Command line
+				NULL,           // Process handle not inheritable
+				NULL,           // Thread handle not inheritable
+				FALSE,          // Set handle inheritance to FALSE
+				0,              // No creation flags
+				NULL,           // Use parent's environment block
+				NULL,           // Use parent's starting directory 
+				&si,            // Pointer to STARTUPINFO structure
+				&pi             // Pointer to PROCESS_INFORMATION structure (removed extra parentheses)
+			);
 		}
 		else
 		{
@@ -185,6 +253,10 @@ void CRectifyUtil::SetMicaForEveryoneEnabled(BOOL enabled)
 	}
 	else
 	{
+		if (!deleteTask(L"mfe"))
+		{
+			MessageBox(NULL, L"Failed to delete MFE task", L"Failed to delete MFE task", MB_ICONERROR);
+		}
 		if (!deleteTask(L"mfe"))
 		{
 			MessageBox(NULL, L"Failed to delete MFE task", L"Failed to delete MFE task", MB_ICONERROR);
@@ -202,14 +274,6 @@ BOOL CRectifyUtil::GetTabbedEnabled()
 	return FALSE;
 }
 
-/// <summary>
-/// Set if mica tab is used instead of regular mica.
-/// </summary>
-/// <param name="enaled"></param>
-void CRectifyUtil::SetTabbedEnabled(BOOL enabled)
-{
-	// TODO
-}
 
 BOOL CRectifyUtil::IsDarkTheme()
 {

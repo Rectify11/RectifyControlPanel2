@@ -3,10 +3,9 @@ class CRectifyUtil
 {
 public:
 	static BOOL CheckIfMicaForEveryoneIsEnabled();
-	static void SetMicaForEveryoneEnabled(BOOL enabled);
+	static void SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed);
 
 	static BOOL GetTabbedEnabled();
-	static void SetTabbedEnabled(BOOL enabled);
 
 	static BOOL IsDarkTheme();
 };

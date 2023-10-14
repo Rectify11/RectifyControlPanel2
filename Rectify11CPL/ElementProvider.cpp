@@ -233,11 +233,11 @@ void MicaChk_OnEvent(Element* elem, Event* iev)
 	if (iev->type == TouchButton::Click)
 	{
 		CheckedStateFlags MicaEnabled2 = MicaForEveryoneCheckbox->GetCheckedState();
-		CRectifyUtil::SetMicaForEveryoneEnabled(MicaEnabled2);
+		CRectifyUtil::SetMicaForEveryoneEnabled(MicaEnabled2 ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE, TabbedCheckbox->GetCheckedState() ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
 
 		// Enable/disable the tabbed checkbox
 		if (TabbedCheckbox != NULL)
-			TabbedCheckbox->SetEnabled(MicaEnabled2);
+			TabbedCheckbox->SetEnabled(MicaEnabled2 ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
 	}
 }
 
@@ -247,7 +247,7 @@ void TabChk_OnEvent(Element* elem, Event* iev)
 
 	if (iev->type == TouchButton::Click)
 	{
-		CRectifyUtil::SetTabbedEnabled(TabbedCheckbox->GetSelected());
+		CRectifyUtil::SetMicaForEveryoneEnabled(TRUE, TabbedCheckbox->GetCheckedState() ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
 	}
 }
 
