@@ -41,18 +41,21 @@ LONG createStartup(LPCWSTR app_name, LPCWSTR app_path)
 {
 	HKEY hKey;
 
+	WCHAR proc_buffer[2066];
+	ExpandEnvironmentStringsW(app_path, proc_buffer, 2066);
+
 	LONG lnRes = RegOpenKeyEx(HKEY_CURRENT_USER,
 		TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"),
 		0, KEY_WRITE,
 		&hKey);
 	if (ERROR_SUCCESS == lnRes)
 	{
-		lnRes = RegSetValueEx(hKey,
-			app_name,
+		lnRes = RegSetValueExW(hKey,
+			proc_buffer,
 			0,
 			REG_SZ,
-			(LPBYTE)app_path,
-			sizeof(app_path));
+			(LPBYTE)proc_buffer,
+			(lstrlenW(proc_buffer) + 1) * sizeof(WCHAR));
 	}
 
 	RegCloseKey(hKey);
@@ -158,9 +161,13 @@ void KillTask(wstring proc)
 	ZeroMemory(&pi, sizeof(pi));
 	wstring args = wstring(L"/f /im ");
 	args += proc;
-	WCHAR args_buffer[4096];
+	WCHAR args_buffer[2066];
 	wcsncpy_s(args_buffer, 1024, args.c_str(), args.size());
-	CreateProcessW(L"%systemroot%\\windows\\taskkill.exe",
+
+	WCHAR proc_buffer[2066];
+	ExpandEnvironmentStringsW(L"%systemroot%\\system32\\taskkill.exe", proc_buffer, 2066);
+
+	BOOL x = CreateProcessW(proc_buffer,
 		args_buffer,        // Command line
 		NULL,           // Process handle not inheritable
 		NULL,           // Thread handle not inheritable
@@ -171,9 +178,37 @@ void KillTask(wstring proc)
 		&si,            // Pointer to STARTUPINFO structure
 		&pi             // Pointer to PROCESS_INFORMATION structure (removed extra parentheses)
 	);
+	HRESULT hr = GetLastError();
+	CloseHandle(pi.hProcess);
+	CloseHandle(pi.hThread);
+}
+
+HRESULT startProc(wstring proc)
+{
+	STARTUPINFOW si;
+	PROCESS_INFORMATION pi;
+	ZeroMemory(&si, sizeof(si));
+	si.cb = sizeof(si);
+	ZeroMemory(&pi, sizeof(pi));
+
+	WCHAR proc_buffer[4096];
+	ExpandEnvironmentStringsW(proc.c_str(), proc_buffer, 4095);
+
+	HRESULT hr = CreateProcessW(proc_buffer,
+		NULL,           // Command line
+		NULL,           // Process handle not inheritable
+		NULL,           // Thread handle not inheritable
+		FALSE,          // Set handle inheritance to FALSE
+		0,              // No creation flags
+		NULL,           // Use parent's environment block
+		NULL,           // Use parent's starting directory 
+		&si,            // Pointer to STARTUPINFO structure
+		&pi             // Pointer to PROCESS_INFORMATION structure (removed extra parentheses)
+	);
 
 	CloseHandle(pi.hProcess);
 	CloseHandle(pi.hThread);
+	return hr;
 }
 /// <summary>
 /// Check if mica for everyone is enabled
@@ -197,7 +232,7 @@ BOOL CRectifyUtil::CheckIfMicaForEveryoneIsEnabled()
 			return TRUE;
 		}
 	}
-	
+
 	return FALSE;
 }
 /// <summary>
@@ -235,7 +270,8 @@ void CRectifyUtil::SetMicaForEveryoneEnabled(wstring currentThemeName, BOOL mica
 			// Enable micafix if black theme
 			if (currentThemeName.compare(L"Mica"))
 			{
-
+				createStartup(L"mfefix", L"%systemroot%\\MicaForEveryone\\EFamd64\\ExplorerFrame.exe");
+				startProc(L"%systemroot%\\MicaForEveryone\\EFamd64\\ExplorerFrame.exe");
 			}
 			else
 			{
@@ -277,6 +313,7 @@ void CRectifyUtil::SetMicaForEveryoneEnabled(wstring currentThemeName, BOOL mica
 		}
 		deleteStartup(L"mfefix");
 		KillTask(L"MicaForEveryone.exe");
+		KillTask(L"explorerframe.exe");
 	}
 }
 
@@ -293,7 +330,7 @@ BOOL CRectifyUtil::GetTabbedEnabled()
 
 BOOL CRectifyUtil::IsDarkTheme()
 {
-	WCHAR value[255] = {0};
+	WCHAR value[255] = { 0 };
 	PVOID pvData = value;
 	DWORD size = sizeof(value);
 	RegGetValueW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\ThemeManager", L"DllName", RRF_RT_REG_SZ, 0, pvData, &size);
