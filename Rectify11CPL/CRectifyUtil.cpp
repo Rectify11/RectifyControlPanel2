@@ -37,85 +37,43 @@ DWORD FindProcessId(const std::wstring& processName)
 	return 0;
 }
 
-bool deleteTask(std::wstring taskName)
+LONG createStartup(LPCWSTR app_name, LPCWSTR app_path)
 {
-	if (FAILED(CoInitialize(nullptr))) {
-		return false;
+	HKEY hKey;
+
+	LONG lnRes = RegOpenKeyEx(HKEY_CURRENT_USER,
+		TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"),
+		0, KEY_WRITE,
+		&hKey);
+	if (ERROR_SUCCESS == lnRes)
+	{
+		lnRes = RegSetValueEx(hKey,
+			app_name,
+			0,
+			REG_SZ,
+			(LPBYTE)app_path,
+			sizeof(app_path));
 	}
 
-	ITaskService* pITS;
-	if (FAILED(CoCreateInstance(CLSID_TaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskService, (void**)&pITS))) {
-		CoUninitialize();
-		return false;
-	}
-
-	if (FAILED(pITS->Connect(_variant_t(), _variant_t(), _variant_t(), _variant_t()))) {
-		pITS->Release();
-		CoUninitialize();
-		return false;
-	}
-
-	ITaskFolder* pITF;
-	if (FAILED(pITS->GetFolder(_bstr_t(L"\\"), &pITF))) {
-		pITS->Release();
-		CoUninitialize();
-		return false;
-	}
-
-	pITS->Release();
-
-	if (FAILED(pITF->DeleteTask(_bstr_t(taskName.c_str()), 0))) {
-		pITF->Release();
-		CoUninitialize();
-		return false;
-	}
-
-	pITF->Release();
-
-	CoUninitialize();
-
-	return true;
+	RegCloseKey(hKey);
+	return lnRes;
 }
 
-
-bool createTask(std::wstring taskName, const char* taskxml)
+LONG deleteStartup(LPCWSTR app_name)
 {
-	if (FAILED(CoInitialize(nullptr))) {
-		return false;
+	HKEY hKey;
+
+	LONG lnRes = RegOpenKeyEx(HKEY_CURRENT_USER,
+		TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"),
+		0, KEY_WRITE,
+		&hKey);
+	if (ERROR_SUCCESS == lnRes)
+	{
+		lnRes = RegDeleteValue(hKey, app_name);
 	}
 
-	ITaskService* pITS;
-	if (FAILED(CoCreateInstance(CLSID_TaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskService, (void**)&pITS))) {
-		CoUninitialize();
-		return false;
-	}
-
-	if (FAILED(pITS->Connect(_variant_t(), _variant_t(), _variant_t(), _variant_t()))) {
-		pITS->Release();
-		CoUninitialize();
-		return false;
-	}
-
-	ITaskFolder* pITF;
-	if (FAILED(pITS->GetFolder(_bstr_t(L"\\"), &pITF))) {
-		pITS->Release();
-		CoUninitialize();
-		return false;
-	}
-
-	pITS->Release();
-	IRegisteredTask* task;
-	if (FAILED(pITF->RegisterTask(_bstr_t(taskName.c_str()), _bstr_t(taskxml), TASK_CREATE_OR_UPDATE, variant_t(), variant_t(), TASK_LOGON_INTERACTIVE_TOKEN, variant_t(), &task))) {
-		pITF->Release();
-		CoUninitialize();
-		return false;
-	}
-
-	pITF->Release();
-
-	CoUninitialize();
-
-	return true;
+	RegCloseKey(hKey);
+	return lnRes;
 }
 
 int DeleteDirectory(const std::string& refcstrRootDirectory,
@@ -191,20 +149,66 @@ int DeleteDirectory(const std::string& refcstrRootDirectory,
 	return 0;
 }
 
+void KillTask(wstring proc)
+{
+	STARTUPINFOW si;
+	PROCESS_INFORMATION pi;
+	ZeroMemory(&si, sizeof(si));
+	si.cb = sizeof(si);
+	ZeroMemory(&pi, sizeof(pi));
+	wstring args = wstring(L"/f /im ");
+	args += proc;
+	WCHAR args_buffer[4096];
+	wcsncpy_s(args_buffer, 1024, args.c_str(), args.size());
+	CreateProcessW(L"%systemroot%\\windows\\taskkill.exe",
+		args_buffer,        // Command line
+		NULL,           // Process handle not inheritable
+		NULL,           // Thread handle not inheritable
+		FALSE,          // Set handle inheritance to FALSE
+		CREATE_NO_WINDOW,              // No creation flags
+		NULL,           // Use parent's environment block
+		NULL,           // Use parent's starting directory 
+		&si,            // Pointer to STARTUPINFO structure
+		&pi             // Pointer to PROCESS_INFORMATION structure (removed extra parentheses)
+	);
+
+	CloseHandle(pi.hProcess);
+	CloseHandle(pi.hThread);
+}
 /// <summary>
 /// Check if mica for everyone is enabled
 /// </summary>
 /// <returns>Returns if Mica for everyone is enabled</returns>
 BOOL CRectifyUtil::CheckIfMicaForEveryoneIsEnabled()
 {
-	return FindProcessId(L"micaforeveryone") != 0;
+	HKEY hKey = NULL;
+	DWORD cbData = 2096;
+	WCHAR buffer[2096];
+	LONG lnRes = RegOpenKeyEx(HKEY_CURRENT_USER,
+		TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"),
+		0, KEY_READ,
+		&hKey);
+
+	if (ERROR_SUCCESS == lnRes)
+	{
+		lnRes = RegQueryValueExW(hKey, L"mfe", NULL, NULL, (LPBYTE)&buffer, &cbData);
+		if (lnRes == ERROR_SUCCESS || lnRes == ERROR_MORE_DATA)
+		{
+			return TRUE;
+		}
+	}
+	
+	return FALSE;
 }
 /// <summary>
 /// Enable/disable micaforeveryone tool
 /// </summary>
 /// <param name="enabled"></param>
-void CRectifyUtil::SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed)
+void CRectifyUtil::SetMicaForEveryoneEnabled(wstring currentThemeName, BOOL micaEnabled, BOOL tabbed)
 {
+	WCHAR buffer[1024];
+	swprintf(buffer, 1024, L"Setting mica enabled. theme: %ws, mica: %d, tabbed: %d", currentThemeName.c_str(), micaEnabled, tabbed);
+	MessageBox(NULL, buffer, L"work", MB_ICONERROR);
 	if (micaEnabled)
 	{
 		struct stat sb;
@@ -219,10 +223,24 @@ void CRectifyUtil::SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed)
 					MessageBox(NULL, L"Failed to delete local micaforeveryone folder.", L"Failed to create MFE task", MB_ICONERROR);
 				}
 			}
-
-			if (!createTask(wstring(L"mfe"), "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Task version=\"1.2\" xmlns=\"http://schemas.microsoft.com/windows/2004/02/mit/task\"><RegistrationInfo><URI>\micafix</URI></RegistrationInfo><Triggers><LogonTrigger><Enabled>true</Enabled></LogonTrigger></Triggers><Principals><Principal id=\"Author\"><GroupId>S-1-5-32-545</GroupId><RunLevel>HighestAvailable</RunLevel></Principal></Principals><Settings><MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy><DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries><StopIfGoingOnBatteries>false</StopIfGoingOnBatteries><AllowHardTerminate>true</AllowHardTerminate><StartWhenAvailable>false</StartWhenAvailable><RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable><IdleSettings><StopOnIdleEnd>true</StopOnIdleEnd><RestartOnIdle>false</RestartOnIdle></IdleSettings><AllowStartOnDemand>true</AllowStartOnDemand><Enabled>true</Enabled><Hidden>false</Hidden><RunOnlyIfIdle>false</RunOnlyIfIdle><WakeToRun>false</WakeToRun><ExecutionTimeLimit>PT0S</ExecutionTimeLimit><Priority>5</Priority></Settings><Actions Context=\"Author\"><Exec><Command>%systemroot%\MicaForEveryone\MicaForEveryone.exe</Command></Exec></Actions></Task>"))
+			HRESULT hr = createStartup(TEXT("mfe"), TEXT("%systemroot%\\MicaForEveryone\\MicaForEveryone.exe"));
+			if (FAILED(hr))
 			{
-				MessageBox(NULL, L"Failed to create MFE task.", L"Failed to create MFE task", MB_ICONERROR);
+				swprintf(buffer, 1024, L"Failed create MFE task: %x", hr);
+				MessageBox(NULL, buffer, L"Failed to create MFE task", MB_ICONERROR);
+			}
+
+			// TODO: copy config
+
+			// Enable micafix if black theme
+			if (currentThemeName.compare(L"Mica"))
+			{
+
+			}
+			else
+			{
+				deleteStartup(L"mfefix");
+				KillTask(L"explorerframe.exe");
 			}
 
 			// Start mica for everyone
@@ -231,7 +249,7 @@ void CRectifyUtil::SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed)
 			ZeroMemory(&si, sizeof(si));
 			si.cb = sizeof(si);
 			ZeroMemory(&pi, sizeof(pi));
-			CreateProcessW(L"%systemroot%\MicaForEveryone\MicaForEveryone.exe",
+			CreateProcessW(L"%systemroot%\\MicaForEveryone\\MicaForEveryone.exe",
 				NULL,        // Command line
 				NULL,           // Process handle not inheritable
 				NULL,           // Thread handle not inheritable
@@ -253,14 +271,12 @@ void CRectifyUtil::SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed)
 	}
 	else
 	{
-		if (!deleteTask(L"mfe"))
+		if (FAILED(deleteStartup(L"mfe")))
 		{
 			MessageBox(NULL, L"Failed to delete MFE task", L"Failed to delete MFE task", MB_ICONERROR);
 		}
-		if (!deleteTask(L"mfe"))
-		{
-			MessageBox(NULL, L"Failed to delete MFE task", L"Failed to delete MFE task", MB_ICONERROR);
-		}
+		deleteStartup(L"mfefix");
+		KillTask(L"MicaForEveryone.exe");
 	}
 }
 

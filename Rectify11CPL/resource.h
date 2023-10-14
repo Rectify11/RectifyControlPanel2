@@ -9,6 +9,7 @@
 #define IDS_CPLTITLE                    104
 #define IDS_THEME                       105
 #define IDS_UPDATE                      106
+#define IDS_ThemePref                   106
 #define IDS_CPLNAME                     107
 #define IDS_THEMESHEADER                108
 #define IDS_INFORMATIONHEADER           109

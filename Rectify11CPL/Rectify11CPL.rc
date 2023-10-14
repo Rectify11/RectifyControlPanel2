@@ -78,7 +78,7 @@ IDR_TASK                XML                     "taskslist.xml"
 
 IDR_MAINPAGE            UIFILE                  "MainPage.xml"
 
-IDR_UPDATEPAGE          UIFILE                  "UpdatePage.xml"
+IDR_UPDATEPAGE          UIFILE                  "ThemeSettingPage.xml"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -101,7 +101,7 @@ BEGIN
     IDS_THEMEHOOKFAIL       "Failed to initialize SecureUXTheme ThemeTool. Theme information will not be loaded."
     IDS_CPLTITLE            "Change Rectify11 Settings"
     IDS_THEME               "Theme:"
-    IDS_UPDATE              "Update Rectify11"
+    IDS_ThemePref           "Theme preferences"
     IDS_CPLNAME             "Rectify11 Settings"
     IDS_THEMESHEADER        "Themes"
     IDS_INFORMATIONHEADER   "Information"

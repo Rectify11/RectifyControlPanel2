@@ -9,8 +9,11 @@
 #include "ElementProvider.h"
 #include "resource.h"
 #include "pch.h"
+#include <map>
 
 static vector<ULONG> themes;
+typedef std::map<int, wstring> ThemesMapBase;
+static ThemesMapBase ThemesMap;
 
 
 #define NOT_IMPLEMENTED MessageBox(NULL, TEXT(__FUNCTION__), TEXT("Non implementented function in CElementProvider"), MB_ICONERROR)
@@ -224,16 +227,16 @@ void CElementProvider::InitNavLinks()
 	}
 }
 
-
 void MicaChk_OnEvent(Element* elem, Event* iev)
 {
 	TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)elem;
 	TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"TabChk"));
+	Combobox* ThemeCombo = (Combobox*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"ThemeCmb"));
 
 	if (iev->type == TouchButton::Click)
 	{
 		CheckedStateFlags MicaEnabled2 = MicaForEveryoneCheckbox->GetCheckedState();
-		CRectifyUtil::SetMicaForEveryoneEnabled(MicaEnabled2 ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE, TabbedCheckbox->GetCheckedState() ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+		CRectifyUtil::SetMicaForEveryoneEnabled(ThemesMap[ThemeCombo->GetSelection()], MicaEnabled2 ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE, TabbedCheckbox->GetCheckedState() ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
 
 		// Enable/disable the tabbed checkbox
 		if (TabbedCheckbox != NULL)
@@ -244,10 +247,11 @@ void MicaChk_OnEvent(Element* elem, Event* iev)
 void TabChk_OnEvent(Element* elem, Event* iev)
 {
 	TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)elem;
+	Combobox* ThemeCombo = (Combobox*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"ThemeCmb"));
 
 	if (iev->type == TouchButton::Click)
 	{
-		CRectifyUtil::SetMicaForEveryoneEnabled(TRUE, TabbedCheckbox->GetCheckedState() ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+		CRectifyUtil::SetMicaForEveryoneEnabled(ThemesMap[ThemeCombo->GetSelection()], TRUE, TabbedCheckbox->GetCheckedState() ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
 	}
 }
 
@@ -303,6 +307,7 @@ void CElementProvider::InitMainPage()
 						std::wstring pathBuff = std::wstring();
 						theme->GetVisualStyle(pathBuff);
 						std::wstring msstylePath = std::wstring((LPCWSTR)pvData);
+						ThemesMap[k] = nameBuffer;
 						if (pathBuff == msstylePath)
 						{
 							ThemeCombo->SetSelection(k);

@@ -15,32 +15,18 @@
 			<sh:controlpanel name="Rectify11.SettingsCPL"/>
 		</sh:task>
 
-		<!-- Update -->
-		<sh:task id="{BF46D6AA-B5E6-4EE1-9E5B-ED017272B9F9}" needsElevation="true">
-			<!-- This is a generated GUID, specific to this task link -->
-			<!-- The needsElevation="true" attribute means that the task 
-                 appears with a shield icon next to it. Adding this attribute 
-                 does not cause the .exe to require elevation - it just adds an 
-                 icon to tell users that the command already requires it -->
-			<sh:name>Update Rectify11</sh:name>
-			<sh:keywords>update;rectify11</sh:keywords>
-			<sh:controlpanel name="Rectify11.SettingsCPL" page="pageRectifyUpdate"/>
-		</sh:task>
-
 		<!-- Category assignments -->
 
 		<!-- Appearance and Personalization -->
 		<category id="1">
 			<!-- These idref attributes refer to the GUIDs of the tasks defined above. A maximum of five tasks are shown per category. -->
 			<sh:task idref="{3B75A7AE-C4E4-4E5A-9420-7CECCDA75425}"/>
-			<sh:task idref="{BF46D6AA-B5E6-4EE1-9E5B-ED017272B9F9}"/>
 		</category>
 		
 		<!-- System and Security -->
 		<category id="5">
 			<!-- These idref attributes refer to the GUIDs of the tasks defined above. A maximum of five tasks are shown per category. -->
 			<sh:task idref="{3B75A7AE-C4E4-4E5A-9420-7CECCDA75425}"/>
-			<sh:task idref="{BF46D6AA-B5E6-4EE1-9E5B-ED017272B9F9}"/>
 		</category>
 	</application>
 </applications>

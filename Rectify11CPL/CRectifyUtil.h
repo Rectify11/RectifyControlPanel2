@@ -3,7 +3,7 @@ class CRectifyUtil
 {
 public:
 	static BOOL CheckIfMicaForEveryoneIsEnabled();
-	static void SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed);
+	static void SetMicaForEveryoneEnabled(wstring currentThemeName, BOOL micaEnabled, BOOL tabbed);
 
 	static BOOL GetTabbedEnabled();
 
