@@ -225,15 +225,12 @@ void CRectifyUtil::SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed)
 				MessageBox(NULL, L"Failed to create MFE task.", L"Failed to create MFE task", MB_ICONERROR);
 			}
 
+			// Start mica for everyone
 			STARTUPINFOW si;
 			PROCESS_INFORMATION pi;
-
-			// set the size of the structures
 			ZeroMemory(&si, sizeof(si));
 			si.cb = sizeof(si);
 			ZeroMemory(&pi, sizeof(pi));
-
-			// start the program up
 			CreateProcessW(L"%systemroot%\MicaForEveryone\MicaForEveryone.exe",
 				NULL,        // Command line
 				NULL,           // Process handle not inheritable
@@ -245,6 +242,9 @@ void CRectifyUtil::SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed)
 				&si,            // Pointer to STARTUPINFO structure
 				&pi             // Pointer to PROCESS_INFORMATION structure (removed extra parentheses)
 			);
+
+			CloseHandle(pi.hProcess);
+			CloseHandle(pi.hThread);
 		}
 		else
 		{
