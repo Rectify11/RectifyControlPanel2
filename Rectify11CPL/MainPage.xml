@@ -215,10 +215,8 @@
 							</element>
 							<!--Checkboxes-->
 							<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)" width="400rp">
-								<TouchButton layoutpos="top" id="atom(Link_EnableAdmin)" class="primary" accname="Change settings that are unavailable" content="Change settings that are unavailable"/>
 								<TouchCheckBox layoutpos="top" id="Atom(MicaChk)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Enable Mica"/>
 								<TouchCheckbox layoutpos="top" id="Atom(TabChk)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Use tabbed instead of Mica"/>
-								<TouchButton layoutpos="top" id="atom(ThemePreferences)" accessible="true" margin="rect(0,16rp,0,8rp)" class="secondary" content="Theme preferences"/>
 							</element>
 						</element>
 					</element>
@@ -244,6 +242,7 @@
 								<CCRadioButton layoutpos="top" id="Atom(NilesoftFull)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Enhanced fluent menus (all items in root)"/>
 								<CCRadioButton layoutpos="top" id="Atom(Classic)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Classic menus"/>
 								<CCRadioButton layoutpos="top" id="Atom(ClassicTransparent)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Classic menus with transparency"/>
+								<TouchButton layoutpos="top" id="atom(Link_EnableAdmin)" class="primary" accname="Change settings that are unavailable" content="Change settings that are unavailable"/>
 							</element>
 						</element>
 					</element>

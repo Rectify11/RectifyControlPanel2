@@ -129,7 +129,7 @@ HRESULT STDMETHODCALLTYPE CElementProvider::SetResourceID(UINT id)
 	//First parmeter: hinstance of module
 	//2nd: Resource ID of uifile
 	//3rd param: The main resid value
-	int hr = DirectUI::XResourceProvider::Create(g_hInst, (unsigned short const*)id, (unsigned short const*)buffer, 0, &this->resourceProvider);
+	int hr = DirectUI::XResourceProvider::Create(g_hInst, (UCString)id, (UCString)buffer, 0, &this->resourceProvider);
 	if (SUCCEEDED(hr))
 	{
 		hr = DirectUI::XProvider::Initialize(NULL, (IXProviderCP*)this->resourceProvider);
@@ -187,17 +187,12 @@ void CElementProvider::InitNavLinks()
 {
 	auto links = new CControlPanelNavLinks();
 
-	//load uac icon
-	SHSTOCKICONINFO icon = {};
-	icon.cbSize = sizeof(SHSTOCKICONINFO);
-	SHGetStockIconInfo(SIID_SHIELD, 0x101, &icon);
-
 	WCHAR buffer[1024];
 	if (FAILED(LoadStringW(g_hInst, IDS_UPDATE, buffer, 1023)))
 	{
 		wcscpy_s(buffer, L"Failed to load localized string");
 	}
-
+	links->AddLinkControlPanel(buffer, L"Rectify11.SettingsCPL", L"pageThemePref", CPNAV_Normal, NULL);
 	links->AddLinkControlPanel(L"System information", L"Microsoft.System", L"", CPNAV_SeeAlso, NULL);
 
 
