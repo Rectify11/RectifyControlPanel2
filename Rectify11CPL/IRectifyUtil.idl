@@ -1,0 +1,14 @@
+import "oaidl.idl";
+import "ocidl.idl";
+
+
+
+[
+    object, uuid(5BFF4E01-D379-4050-A382-C6504A980D46),
+        version(1.0)
+]
+interface IRectifyUtil : IUnknown
+{
+    HRESULT GetMicaSettings([out] BOOL* pEnabled, [out] BOOL* pTabbed);
+    HRESULT SetMicaForEveryoneEnabled([in] BOOL micaEnabled, [in] BOOL tabbed);
+}

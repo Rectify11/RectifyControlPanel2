@@ -40,3 +40,12 @@ enum CPNAVTYPE : int{
     CPNAVTYPE_ShellExec = 1,
     CPNAVTYPE_Navigate = 2
 };
+
+MIDL_INTERFACE("6FABDA16-031E-47E3-B2A2-2339C05CCB9E")
+IMultiObjectElevationFactory : public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE Initialize(HWND hwnd, GUID param) = 0;
+    virtual HRESULT STDMETHODCALLTYPE InitializeNoWaitCursor(HWND hwnd, GUID param) = 0;
+    virtual HRESULT STDMETHODCALLTYPE CreateElevatedObject(GUID param, GUID param2, void** ppv) = 0;
+};

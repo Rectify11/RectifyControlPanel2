@@ -189,6 +189,7 @@
     <ClCompile Include="ClassFactory.cpp" />
     <ClCompile Include="CRectifyUtil.cpp" />
     <ClCompile Include="ElementProvider.cpp" />
+    <ClCompile Include="ElevationManager.cpp" />
     <ClCompile Include="Register.cpp" />
     <ClCompile Include="theme.cpp" />
   </ItemGroup>
@@ -203,6 +204,7 @@
     <ClInclude Include="ClassFactory.h" />
     <ClInclude Include="CRectifyUtil.h" />
     <ClInclude Include="ElementProvider.h" />
+    <ClInclude Include="ElevationManager.h" />
     <ClInclude Include="Rectify11CPL.h" />
     <ClInclude Include="Guid.h" />
     <ClInclude Include="theme.h" />
@@ -226,6 +228,9 @@
     <ProjectReference Include="..\dui70\DirectUI\DirectUI.vcxproj">
       <Project>{0b7de49a-33c6-41b1-a9ce-d353031f8454}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="IRectifyUtil.idl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

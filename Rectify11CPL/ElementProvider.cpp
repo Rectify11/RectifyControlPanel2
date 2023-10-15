@@ -6,6 +6,7 @@
 #include <shellapi.h>
 
 #include "Rectify11CPL.h"
+#include "ElevationManager.h"
 #include "ElementProvider.h"
 #include "resource.h"
 #include "pch.h"
@@ -14,7 +15,8 @@
 static vector<ULONG> themes;
 typedef std::map<int, wstring> ThemesMapBase;
 static ThemesMapBase ThemesMap;
-
+static IRectifyUtil* RectifyUtil = NULL;
+static bool HasAdmin = FALSE;
 
 #define NOT_IMPLEMENTED MessageBox(NULL, TEXT(__FUNCTION__), TEXT("Non implementented function in CElementProvider"), MB_ICONERROR)
 #define SHOW_ERROR(x) MessageBox(NULL, TEXT(x), TEXT("Error in CElementProvider"), MB_ICONERROR)
@@ -236,7 +238,9 @@ void MicaChk_OnEvent(Element* elem, Event* iev)
 	if (iev->type == TouchButton::Click)
 	{
 		CheckedStateFlags MicaEnabled2 = MicaForEveryoneCheckbox->GetCheckedState();
-		CRectifyUtil::SetMicaForEveryoneEnabled(ThemesMap[ThemeCombo->GetSelection()], MicaEnabled2 ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE, TabbedCheckbox->GetCheckedState() ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+		CheckedStateFlags TabbedEnabled = TabbedCheckbox->GetCheckedState();
+
+		RectifyUtil->SetMicaForEveryoneEnabled(MicaEnabled2 ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE, TabbedEnabled ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
 
 		// Enable/disable the tabbed checkbox
 		if (TabbedCheckbox != NULL)
@@ -251,7 +255,9 @@ void TabChk_OnEvent(Element* elem, Event* iev)
 
 	if (iev->type == TouchButton::Click)
 	{
-		CRectifyUtil::SetMicaForEveryoneEnabled(ThemesMap[ThemeCombo->GetSelection()], TRUE, TabbedCheckbox->GetCheckedState() ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+
+		RectifyUtil->SetMicaForEveryoneEnabled(TRUE, TabbedCheckbox->GetCheckedState() ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+		
 	}
 }
 
@@ -260,6 +266,27 @@ void HelpButton_OnEvent(Element* elem, Event* iev)
 	if (iev->type == Button::Click)
 	{
 		ShellExecute(0, 0, TEXT("http://rectify11.net"), 0, 0, SW_SHOW);
+	}
+}
+
+void EnableAdminBtn_OnEvent(Element* elem, Event* iev)
+{
+	if (iev->type == TouchButton::Click)
+	{
+		IRectifyUtil* utility = ElevationManager::Initialize(TRUE);
+		TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"MicaChk"));
+		TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"TabChk"));
+		if (utility != NULL)
+		{
+			RectifyUtil = utility;
+			HasAdmin = TRUE;
+			elem->SetLayoutPos(-3);
+			elem->SetVisible(FALSE);
+
+			MicaForEveryoneCheckbox->SetEnabled(TRUE);
+			if (MicaForEveryoneCheckbox->GetCheckedState() != CheckedStateFlags_NONE)
+				TabbedCheckbox->SetEnabled(TRUE);
+		}
 	}
 }
 
@@ -275,12 +302,14 @@ void ThemeCmb_OnEvent(Element* elem, Event* iev)
 
 void CElementProvider::InitMainPage()
 {
+	RectifyUtil = (IRectifyUtil*)new CRectifyUtil();
 	Element* root = XProvider::GetRoot();
 	ThemeCombo = (Combobox*)root->FindDescendent(StrToID((UCString)L"ThemeCmb"));
 	Button* HelpButton = (Button*)root->FindDescendent(StrToID((UCString)L"buttonHelp"));
 	TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"MicaChk"));
 	TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"TabChk"));
 	Element* version = (Element*)root->FindDescendent(StrToID((UCString)L"RectifyVersion"));
+	TouchButton* enableAdmin = (TouchButton*)root->FindDescendent(StrToID((UCString)L"Link_EnableAdmin"));
 
 	if (ThemeCombo != NULL)
 	{
@@ -365,10 +394,22 @@ void CElementProvider::InitMainPage()
 		}
 	}
 
+	if (enableAdmin != NULL)
+	{
+		static EventListener help_listener(EnableAdminBtn_OnEvent);
+		if (enableAdmin->AddListener(&help_listener) != S_OK)
+		{
+			MessageBox(NULL, TEXT("Failed to add elevation button licenser"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
+		}
+	}
+
 	if (MicaForEveryoneCheckbox != NULL)
 	{
 		MicaForEveryoneCheckbox->SetToggleOnClick(true);
-		bool MicaEnabled = CRectifyUtil::CheckIfMicaForEveryoneIsEnabled();
+		BOOL MicaEnabled;
+		BOOL TabbedEnabled;
+		RectifyUtil->GetMicaSettings(&MicaEnabled, &TabbedEnabled);
+
 		MicaForEveryoneCheckbox->SetCheckedState(MicaEnabled ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
 
 		if (!MicaEnabled && TabbedCheckbox != NULL)
@@ -385,8 +426,12 @@ void CElementProvider::InitMainPage()
 
 	if (TabbedCheckbox != NULL)
 	{
+		BOOL MicaEnabled;
+		BOOL TabbedEnabled;
+		RectifyUtil->GetMicaSettings(&MicaEnabled, &TabbedEnabled);
+
 		TabbedCheckbox->SetToggleOnClick(true);
-		TabbedCheckbox->SetCheckedState(CRectifyUtil::GetTabbedEnabled() ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+		TabbedCheckbox->SetCheckedState(MicaEnabled ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
 
 		static EventListener tab_listener(TabChk_OnEvent);
 		if (TabbedCheckbox->AddListener(&tab_listener) != S_OK)
@@ -395,12 +440,23 @@ void CElementProvider::InitMainPage()
 		}
 	}
 
+	if (!HasAdmin)
+	{
+		MicaForEveryoneCheckbox->SetEnabled(FALSE);
+		TabbedCheckbox->SetEnabled(FALSE);
+	}
+	else {
+		enableAdmin->SetLayoutPos(-3);
+		enableAdmin->SetVisible(FALSE);
+	}
+
+
 	UpdateThemeGraphic(root);
 }
 
 void CElementProvider::UpdateThemeGraphic(Element* root)
 {
-	LPCWSTR id = CRectifyUtil::IsDarkTheme() ? MAKEINTRESOURCE(IDB_DARKPREVIEW) : MAKEINTRESOURCE(IDB_LIGHTPREVIEW);
+	LPCWSTR id = IsDarkTheme() ? MAKEINTRESOURCE(IDB_DARKPREVIEW) : MAKEINTRESOURCE(IDB_LIGHTPREVIEW);
 	HBITMAP bmp = (HBITMAP)LoadImage(g_hInst, id, IMAGE_BITMAP, 256, 256, 0);
 	if (bmp == NULL)
 	{
@@ -489,6 +545,9 @@ HRESULT STDMETHODCALLTYPE CElementProvider::OnNavigateAway() {
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnInnerElementDestroyed() {
+	if (RectifyUtil != NULL)
+		RectifyUtil->Release();
+	HasAdmin = FALSE;
 	return 0;
 }
 

@@ -4,9 +4,16 @@
 #include <tlhelp32.h>
 #include <taskschd.h>
 #include <comutil.h>
+#include "Guid.h"
+#include <Shlwapi.h>
 #pragma comment(lib, "taskschd.lib")
 #pragma comment(lib, "comsupp.lib")
 #pragma comment(lib, "comsuppw.lib")
+
+CRectifyUtil::CRectifyUtil() : m_ref(1)
+{
+	
+}
 
 DWORD FindProcessId(const std::wstring& processName)
 {
@@ -37,46 +44,82 @@ DWORD FindProcessId(const std::wstring& processName)
 	return 0;
 }
 
-LONG createStartup(LPCWSTR app_name, LPCWSTR app_path)
+
+bool deleteTask(std::wstring taskName)
 {
-	HKEY hKey;
+	HRESULT hr = S_OK;
 
-	WCHAR proc_buffer[2066];
-	ExpandEnvironmentStringsW(app_path, proc_buffer, 2066);
-
-	LONG lnRes = RegOpenKeyEx(HKEY_CURRENT_USER,
-		TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"),
-		0, KEY_WRITE,
-		&hKey);
-	if (ERROR_SUCCESS == lnRes)
-	{
-		lnRes = RegSetValueExW(hKey,
-			app_name,
-			0,
-			REG_SZ,
-			(LPBYTE)proc_buffer,
-			(lstrlenW(proc_buffer) + 1) * sizeof(WCHAR));
+	ITaskService* pITS;
+	hr = CoCreateInstance(CLSID_TaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskService, (void**)&pITS);
+	if (FAILED(hr)) {
+		return hr;
 	}
 
-	RegCloseKey(hKey);
-	return lnRes;
+	hr = pITS->Connect(_variant_t(), _variant_t(), _variant_t(), _variant_t());
+	if (FAILED(hr)) {
+		pITS->Release();
+		return hr;
+	}
+
+	ITaskFolder* pITF;
+	hr = pITS->GetFolder(_bstr_t(L"\\"), &pITF);
+	if (FAILED(hr)) {
+		pITS->Release();
+		return hr;
+	}
+
+	pITS->Release();
+
+	hr = pITF->DeleteTask(_bstr_t(taskName.c_str()), 0);
+	if (FAILED(hr)) {
+		pITF->Release();
+		return hr;
+	}
+
+	pITF->Release();
+
+	return hr;
 }
 
-LONG deleteStartup(LPCWSTR app_name)
-{
-	HKEY hKey;
 
-	LONG lnRes = RegOpenKeyEx(HKEY_CURRENT_USER,
-		TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"),
-		0, KEY_WRITE,
-		&hKey);
-	if (ERROR_SUCCESS == lnRes)
-	{
-		lnRes = RegDeleteValue(hKey, app_name);
+HRESULT createTask(std::wstring taskName, std::wstring taskExe)
+{
+	HRESULT hr = S_OK;
+
+	ITaskService* pITS;
+	hr = CoCreateInstance(CLSID_TaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskService, (void**)&pITS);
+	if (FAILED(hr)) {
+		return hr;
 	}
 
-	RegCloseKey(hKey);
-	return lnRes;
+	hr = pITS->Connect(_variant_t(), _variant_t(), _variant_t(), _variant_t());
+	if (FAILED(hr)) {
+		pITS->Release();
+		return hr;
+	}
+
+	ITaskFolder* pITF;
+	hr = pITS->GetFolder(_bstr_t(L"\\"), &pITF);
+	if (FAILED(hr)) {
+		pITS->Release();
+		return hr;
+	}
+
+	wstring taskxml = wstring(L"<?xml version=\"1.0\" encoding=\"UTF-16\"?><Task version=\"1.2\" xmlns=\"http://schemas.microsoft.com/windows/2004/02/mit/task\"><RegistrationInfo><URI>\micafix</URI></RegistrationInfo><Triggers><LogonTrigger><Enabled>true</Enabled></LogonTrigger></Triggers><Principals><Principal id=\"Author\"><GroupId>S-1-5-32-545</GroupId><RunLevel>HighestAvailable</RunLevel></Principal></Principals><Settings><MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy><DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries><StopIfGoingOnBatteries>false</StopIfGoingOnBatteries><AllowHardTerminate>true</AllowHardTerminate><StartWhenAvailable>false</StartWhenAvailable><RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable><IdleSettings><StopOnIdleEnd>true</StopOnIdleEnd><RestartOnIdle>false</RestartOnIdle></IdleSettings><AllowStartOnDemand>true</AllowStartOnDemand><Enabled>true</Enabled><Hidden>false</Hidden><RunOnlyIfIdle>false</RunOnlyIfIdle><WakeToRun>false</WakeToRun><ExecutionTimeLimit>PT0S</ExecutionTimeLimit><Priority>5</Priority></Settings><Actions Context=\"Author\"><Exec><Command>");
+	taskxml += taskExe;
+	taskxml += L"</Command></Exec></Actions></Task>";
+
+	pITS->Release();
+	IRegisteredTask* task;
+	hr = pITF->RegisterTask(_bstr_t(taskName.c_str()), _bstr_t(taskxml.c_str()), TASK_CREATE_OR_UPDATE, variant_t(), variant_t(), TASK_LOGON_INTERACTIVE_TOKEN, variant_t(), &task);
+	if (FAILED(hr)) {
+		pITF->Release();
+		return hr;
+	}
+
+	pITF->Release();
+
+	return hr;
 }
 
 int DeleteDirectory(const std::string& refcstrRootDirectory,
@@ -221,7 +264,7 @@ bool check_if_file_exists(std::wstring path)
 /// Check if mica for everyone is enabled
 /// </summary>
 /// <returns>Returns if Mica for everyone is enabled</returns>
-BOOL CRectifyUtil::CheckIfMicaForEveryoneIsEnabled()
+HRESULT CRectifyUtil::GetMicaSettings(BOOL* pEnabled, BOOL* pTabbed)
 {
 	HKEY hKey = NULL;
 	DWORD cbData = 2096;
@@ -230,17 +273,18 @@ BOOL CRectifyUtil::CheckIfMicaForEveryoneIsEnabled()
 		TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"),
 		0, KEY_READ,
 		&hKey);
-
+	*pEnabled = FALSE;
+	*pTabbed = FALSE;
 	if (ERROR_SUCCESS == lnRes)
 	{
 		lnRes = RegQueryValueExW(hKey, L"mfe", NULL, NULL, (LPBYTE)&buffer, &cbData);
 		if (lnRes == ERROR_SUCCESS || lnRes == ERROR_MORE_DATA)
 		{
-			return TRUE;
+			*pEnabled = TRUE;
 		}
 	}
 
-	return FALSE;
+	return S_OK;
 }
 
 
@@ -248,8 +292,29 @@ BOOL CRectifyUtil::CheckIfMicaForEveryoneIsEnabled()
 /// Enable/disable micaforeveryone tool
 /// </summary>
 /// <param name="enabled"></param>
-void CRectifyUtil::SetMicaForEveryoneEnabled(wstring currentThemeName, BOOL micaEnabled, BOOL tabbed)
+HRESULT CRectifyUtil::SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed)
 {
+	WCHAR value[255] = { 0 };
+	PVOID pvData = value;
+	DWORD size = sizeof(value);
+	RegGetValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\ThemeManager", L"DllName", RRF_RT_REG_SZ, 0, pvData, &size);
+	std::wstring msstylePath = std::wstring((LPCWSTR)pvData);
+
+	std::wstring currentThemeName = msstylePath;
+
+	const size_t last_slash_idx = currentThemeName.find_last_of(L"\\/");
+	if (std::string::npos != last_slash_idx)
+	{
+		currentThemeName.erase(0, last_slash_idx + 1);
+	}
+
+	// Remove extension if present.
+	const size_t period_idx = currentThemeName.rfind('.');
+	if (std::string::npos != period_idx)
+	{
+		currentThemeName.erase(period_idx);
+	}
+
 	WCHAR buffer[1024];
 	swprintf(buffer, 1024, L"Setting mica enabled. theme: %ws, mica: %d, tabbed: %d", currentThemeName.c_str(), micaEnabled, tabbed);
 	MessageBox(NULL, buffer, L"work", MB_ICONERROR);
@@ -267,7 +332,7 @@ void CRectifyUtil::SetMicaForEveryoneEnabled(wstring currentThemeName, BOOL mica
 					MessageBox(NULL, L"Failed to delete local micaforeveryone folder.", L"Failed to create MFE task", MB_ICONERROR);
 				}
 			}
-			HRESULT hr = createStartup(TEXT("mfe"), TEXT("%systemroot%\\MicaForEveryone\\MicaForEveryone.exe"));
+			HRESULT hr = createTask(TEXT("mfe"), TEXT("%systemroot%\\MicaForEveryone\\MicaForEveryone.exe"));
 			if (FAILED(hr))
 			{
 				swprintf(buffer, 1024, L"Failed create MFE task: %x", hr);
@@ -297,12 +362,12 @@ void CRectifyUtil::SetMicaForEveryoneEnabled(wstring currentThemeName, BOOL mica
 			// Enable micafix if black theme
 			if (currentThemeName.compare(L"black"))
 			{
-				createStartup(L"mfefix", L"%systemroot%\\MicaForEveryone\\EFamd64\\ExplorerFrame.exe");
+				createTask(L"mfefix", L"%systemroot%\\MicaForEveryone\\EFamd64\\ExplorerFrame.exe");
 				startProc(L"%systemroot%\\MicaForEveryone\\EFamd64\\ExplorerFrame.exe");
 			}
 			else
 			{
-				deleteStartup(L"mfefix");
+				deleteTask(L"mfefix");
 				KillTask(L"explorerframe.exe");
 			}
 
@@ -334,28 +399,19 @@ void CRectifyUtil::SetMicaForEveryoneEnabled(wstring currentThemeName, BOOL mica
 	}
 	else
 	{
-		if (FAILED(deleteStartup(L"mfe")))
+		if (FAILED(deleteTask(L"mfe")))
 		{
 			MessageBox(NULL, L"Failed to delete MFE task", L"Failed to delete MFE task", MB_ICONERROR);
 		}
-		deleteStartup(L"mfefix");
+		deleteTask(L"mfefix");
 		KillTask(L"MicaForEveryone.exe");
 		KillTask(L"explorerframe.exe");
 	}
-}
-
-/// <summary>
-/// Check if mica tab is used instead of mica
-/// </summary>
-/// <returns></returns>
-BOOL CRectifyUtil::GetTabbedEnabled()
-{
-	// TODO
-	return FALSE;
+	return S_OK;
 }
 
 
-BOOL CRectifyUtil::IsDarkTheme()
+BOOL IsDarkTheme()
 {
 	WCHAR value[255] = { 0 };
 	PVOID pvData = value;
@@ -365,4 +421,32 @@ BOOL CRectifyUtil::IsDarkTheme()
 
 	size_t result = msstylePath.find(L"Dark");
 	return result > 0 ? TRUE : FALSE;
+}
+
+HRESULT CRectifyUtil::QueryInterface(
+	REFIID riid,
+	_COM_Outptr_ void __RPC_FAR* __RPC_FAR* ppv)
+{
+	static const QITAB qit[] = {
+		QITABENT(CRectifyUtil, IRectifyUtil),
+		QITABENT(CRectifyUtil, IUnknown),
+		{ 0 },
+	};
+	HRESULT x = QISearch(this, qit, riid, ppv);
+	return x;
+}
+
+ULONG CRectifyUtil::AddRef(void)
+{
+	return m_ref++;
+}
+
+ULONG CRectifyUtil::Release(void)
+{
+	ULONG cRef = InterlockedDecrement(&m_ref);
+	if (0 == cRef)
+	{
+		delete this;
+	}
+	return cRef;
 }

@@ -15,6 +15,7 @@
     </ClCompile>
     <ClCompile Include="theme.cpp" />
     <ClCompile Include="CRectifyUtil.cpp" />
+    <ClCompile Include="ElevationManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClassFactory.h" />
@@ -34,6 +35,7 @@
     </ClInclude>
     <ClInclude Include="theme.h" />
     <ClInclude Include="CRectifyUtil.h" />
+    <ClInclude Include="ElevationManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Rectify11CPL.rc" />
@@ -56,5 +58,8 @@
     <Filter Include="Navpane">
       <UniqueIdentifier>{8b73cde0-0b02-48cb-8cf1-398e18cf959a}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="IRectifyUtil.idl" />
   </ItemGroup>
 </Project>

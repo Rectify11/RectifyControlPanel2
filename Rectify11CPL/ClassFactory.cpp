@@ -62,6 +62,20 @@ HRESULT CElementProvider_CreateInstance(__in REFIID riid, __deref_out void** ppv
     }
     return hr;
 }
+
+HRESULT CRectifyUtil_CreateInstance(__in REFIID riid, __deref_out void** ppv)
+{
+    HRESULT hr = S_ALLTHRESHOLD;
+    CRectifyUtil* pUtility = new CRectifyUtil();
+    hr = pUtility ? S_OK : E_OUTOFMEMORY;
+    if (SUCCEEDED(hr))
+    {
+        hr = pUtility->QueryInterface(riid, ppv);
+        pUtility->Release();
+    }
+    return hr;
+}
+
 HRESULT CFolderViewImplClassFactory::CreateInstance(__in_opt IUnknown* punkOuter, 
                                                     __in REFIID riid, 
                                                     __deref_out void **ppv)
@@ -74,6 +88,10 @@ HRESULT CFolderViewImplClassFactory::CreateInstance(__in_opt IUnknown* punkOuter
         if (CLSID_FolderViewImplElement == m_rclsid)
         {
             hr = CElementProvider_CreateInstance(riid, ppv);
+        }
+        else if (CLSID_CRectifyUtil == m_rclsid)
+        {
+            hr = CRectifyUtil_CreateInstance(riid, ppv);
         }
         else
         {
