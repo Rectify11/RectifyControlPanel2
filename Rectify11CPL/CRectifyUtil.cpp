@@ -51,7 +51,7 @@ LONG createStartup(LPCWSTR app_name, LPCWSTR app_path)
 	if (ERROR_SUCCESS == lnRes)
 	{
 		lnRes = RegSetValueExW(hKey,
-			proc_buffer,
+			app_name,
 			0,
 			REG_SZ,
 			(LPBYTE)proc_buffer,
@@ -210,6 +210,13 @@ HRESULT startProc(wstring proc)
 	CloseHandle(pi.hThread);
 	return hr;
 }
+
+bool check_if_file_exists(std::wstring path)
+{
+	std::ifstream ff(path.c_str());
+	return ff.is_open();
+}
+
 /// <summary>
 /// Check if mica for everyone is enabled
 /// </summary>
@@ -235,6 +242,8 @@ BOOL CRectifyUtil::CheckIfMicaForEveryoneIsEnabled()
 
 	return FALSE;
 }
+
+
 /// <summary>
 /// Enable/disable micaforeveryone tool
 /// </summary>
@@ -265,10 +274,28 @@ void CRectifyUtil::SetMicaForEveryoneEnabled(wstring currentThemeName, BOOL mica
 				MessageBox(NULL, buffer, L"Failed to create MFE task", MB_ICONERROR);
 			}
 
-			// TODO: copy config
+			wstring config_file_src = wstring(L"c:\\windows\\micaforeveryone\\CONF\\");
+			if (tabbed)
+				config_file_src += L"T";
+			config_file_src += currentThemeName;
+			config_file_src += L".conf";
+
+			if (!check_if_file_exists(config_file_src))
+			{
+				swprintf(buffer, 1024, L"Warning: Micaforeveryone configuration file is missing! File name is %ws", config_file_src.c_str());
+				MessageBox(NULL, buffer, L"Warning", MB_ICONWARNING);
+			}
+			else
+			{
+				if (!CopyFileExW(config_file_src.c_str(), L"c:\\windows\\micaforeveryone\\MicaForEveryone.conf", NULL, NULL, NULL, 0))
+				{
+					swprintf(buffer, 1024, L"Warning: Failed to copy micaforeveryone configuration file with result %x", GetLastError());
+					MessageBox(NULL, buffer, L"Warning", MB_ICONWARNING);
+				}
+			}
 
 			// Enable micafix if black theme
-			if (currentThemeName.compare(L"Mica"))
+			if (currentThemeName.compare(L"black"))
 			{
 				createStartup(L"mfefix", L"%systemroot%\\MicaForEveryone\\EFamd64\\ExplorerFrame.exe");
 				startProc(L"%systemroot%\\MicaForEveryone\\EFamd64\\ExplorerFrame.exe");

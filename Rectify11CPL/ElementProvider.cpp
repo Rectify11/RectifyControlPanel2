@@ -307,7 +307,23 @@ void CElementProvider::InitMainPage()
 						std::wstring pathBuff = std::wstring();
 						theme->GetVisualStyle(pathBuff);
 						std::wstring msstylePath = std::wstring((LPCWSTR)pvData);
-						ThemesMap[k] = nameBuffer;
+
+						std::wstring msstylePathClean = msstylePath;
+
+						const size_t last_slash_idx = msstylePathClean.find_last_of(L"\\/");
+						if (std::string::npos != last_slash_idx)
+						{
+							msstylePathClean.erase(0, last_slash_idx + 1);
+						}
+
+						// Remove extension if present.
+						const size_t period_idx = msstylePathClean.rfind('.');
+						if (std::string::npos != period_idx)
+						{
+							msstylePathClean.erase(period_idx);
+						}
+
+						ThemesMap[k] = msstylePathClean;
 						if (pathBuff == msstylePath)
 						{
 							ThemeCombo->SetSelection(k);
