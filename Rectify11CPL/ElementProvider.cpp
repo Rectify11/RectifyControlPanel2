@@ -198,7 +198,6 @@ void CElementProvider::InitNavLinks()
 		wcscpy_s(buffer, L"Failed to load localized string");
 	}
 
-	//links->AddLinkControlPanel(buffer, L"Rectify11.SettingsCPL", L"pageRectifyUpdate", CPNAV_Normal, icon.hIcon);
 	links->AddLinkControlPanel(L"System information", L"Microsoft.System", L"", CPNAV_SeeAlso, NULL);
 
 
@@ -292,11 +291,27 @@ void EnableAdminBtn_OnEvent(Element* elem, Event* iev)
 
 void ThemeCmb_OnEvent(Element* elem, Event* iev)
 {
+	TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"MicaChk"));
+	TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"TabChk"));
 	if (iev->type == Combobox::SelectionChange)
 	{
 		int selection = ((Combobox*)iev->target)->GetSelection();
 		themetool_set_active(NULL, themes[selection], TRUE, 0, 0);
 		CElementProvider::UpdateThemeGraphic(elem->GetRoot());
+
+		// update mica
+		if (HasAdmin)
+		{
+			BOOL hasMica = FALSE;
+			BOOL hasTabbed = FALSE;
+			RectifyUtil->GetMicaSettings(&hasMica, &hasTabbed);
+
+			RectifyUtil->SetMicaForEveryoneEnabled(hasMica, hasTabbed);
+
+			// update checkboxes in case we aren't using a mica theme anymore
+			MicaForEveryoneCheckbox->SetCheckedState(hasMica ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+			TabbedCheckbox->SetCheckedState(hasTabbed ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+		}
 	}
 }
 
@@ -444,6 +459,7 @@ void CElementProvider::InitMainPage()
 	{
 		MicaForEveryoneCheckbox->SetEnabled(FALSE);
 		TabbedCheckbox->SetEnabled(FALSE);
+		
 	}
 	else {
 		enableAdmin->SetLayoutPos(-3);

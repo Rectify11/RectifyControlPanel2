@@ -45,7 +45,7 @@ DWORD FindProcessId(const std::wstring& processName)
 }
 
 
-bool deleteTask(std::wstring taskName)
+HRESULT deleteTask(std::wstring taskName)
 {
 	HRESULT hr = S_OK;
 
@@ -74,6 +74,47 @@ bool deleteTask(std::wstring taskName)
 	if (FAILED(hr)) {
 		pITF->Release();
 		return hr;
+	}
+
+	pITF->Release();
+
+	return hr;
+}
+
+HRESULT taskExists(wstring taskName, BOOL* taskExists)
+{
+	HRESULT hr = S_OK;
+	*taskExists = FALSE;
+	ITaskService* pITS;
+	hr = CoCreateInstance(CLSID_TaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskService, (void**)&pITS);
+	if (FAILED(hr)) {
+		return hr;
+	}
+
+	hr = pITS->Connect(_variant_t(), _variant_t(), _variant_t(), _variant_t());
+	if (FAILED(hr)) {
+		pITS->Release();
+		return hr;
+	}
+
+	ITaskFolder* pITF;
+	hr = pITS->GetFolder(_bstr_t(L"\\"), &pITF);
+	if (FAILED(hr)) {
+		pITS->Release();
+		return hr;
+	}
+
+	pITS->Release();
+
+	IRegisteredTask* task = NULL;
+	hr = pITF->GetTask(_bstr_t(taskName.c_str()), &task);
+	if (FAILED(hr)) {
+		pITF->Release();
+		return hr;
+	}
+	else
+	{
+		*taskExists = TRUE;
 	}
 
 	pITF->Release();
@@ -259,6 +300,40 @@ bool check_if_file_exists(std::wstring path)
 	std::ifstream ff(path.c_str());
 	return ff.is_open();
 }
+size_t GetSizeOfFile(const std::wstring& path)
+{
+	struct _stat fileinfo;
+	_wstat(path.c_str(), &fileinfo);
+	return fileinfo.st_size;
+}
+
+std::wstring LoadUtf8FileToString(const std::wstring& filename)
+{
+	std::wstring buffer;            // stores file contents
+	FILE* f = _wfopen(filename.c_str(), L"rtS, ccs=UTF-8");
+
+	// Failed to open file
+	if (f == NULL)
+	{
+		// ...handle some error...
+		return buffer;
+	}
+
+	size_t filesize = GetSizeOfFile(filename);
+
+	// Read entire file contents in to memory
+	if (filesize > 0)
+	{
+		buffer.resize(filesize);
+		size_t wchars_read = fread(&(buffer.front()), sizeof(wchar_t), filesize, f);
+		buffer.resize(wchars_read);
+		buffer.shrink_to_fit();
+	}
+
+	fclose(f);
+
+	return buffer;
+}
 
 /// <summary>
 /// Check if mica for everyone is enabled
@@ -266,23 +341,23 @@ bool check_if_file_exists(std::wstring path)
 /// <returns>Returns if Mica for everyone is enabled</returns>
 HRESULT CRectifyUtil::GetMicaSettings(BOOL* pEnabled, BOOL* pTabbed)
 {
-	HKEY hKey = NULL;
-	DWORD cbData = 2096;
-	WCHAR buffer[2096];
-	LONG lnRes = RegOpenKeyEx(HKEY_CURRENT_USER,
-		TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"),
-		0, KEY_READ,
-		&hKey);
 	*pEnabled = FALSE;
 	*pTabbed = FALSE;
-	if (ERROR_SUCCESS == lnRes)
+
+	taskExists(L"mfe", pEnabled);
+
+	// read mfe config file
+	struct stat sb;
+	wstring config_file = wstring(L"c:\\windows\\micaforeveryone\\MicaForEveryone.conf");
+	if (stat("c:\\windows\\micaforeveryone\\MicaForEveryone.conf", &sb) == 0)
 	{
-		lnRes = RegQueryValueExW(hKey, L"mfe", NULL, NULL, (LPBYTE)&buffer, &cbData);
-		if (lnRes == ERROR_SUCCESS || lnRes == ERROR_MORE_DATA)
+		wstring config = LoadUtf8FileToString(config_file);
+		if (config.compare(L"Tabbed"))
 		{
-			*pEnabled = TRUE;
+			*pTabbed = TRUE;
 		}
 	}
+
 
 	return S_OK;
 }
@@ -294,6 +369,7 @@ HRESULT CRectifyUtil::GetMicaSettings(BOOL* pEnabled, BOOL* pTabbed)
 /// <param name="enabled"></param>
 HRESULT CRectifyUtil::SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed)
 {
+	HRESULT hr = S_OK;
 	WCHAR value[255] = { 0 };
 	PVOID pvData = value;
 	DWORD size = sizeof(value);
@@ -316,8 +392,6 @@ HRESULT CRectifyUtil::SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed)
 	}
 
 	WCHAR buffer[1024];
-	swprintf(buffer, 1024, L"Setting mica enabled. theme: %ws, mica: %d, tabbed: %d", currentThemeName.c_str(), micaEnabled, tabbed);
-	MessageBox(NULL, buffer, L"work", MB_ICONERROR);
 	if (micaEnabled)
 	{
 		struct stat sb;
@@ -399,7 +473,9 @@ HRESULT CRectifyUtil::SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed)
 	}
 	else
 	{
-		if (FAILED(deleteTask(L"mfe")))
+		BOOL mfeExists;
+		taskExists(L"mfe", &mfeExists);
+		if (FAILED(deleteTask(L"mfe")) && mfeExists)
 		{
 			MessageBox(NULL, L"Failed to delete MFE task", L"Failed to delete MFE task", MB_ICONERROR);
 		}
@@ -407,7 +483,7 @@ HRESULT CRectifyUtil::SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed)
 		KillTask(L"MicaForEveryone.exe");
 		KillTask(L"explorerframe.exe");
 	}
-	return S_OK;
+	return hr;
 }
 
 
