@@ -22,7 +22,10 @@ public:
 
 private:
 	LONG m_ref;
+	HRESULT _EnableClassicTransparent();
 	HRESULT _DeleteClassicTransparent();
+	HRESULT _EnableClassicMenu();
+	HRESULT _DeleteNilesoftIfExists();
 };
 
 BOOL IsDarkTheme();

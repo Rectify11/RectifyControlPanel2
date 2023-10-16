@@ -15,35 +15,38 @@ CRectifyUtil::CRectifyUtil() : m_ref(1)
 
 }
 
-DWORD FindProcessId(const std::wstring& processName)
+DWORD FindProcessId(const WCHAR* procname)
 {
-	PROCESSENTRY32 processInfo;
-	processInfo.dwSize = sizeof(processInfo);
+	HANDLE hSnapshot;
+	PROCESSENTRY32 pe;
+	int pid = 0;
+	BOOL hResult;
 
-	HANDLE processesSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
-	if (processesSnapshot == INVALID_HANDLE_VALUE)
-		return 0;
+	// snapshot of all processes in the system
+	hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+	if (INVALID_HANDLE_VALUE == hSnapshot) return 0;
 
-	Process32First(processesSnapshot, &processInfo);
-	if (!processName.compare(processInfo.szExeFile))
-	{
-		CloseHandle(processesSnapshot);
-		return processInfo.th32ProcessID;
-	}
+	// initializing size: needed for using Process32First
+	pe.dwSize = sizeof(PROCESSENTRY32);
 
-	while (Process32Next(processesSnapshot, &processInfo))
-	{
-		if (!processName.compare(processInfo.szExeFile))
-		{
-			CloseHandle(processesSnapshot);
-			return processInfo.th32ProcessID;
+	// info about first process encountered in a system snapshot
+	hResult = Process32First(hSnapshot, &pe);
+
+	// retrieve information about the processes
+	// and exit if unsuccessful
+	while (hResult) {
+		// if we find the process: return process ID
+		if (wcscmp(procname, pe.szExeFile) == 0) {
+			pid = pe.th32ProcessID;
+			break;
 		}
+		hResult = Process32Next(hSnapshot, &pe);
 	}
 
-	CloseHandle(processesSnapshot);
-	return 0;
+	// closes an open handle (CreateToolhelp32Snapshot)
+	CloseHandle(hSnapshot);
+	return pid;
 }
-
 
 HRESULT deleteTask(std::wstring taskName)
 {
@@ -121,7 +124,6 @@ HRESULT taskExists(wstring taskName, BOOL* taskExists)
 
 	return hr;
 }
-
 
 HRESULT createTask(std::wstring taskName, std::wstring taskExe)
 {
@@ -236,23 +238,42 @@ int DeleteDirectory(const std::string& refcstrRootDirectory,
 	return 0;
 }
 
-void KillTask(wstring proc)
+BOOL KillTask(wstring proc)
+{
+	DWORD pid = FindProcessId(proc.c_str());
+	if (pid == 0)
+	{
+		return FALSE;
+	}
+
+	const auto explorer = OpenProcess(PROCESS_TERMINATE, false, pid);
+	BOOL result = TerminateProcess(explorer, 1);
+	CloseHandle(explorer);
+	return result;
+}
+
+HRESULT startProc(LPCWSTR proc, wstring args = L"", bool waitForExit = false)
 {
 	STARTUPINFOW si;
 	PROCESS_INFORMATION pi;
 	ZeroMemory(&si, sizeof(si));
 	si.cb = sizeof(si);
 	ZeroMemory(&pi, sizeof(pi));
-	wstring args = wstring(L"/f /im ");
-	args += proc;
-	WCHAR args_buffer[2066];
-	wcsncpy_s(args_buffer, 1024, args.c_str(), args.size());
 
-	WCHAR proc_buffer[2066];
-	ExpandEnvironmentStringsW(L"%systemroot%\\system32\\taskkill.exe", proc_buffer, 2066);
+	WCHAR proc_buffer[1000];
+	if (proc)
+	{
+		ExpandEnvironmentStringsW(proc, proc_buffer, 999);
+	}
 
-	BOOL x = CreateProcessW(proc_buffer,
-		args_buffer,        // Command line
+
+	WCHAR args_buffer[1000] = {0};
+	if (!args.empty())
+	{
+		wcsncpy_s(args_buffer, 999, args.c_str(), args.size());
+	}
+	BOOL hr = CreateProcessW(proc ? proc_buffer : NULL,
+		args_buffer,           // Command line
 		NULL,           // Process handle not inheritable
 		NULL,           // Thread handle not inheritable
 		FALSE,          // Set handle inheritance to FALSE
@@ -262,37 +283,28 @@ void KillTask(wstring proc)
 		&si,            // Pointer to STARTUPINFO structure
 		&pi             // Pointer to PROCESS_INFORMATION structure (removed extra parentheses)
 	);
-	HRESULT hr = GetLastError();
-	CloseHandle(pi.hProcess);
-	CloseHandle(pi.hThread);
-}
 
-HRESULT startProc(wstring proc)
-{
-	STARTUPINFOW si;
-	PROCESS_INFORMATION pi;
-	ZeroMemory(&si, sizeof(si));
-	si.cb = sizeof(si);
-	ZeroMemory(&pi, sizeof(pi));
-
-	WCHAR proc_buffer[4096];
-	ExpandEnvironmentStringsW(proc.c_str(), proc_buffer, 4095);
-
-	HRESULT hr = CreateProcessW(proc_buffer,
-		NULL,           // Command line
-		NULL,           // Process handle not inheritable
-		NULL,           // Thread handle not inheritable
-		FALSE,          // Set handle inheritance to FALSE
-		0,              // No creation flags
-		NULL,           // Use parent's environment block
-		NULL,           // Use parent's starting directory 
-		&si,            // Pointer to STARTUPINFO structure
-		&pi             // Pointer to PROCESS_INFORMATION structure (removed extra parentheses)
-	);
+	if (!hr)
+	{
+		WCHAR error_buffer[1000];
+		swprintf_s(error_buffer, L"error while creating process: %d", GetLastError());
+		MessageBox(NULL, error_buffer, TEXT("startProc"), MB_ICONERROR);
+	}
+	else
+	{
+		if (waitForExit)
+		{
+			// Successfully created the process.  Wait for it to finish.
+			WaitForSingleObject(pi.hProcess, INFINITE);
+			DWORD exitCode;
+			// Get the exit code.
+			hr = GetExitCodeProcess(pi.hProcess, &exitCode);
+		}
+	}
 
 	CloseHandle(pi.hProcess);
 	CloseHandle(pi.hThread);
-	return hr;
+	return hr ? S_OK : S_FALSE;
 }
 
 bool check_if_file_exists(std::wstring path)
@@ -335,6 +347,42 @@ std::wstring LoadUtf8FileToString(const std::wstring& filename)
 	return buffer;
 }
 
+HRESULT CreateLink(LPCWSTR lpszTarget, LPCWSTR lpszDesc, LPCWSTR lpszWorkingDir, LPCSTR lpszShortcutPath)
+{
+	HRESULT hres;
+	IShellLink* psl;
+
+	// Get a pointer to the IShellLink interface. It is assumed that CoInitialize
+	// has already been called.
+	hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, (LPVOID*)&psl);
+	if (SUCCEEDED(hres))
+	{
+		IPersistFile* ppf;
+
+		// Set the path to the shortcut target and add the description. 
+		psl->SetPath(lpszTarget);
+		psl->SetDescription(lpszDesc);
+		psl->SetWorkingDirectory(lpszWorkingDir);
+
+		// Query IShellLink for the IPersistFile interface, used for saving the 
+		// shortcut in persistent storage. 
+		hres = psl->QueryInterface(IID_IPersistFile, (LPVOID*)&ppf);
+
+		if (SUCCEEDED(hres))
+		{
+			WCHAR wsz[MAX_PATH];
+
+			// Ensure that the string is Unicode. 
+			MultiByteToWideChar(CP_ACP, 0, lpszShortcutPath, -1, wsz, MAX_PATH);
+
+			// Save the link by calling IPersistFile::Save. 
+			hres = ppf->Save(wsz, TRUE);
+			ppf->Release();
+		}
+		psl->Release();
+	}
+	return hres;
+}
 /// <summary>
 /// Check if mica for everyone is enabled
 /// </summary>
@@ -362,20 +410,76 @@ HRESULT CRectifyUtil::GetMicaSettings(BOOL* pEnabled, BOOL* pTabbed)
 	return S_OK;
 }
 
-HRESULT CRectifyUtil::_DeleteClassicTransparent()
+HRESULT CRectifyUtil::_EnableClassicTransparent()
 {
 	CHAR path[MAX_PATH];
 	HRESULT hr = SHGetFolderPathA(NULL, CSIDL_COMMON_STARTMENU, NULL, 0, path);
 	if (SUCCEEDED(hr))
 	{
-		string file = string(path);
-		file += +"\\programs\\startup\\acrylmenu.lnk";
-		return !DeleteFileA(file.c_str());
+		WCHAR workingdir_buffer[MAX_PATH];
+		ExpandEnvironmentStringsW(L"%windir%\\nilesoft\\AcrylicMenus", workingdir_buffer, MAX_PATH);
+
+		WCHAR target_buffer[MAX_PATH] = {0};
+		ExpandEnvironmentStringsW(L"%windir%\\nilesoft\\AcrylicMenus\\AcrylicMenusLoader.exe", target_buffer, MAX_PATH);
+
+		string shortcut_path = string(path);
+		shortcut_path += +"\\programs\\startup\\acrylmenu.lnk";
+		startProc(target_buffer);
+		return CreateLink(target_buffer, L"Launch classic transparent menu hook", workingdir_buffer, shortcut_path.c_str());
 	}
 	else
 	{
 		return hr;
 	}
+}
+
+HRESULT CRectifyUtil::_DeleteClassicTransparent()
+{
+	CHAR path[MAX_PATH];
+	HRESULT hr = SHGetFolderPathA(NULL, CSIDL_COMMON_STARTMENU, NULL, 0, path);
+	KillTask(L"AcrylicMenusLoader.exe");
+	if (SUCCEEDED(hr))
+	{
+		string file = string(path);
+		file += +"\\programs\\startup\\acrylmenu.lnk";
+		return DeleteFileA(file.c_str()) ? S_OK : E_ACTIVATIONDENIED_SHELLNOTREADY;
+	}
+	else
+	{
+		return hr;
+	}
+}
+HRESULT CRectifyUtil::_EnableClassicMenu()
+{
+	HKEY result;
+	HRESULT status = RegCreateKey(HKEY_CURRENT_USER, TEXT("Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}"), &result);
+	if (SUCCEEDED(status))
+	{
+		HKEY inprocServer;
+		HRESULT status = RegCreateKey(result, TEXT("InprocServer32"), &inprocServer);
+		if (SUCCEEDED(status))
+		{
+			RegSetValueExW(inprocServer, NULL, 0, REG_SZ, (const BYTE*)L"", 2);
+			RegCloseKey(inprocServer);
+			return S_OK;
+		}
+		RegCloseKey(result);
+		return status;
+	}
+	return status;
+}
+
+HRESULT CRectifyUtil::_DeleteNilesoftIfExists()
+{
+	struct stat sb;
+	if (stat("c:\\windows\\nilesoft\\shell.nss", &sb) == 0)
+	{
+		startProc(NULL, L"c:\\windows\\nilesoft\\shell.exe -unregister", true);
+
+		// delete configuration file
+		return DeleteFile(TEXT("c:\\windows\\nilesoft\\shell.nss")) ? S_OK : GetLastError();
+	}
+	return S_OK;
 }
 
 /// <summary>
@@ -546,28 +650,48 @@ HRESULT CRectifyUtil::GetCurrentMenuIndex(DWORD* menuIndex)
 
 HRESULT CRectifyUtil::SetCurrentMenuByIndex(DWORD menuIndex)
 {
+	HRESULT hr = S_OK;
 	if (menuIndex == Normal)
 	{
 		// Restore default Windows 11 menus
-		RegDeleteKey(HKEY_CURRENT_USER, TEXT("Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}"));
+		hr = RegDeleteTree(HKEY_CURRENT_USER, TEXT("Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}"));
 		_DeleteClassicTransparent();
-		KillTask(L"AcrylicMenusLoader");
-		return S_OK;
+		_DeleteNilesoftIfExists();
+	}
+	else if (menuIndex == NilesoftSmall)
+	{
+		std::wofstream f(L"c:\\windows\\nilesoft\\shell.nss");
+		f.clear();
+		f << "settings\r\n{\r\n	priority=1\r\n	exclude.where = !process.is_explorer\r\n	showdelay = 100\r\n	// Options to allow modification of system items\r\n	modify.remove.duplicate=1\r\n	tip\r\n	{\r\n		enabled=1\r\n		opacity=100\r\n		width=400\r\n		radius=1\r\n		time=1.25\r\n		padding=[10,10]\r\n	}\r\n}\r\ntheme\r\n{\r\n	name=\"modern\"\r\n}\r\nimport 'imports/theme.nss'\r\nimport 'imports/images.nss'\r\n\r\nimport 'imports/modify.nss'\r\nmodify(where=this.title.length > 15 menu=title.more_options)\r\n\r\nmenu(mode=\"multiple\" title=\"Pin/Unpin\" image=icon.pin) {}\r\nmenu(mode=\"multiple\" title=title.more_options image=icon.more_options) {}\r\nimport 'imports/taskbar.nss'";
+		f.close();
+
+		startProc(NULL, L"c:\\windows\\nilesoft\\shell.exe -register", true);
+
+
+	}
+	else if (menuIndex == NilesoftFull)
+	{
+		std::wofstream f(L"c:\\windows\\nilesoft\\shell.nss");
+		f.clear();
+		f << "settings\r\n{\r\n	priority=1\r\n	exclude.where = !process.is_explorer\r\n	showdelay = 100\r\n	// Options to allow modification of system items\r\n	modify.remove.duplicate=1\r\n	tip\r\n	{\r\n		enabled=1\r\n		opacity=100\r\n		width=400\r\n		radius=1\r\n		time=1.25\r\n		padding=[10,10]\r\n	}\r\n}\r\ntheme\r\n{\r\n	name=\"modern\"\r\n}\r\nimport 'imports/theme.nss'\r\nimport 'imports/images.nss'\r\n\r\nimport 'imports/modify.nss'\r\nmenu(mode=\"multiple\" title=\"Pin/Unpin\" image=icon.pin) {}\r\nmenu(mode=\"multiple\" title=title.more_options image=icon.more_options) {}\r\nimport 'imports/taskbar.nss'";
+		f.close();
+
+		startProc(NULL, L"c:\\windows\\nilesoft\\shell.exe -register", true);
 	}
 	else if (menuIndex == Classic)
 	{
 		_DeleteClassicTransparent();
-		KillTask(L"AcrylicMenusLoader");
-
-		HKEY result;
-		HRESULT status = RegCreateKey(HKEY_CURRENT_USER, TEXT("Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}"), &result);
-		if (SUCCEEDED(status))
+		_DeleteNilesoftIfExists();
+		hr = _EnableClassicMenu();
+	}
+	else if (menuIndex == ClassicTransparent)
+	{
+		_DeleteNilesoftIfExists();
+		hr = _EnableClassicMenu();
+		if (SUCCEEDED(hr))
 		{
-			RegCloseKey(result);
-			return S_OK;
+			hr = _EnableClassicTransparent();
 		}
-		
-		return status;
 	}
 	else
 	{
@@ -575,8 +699,10 @@ HRESULT CRectifyUtil::SetCurrentMenuByIndex(DWORD menuIndex)
 
 		swprintf(buffer, 199, L"Failed to update menu settings. Unknown enum index %d", menuIndex);
 		MessageBox(NULL, buffer, TEXT("SetCurrentMenuByIndex"), MB_ICONERROR);
-		return E_NOTIMPL;
+		hr = E_NOTIMPL;
 	}
+
+	return hr;
 }
 
 BOOL IsDarkTheme()
