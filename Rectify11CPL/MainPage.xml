@@ -242,6 +242,7 @@
 								<CCRadioButton layoutpos="top" id="Atom(NilesoftFull)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Enhanced fluent menus (all items in root)"/>
 								<CCRadioButton layoutpos="top" id="Atom(Classic)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Classic menus"/>
 								<CCRadioButton layoutpos="top" id="Atom(ClassicTransparent)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Classic menus with transparency"/>
+								<TouchButton layoutpos="top" id="atom(BtnRestartExplorer)" class="primary" accname="Restart explorer" content="Restart explorer to apply changes"/>
 								<TouchButton layoutpos="top" id="atom(Link_EnableAdmin)" class="primary" accname="Change settings that are unavailable" content="Change settings that are unavailable"/>
 							</element>
 						</element>

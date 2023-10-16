@@ -20,6 +20,9 @@ public:
 	virtual HRESULT GetCurrentMenuIndex(DWORD* menuIndex);
 	virtual HRESULT SetCurrentMenuByIndex(DWORD pIndex);
 
+	static BOOL KillTask(wstring proc);
+	static void RestartExplorer();
+
 private:
 	LONG m_ref;
 	HRESULT _EnableClassicTransparent();

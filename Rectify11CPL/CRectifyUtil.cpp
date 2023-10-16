@@ -238,7 +238,7 @@ int DeleteDirectory(const std::string& refcstrRootDirectory,
 	return 0;
 }
 
-BOOL KillTask(wstring proc)
+BOOL CRectifyUtil::KillTask(wstring proc)
 {
 	DWORD pid = FindProcessId(proc.c_str());
 	if (pid == 0)
@@ -251,6 +251,7 @@ BOOL KillTask(wstring proc)
 	CloseHandle(explorer);
 	return result;
 }
+
 
 HRESULT startProc(LPCWSTR proc, wstring args = L"", bool waitForExit = false)
 {
@@ -345,6 +346,20 @@ std::wstring LoadUtf8FileToString(const std::wstring& filename)
 	fclose(f);
 
 	return buffer;
+}
+
+void CRectifyUtil::RestartExplorer()
+{
+	HWND hwnd = FindWindow(L"Shell_TrayWnd", NULL);
+	DWORD pid = {};
+	GetWindowThreadProcessId(hwnd, &pid);
+
+	HANDLE h_explorer;
+	h_explorer = OpenProcess(PROCESS_TERMINATE, false, pid);
+	TerminateProcess(h_explorer, 2);
+	CloseHandle(h_explorer);
+
+	startProc(L"C:\\windows\\explorer.exe");
 }
 
 HRESULT CreateLink(LPCWSTR lpszTarget, LPCWSTR lpszDesc, LPCWSTR lpszWorkingDir, LPCSTR lpszShortcutPath)
@@ -474,10 +489,18 @@ HRESULT CRectifyUtil::_DeleteNilesoftIfExists()
 	struct stat sb;
 	if (stat("c:\\windows\\nilesoft\\shell.nss", &sb) == 0)
 	{
-		startProc(NULL, L"c:\\windows\\nilesoft\\shell.exe -unregister", true);
-
 		// delete configuration file
-		return DeleteFile(TEXT("c:\\windows\\nilesoft\\shell.nss")) ? S_OK : GetLastError();
+		BOOL h = DeleteFile(TEXT("c:\\windows\\nilesoft\\shell.nss"));
+		if (!h)
+		{
+			WCHAR buffer[200];
+
+			swprintf(buffer, 199, L"Failed to uninstall nilesoft. failed to delete config file. hresult is %d\n", GetLastError());
+			MessageBox(NULL, buffer, TEXT("_DeleteNilesoftIfExists"), MB_ICONERROR);
+		}
+
+		startProc(NULL, L"c:\\windows\\nilesoft\\shell.exe -unregister", true);
+		return S_OK;
 	}
 	return S_OK;
 }
@@ -613,10 +636,10 @@ HRESULT CRectifyUtil::GetCurrentMenuIndex(DWORD* menuIndex)
 	{
 		HKEY key = HKEY_CURRENT_USER;
 		HKEY result;
-		HRESULT hr = RegOpenKey(key, L"Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}", &result);
+		LONG hr = RegOpenKeyEx(key, L"Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}", 0, KEY_READ, &result);
 
 
-		if (SUCCEEDED(hr))
+		if (hr == 0)
 		{
 			*menuIndex = Classic;
 			RegCloseKey(result);

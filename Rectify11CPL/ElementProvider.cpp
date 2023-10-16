@@ -338,6 +338,10 @@ void Win11DefaultMenus_OnEvent(Element* elem, Event* iev)
 			swprintf(buffer, 199, L"Failed to update menu settings. HRESULT is %x", hr);
 			MessageBox(NULL, buffer, TEXT("Win11DefaultMenus_OnEvent"), MB_ICONERROR);
 		}
+
+		TouchButton* BtnRestartExplorer = (TouchButton*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"BtnRestartExplorer"));
+		BtnRestartExplorer->SetLayoutPos(0);
+		BtnRestartExplorer->SetVisible(TRUE);
 	}
 }
 
@@ -353,6 +357,10 @@ void NilesoftSmall_OnEvent(Element* elem, Event* iev)
 			swprintf(buffer, 199, L"Failed to update menu settings. HRESULT is %x", hr);
 			MessageBox(NULL, buffer, TEXT("NilesoftSmall_OnEvent"), MB_ICONERROR);
 		}
+
+		TouchButton* BtnRestartExplorer = (TouchButton*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"BtnRestartExplorer"));
+		BtnRestartExplorer->SetLayoutPos(0);
+		BtnRestartExplorer->SetVisible(TRUE);
 	}
 }
 
@@ -367,6 +375,10 @@ void NilesoftFull_OnEvent(Element* elem, Event* iev)
 			swprintf(buffer, 199, L"Failed to update menu settings. HRESULT is %x", hr);
 			MessageBox(NULL, buffer, TEXT("NilesoftFull_OnEvent"), MB_ICONERROR);
 		}
+
+		TouchButton* BtnRestartExplorer = (TouchButton*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"BtnRestartExplorer"));
+		BtnRestartExplorer->SetLayoutPos(0);
+		BtnRestartExplorer->SetVisible(TRUE);
 	}
 }
 
@@ -381,6 +393,10 @@ void Classic_OnEvent(Element* elem, Event* iev)
 			swprintf(buffer, 199, L"Failed to update menu settings. HRESULT is %x", hr);
 			MessageBox(NULL, buffer, TEXT("Classic_OnEvent"), MB_ICONERROR);
 		}
+
+		TouchButton* BtnRestartExplorer = (TouchButton*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"BtnRestartExplorer"));
+		BtnRestartExplorer->SetLayoutPos(0);
+		BtnRestartExplorer->SetVisible(TRUE);
 	}
 }
 
@@ -395,6 +411,19 @@ void ClassicTransparent_OnEvent(Element* elem, Event* iev)
 			swprintf(buffer, 199, L"Failed to update menu settings. HRESULT is %x", hr);
 			MessageBox(NULL, buffer, TEXT("ClassicTransparent_OnEvent"), MB_ICONERROR);
 		}
+
+		TouchButton* BtnRestartExplorer = (TouchButton*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"BtnRestartExplorer"));
+		BtnRestartExplorer->SetLayoutPos(0);
+		BtnRestartExplorer->SetVisible(TRUE);
+	}
+}
+
+void BtnRestartExplorer_OnEvent(Element* elem, Event* iev)
+{
+	if (iev->type == TouchButton::Click) {
+		CRectifyUtil::RestartExplorer();
+		elem->SetLayoutPos(-3);
+		elem->SetVisible(FALSE);
 	}
 }
 
@@ -408,6 +437,7 @@ void CElementProvider::InitMainPage()
 	TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"TabChk"));
 	Element* version = (Element*)root->FindDescendent(StrToID((UCString)L"RectifyVersion"));
 	TouchButton* enableAdmin = (TouchButton*)root->FindDescendent(StrToID((UCString)L"Link_EnableAdmin"));
+	TouchButton* BtnRestartExplorer = (TouchButton*)root->FindDescendent(StrToID((UCString)L"BtnRestartExplorer"));
 
 	CCRadioButton* Win11DefaultMenus = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"Win11DefaultMenus"));
 	CCRadioButton* NilesoftSmall = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"NilesoftSmall"));
@@ -546,8 +576,19 @@ void CElementProvider::InitMainPage()
 		}
 	}
 
-	DWORD menuIndex;
+	if (BtnRestartExplorer != NULL)
+	{
+		static EventListener tab_listener(BtnRestartExplorer_OnEvent);
+		if (BtnRestartExplorer->AddListener(&tab_listener) != S_OK)
+		{
+			MessageBox(NULL, TEXT("Failed to add restart explorer licenser"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
+		}
 
+		BtnRestartExplorer->SetLayoutPos(-3);
+		BtnRestartExplorer->SetVisible(FALSE);
+	}
+
+	DWORD menuIndex;
 
 	for (size_t i = 0; i < 5; i++)
 	{
@@ -700,9 +741,11 @@ HRESULT STDMETHODCALLTYPE CElementProvider::OnNavigateAway() {
 	//TODO: this causes a crash
 	//DirectUI::XProvider::SetHandleEnterKey(false);
 	//SetDefaultButtonTracking(false);
+	HasAdmin = FALSE;
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnInnerElementDestroyed() {
+	HasAdmin = FALSE;
 	return 0;
 }
 
