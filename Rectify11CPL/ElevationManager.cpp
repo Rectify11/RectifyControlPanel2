@@ -4,6 +4,7 @@
 #include "Guid.h"
 #include <string>
 using namespace std;
+#include <system_error>
 #include "CRectifyUtil.h"
 
 IRectifyUtil* ElevationManager::Initialize(BOOL elevate)
@@ -48,12 +49,13 @@ IRectifyUtil* ElevationManager::Initialize(BOOL elevate)
             return NULL;
         }
        
-        hr = ppv->CreateElevatedObject(CLSID_CRectifyUtil, CLSID_powercplthinginterface, (void**)&ppv2);
+        hr = ppv->CreateElevatedObject(CLSID_CRectifyUtil, IID_IRectifyUtil, (void**)&ppv2);
         if (hr != S_OK)
         {
-            WCHAR buffer[1024];
-            swprintf(buffer, 1024, L"CreateElevatedObject() failed with %d", hr);
-            MessageBox(NULL, buffer, L"work", MB_ICONERROR);
+            std::string message = std::system_category().message(hr);
+            CHAR buffer[1024];
+            sprintf(buffer, "CreateElevatedObject() failed with %d (%s)", hr, message.c_str());
+            MessageBoxA(NULL, buffer, "work", MB_ICONERROR);
         }
         ppv->Release();
         if (SUCCEEDED(hr))

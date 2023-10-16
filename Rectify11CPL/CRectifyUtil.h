@@ -3,6 +3,7 @@
 #include "IRectifyUtil_h.h"
 using namespace std;
 
+
 class CRectifyUtil : IRectifyUtil
 {
 public:
@@ -15,9 +16,13 @@ public:
 
 	virtual HRESULT GetMicaSettings(BOOL* pEnabled, BOOL* pTabbed);
 	virtual HRESULT SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed);
+	
+	virtual HRESULT GetCurrentMenuIndex(DWORD* menuIndex);
+	virtual HRESULT SetCurrentMenuByIndex(DWORD pIndex);
 
 private:
 	LONG m_ref;
+	HRESULT _DeleteClassicTransparent();
 };
 
 BOOL IsDarkTheme();

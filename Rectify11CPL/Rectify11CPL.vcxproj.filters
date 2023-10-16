@@ -16,6 +16,8 @@
     <ClCompile Include="theme.cpp" />
     <ClCompile Include="CRectifyUtil.cpp" />
     <ClCompile Include="ElevationManager.cpp" />
+    <ClCompile Include="proxy.c" />
+    <ClCompile Include="IRectifyUtil_p.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClassFactory.h" />

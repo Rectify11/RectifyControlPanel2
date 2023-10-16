@@ -31,8 +31,8 @@
 
 #include "IRectifyUtil_h.h"
 
-#define TYPE_FORMAT_STRING_SIZE   9                                 
-#define PROC_FORMAT_STRING_SIZE   43                                
+#define TYPE_FORMAT_STRING_SIZE   11                                
+#define PROC_FORMAT_STRING_SIZE   181                               
 #define EXPR_FORMAT_STRING_SIZE   1                                 
 #define TRANSMIT_AS_TABLE_SIZE    0            
 #define WIRE_MARSHAL_TABLE_SIZE   0            
@@ -125,50 +125,113 @@ extern const IRectifyUtil_MIDL_EXPR_FORMAT_STRING IRectifyUtil__MIDL_ExprFormatS
 #define GENERIC_BINDING_TABLE_SIZE   0            
 
 
-/* Standard interface: MyInterface, ver. 1.0,
-   GUID={0xba209999,0x0c6c,0x11d2,{0x97,0xcf,0x00,0xc0,0x4f,0x8e,0xea,0x45}} */
-
- extern const MIDL_STUBLESS_PROXY_INFO MyInterface_ProxyInfo;
+/* Standard interface: __MIDL_itf_IRectifyUtil_0000_0000, ver. 0.0,
+   GUID={0x00000000,0x0000,0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}} */
 
 
-static const RPC_CLIENT_INTERFACE MyInterface___RpcClientInterface =
+/* Standard interface: IRectifyUtil, ver. 1.0,
+   GUID={0x5BFF4E01,0xD379,0x4050,{0xA3,0x82,0xC6,0x50,0x4A,0x98,0x0D,0x46}} */
+
+ extern const MIDL_STUBLESS_PROXY_INFO IRectifyUtil_ProxyInfo;
+
+
+static const RPC_CLIENT_INTERFACE IRectifyUtil___RpcClientInterface =
     {
     sizeof(RPC_CLIENT_INTERFACE),
-    {{0xba209999,0x0c6c,0x11d2,{0x97,0xcf,0x00,0xc0,0x4f,0x8e,0xea,0x45}},{1,0}},
+    {{0x5BFF4E01,0xD379,0x4050,{0xA3,0x82,0xC6,0x50,0x4A,0x98,0x0D,0x46}},{1,0}},
     {{0x8A885D04,0x1CEB,0x11C9,{0x9F,0xE8,0x08,0x00,0x2B,0x10,0x48,0x60}},{2,0}},
     0,
     0,
     0,
     0,
-    &MyInterface_ProxyInfo,
+    &IRectifyUtil_ProxyInfo,
     0x02000000
     };
-RPC_IF_HANDLE MyInterface_v1_0_c_ifspec = (RPC_IF_HANDLE)& MyInterface___RpcClientInterface;
+RPC_IF_HANDLE IRectifyUtil_v1_0_c_ifspec = (RPC_IF_HANDLE)& IRectifyUtil___RpcClientInterface;
 #ifdef __cplusplus
 namespace {
 #endif
 
-extern const MIDL_STUB_DESC MyInterface_StubDesc;
+extern const MIDL_STUB_DESC IRectifyUtil_StubDesc;
 #ifdef __cplusplus
 }
 #endif
 
-static RPC_BINDING_HANDLE MyInterface__MIDL_AutoBindHandle;
+static RPC_BINDING_HANDLE IRectifyUtil__MIDL_AutoBindHandle;
 
 
-void MyRemoteProc( 
+HRESULT GetMicaSettings( 
     /* [in] */ handle_t IDL_handle,
-    /* [in] */ int param1,
-    /* [out] */ int outArray[ 1 ])
+    /* [out] */ BOOL *pEnabled,
+    /* [out] */ BOOL *pTabbed)
 {
 
-    NdrClientCall3(
-                  ( PMIDL_STUBLESS_PROXY_INFO  )&MyInterface_ProxyInfo,
+    CLIENT_CALL_RETURN _RetVal;
+
+    _RetVal = NdrClientCall3(
+                  ( PMIDL_STUBLESS_PROXY_INFO  )&IRectifyUtil_ProxyInfo,
                   0,
                   0,
                   IDL_handle,
-                  param1,
-                  outArray);
+                  pEnabled,
+                  pTabbed);
+    return ( HRESULT  )_RetVal.Simple;
+    
+}
+
+
+HRESULT SetMicaForEveryoneEnabled( 
+    /* [in] */ handle_t IDL_handle,
+    /* [in] */ BOOL micaEnabled,
+    /* [in] */ BOOL tabbed)
+{
+
+    CLIENT_CALL_RETURN _RetVal;
+
+    _RetVal = NdrClientCall3(
+                  ( PMIDL_STUBLESS_PROXY_INFO  )&IRectifyUtil_ProxyInfo,
+                  1,
+                  0,
+                  IDL_handle,
+                  micaEnabled,
+                  tabbed);
+    return ( HRESULT  )_RetVal.Simple;
+    
+}
+
+
+HRESULT GetCurrentMenuIndex( 
+    /* [in] */ handle_t IDL_handle,
+    /* [out] */ MenuCustomizationType *pMenuIndex)
+{
+
+    CLIENT_CALL_RETURN _RetVal;
+
+    _RetVal = NdrClientCall3(
+                  ( PMIDL_STUBLESS_PROXY_INFO  )&IRectifyUtil_ProxyInfo,
+                  2,
+                  0,
+                  IDL_handle,
+                  pMenuIndex);
+    return ( HRESULT  )_RetVal.Simple;
+    
+}
+
+
+HRESULT SetCurrentMenuByIndex( 
+    /* [in] */ handle_t IDL_handle,
+    /* [in] */ MenuCustomizationType pMenuIndex)
+{
+
+    CLIENT_CALL_RETURN _RetVal;
+
+    _RetVal = NdrClientCall3(
+                  ( PMIDL_STUBLESS_PROXY_INFO  )&IRectifyUtil_ProxyInfo,
+                  3,
+                  0,
+                  IDL_handle,
+                  pMenuIndex);
+    return ( HRESULT  )_RetVal.Simple;
     
 }
 
@@ -182,20 +245,20 @@ static const IRectifyUtil_MIDL_PROC_FORMAT_STRING IRectifyUtil__MIDL_ProcFormatS
         0,
         {
 
-	/* Procedure MyRemoteProc */
+	/* Procedure GetMicaSettings */
 
 			0x0,		/* 0 */
 			0x48,		/* Old Flags:  */
 /*  2 */	NdrFcLong( 0x0 ),	/* 0 */
 /*  6 */	NdrFcShort( 0x0 ),	/* 0 */
-/*  8 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/*  8 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
 /* 10 */	0x32,		/* FC_BIND_PRIMITIVE */
 			0x0,		/* 0 */
 /* 12 */	NdrFcShort( 0x0 ),	/* X64 Stack size/offset = 0 */
-/* 14 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 16 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 18 */	0x40,		/* Oi2 Flags:  has ext, */
-			0x2,		/* 2 */
+/* 14 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 16 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 18 */	0x44,		/* Oi2 Flags:  has return, has ext, */
+			0x3,		/* 3 */
 /* 20 */	0xa,		/* 10 */
 			0x1,		/* Ext Flags:  new corr desc, */
 /* 22 */	NdrFcShort( 0x0 ),	/* 0 */
@@ -203,18 +266,137 @@ static const IRectifyUtil_MIDL_PROC_FORMAT_STRING IRectifyUtil__MIDL_ProcFormatS
 /* 26 */	NdrFcShort( 0x0 ),	/* 0 */
 /* 28 */	NdrFcShort( 0x0 ),	/* 0 */
 
-	/* Parameter param1 */
+	/* Parameter pEnabled */
 
-/* 30 */	NdrFcShort( 0x48 ),	/* Flags:  in, base type, */
+/* 30 */	NdrFcShort( 0x2150 ),	/* Flags:  out, base type, simple ref, srv alloc size=8 */
 /* 32 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
 /* 34 */	0x8,		/* FC_LONG */
 			0x0,		/* 0 */
 
-	/* Parameter outArray */
+	/* Parameter pTabbed */
 
-/* 36 */	NdrFcShort( 0x12 ),	/* Flags:  must free, out, */
+/* 36 */	NdrFcShort( 0x2150 ),	/* Flags:  out, base type, simple ref, srv alloc size=8 */
 /* 38 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 40 */	NdrFcShort( 0x2 ),	/* Type Offset=2 */
+/* 40 */	0x8,		/* FC_LONG */
+			0x0,		/* 0 */
+
+	/* Return value */
+
+/* 42 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+/* 44 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 46 */	0x8,		/* FC_LONG */
+			0x0,		/* 0 */
+
+	/* Procedure SetMicaForEveryoneEnabled */
+
+/* 48 */	0x0,		/* 0 */
+			0x48,		/* Old Flags:  */
+/* 50 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 54 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 56 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
+/* 58 */	0x32,		/* FC_BIND_PRIMITIVE */
+			0x0,		/* 0 */
+/* 60 */	NdrFcShort( 0x0 ),	/* X64 Stack size/offset = 0 */
+/* 62 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 64 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 66 */	0x44,		/* Oi2 Flags:  has return, has ext, */
+			0x3,		/* 3 */
+/* 68 */	0xa,		/* 10 */
+			0x1,		/* Ext Flags:  new corr desc, */
+/* 70 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 72 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 74 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 76 */	NdrFcShort( 0x0 ),	/* 0 */
+
+	/* Parameter micaEnabled */
+
+/* 78 */	NdrFcShort( 0x48 ),	/* Flags:  in, base type, */
+/* 80 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 82 */	0x8,		/* FC_LONG */
+			0x0,		/* 0 */
+
+	/* Parameter tabbed */
+
+/* 84 */	NdrFcShort( 0x48 ),	/* Flags:  in, base type, */
+/* 86 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
+/* 88 */	0x8,		/* FC_LONG */
+			0x0,		/* 0 */
+
+	/* Return value */
+
+/* 90 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+/* 92 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 94 */	0x8,		/* FC_LONG */
+			0x0,		/* 0 */
+
+	/* Procedure GetCurrentMenuIndex */
+
+/* 96 */	0x0,		/* 0 */
+			0x48,		/* Old Flags:  */
+/* 98 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 102 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 104 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 106 */	0x32,		/* FC_BIND_PRIMITIVE */
+			0x0,		/* 0 */
+/* 108 */	NdrFcShort( 0x0 ),	/* X64 Stack size/offset = 0 */
+/* 110 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 112 */	NdrFcShort( 0x22 ),	/* 34 */
+/* 114 */	0x44,		/* Oi2 Flags:  has return, has ext, */
+			0x2,		/* 2 */
+/* 116 */	0xa,		/* 10 */
+			0x1,		/* Ext Flags:  new corr desc, */
+/* 118 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 120 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 122 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 124 */	NdrFcShort( 0x0 ),	/* 0 */
+
+	/* Parameter pMenuIndex */
+
+/* 126 */	NdrFcShort( 0x2010 ),	/* Flags:  out, srv alloc size=8 */
+/* 128 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 130 */	NdrFcShort( 0x6 ),	/* Type Offset=6 */
+
+	/* Return value */
+
+/* 132 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+/* 134 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
+/* 136 */	0x8,		/* FC_LONG */
+			0x0,		/* 0 */
+
+	/* Procedure SetCurrentMenuByIndex */
+
+/* 138 */	0x0,		/* 0 */
+			0x48,		/* Old Flags:  */
+/* 140 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 144 */	NdrFcShort( 0x3 ),	/* 3 */
+/* 146 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 148 */	0x32,		/* FC_BIND_PRIMITIVE */
+			0x0,		/* 0 */
+/* 150 */	NdrFcShort( 0x0 ),	/* X64 Stack size/offset = 0 */
+/* 152 */	NdrFcShort( 0x6 ),	/* 6 */
+/* 154 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 156 */	0x44,		/* Oi2 Flags:  has return, has ext, */
+			0x2,		/* 2 */
+/* 158 */	0xa,		/* 10 */
+			0x1,		/* Ext Flags:  new corr desc, */
+/* 160 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 162 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 164 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 166 */	NdrFcShort( 0x0 ),	/* 0 */
+
+	/* Parameter pMenuIndex */
+
+/* 168 */	NdrFcShort( 0x48 ),	/* Flags:  in, base type, */
+/* 170 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 172 */	0xd,		/* FC_ENUM16 */
+			0x0,		/* 0 */
+
+	/* Return value */
+
+/* 174 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+/* 176 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
+/* 178 */	0x8,		/* FC_LONG */
+			0x0,		/* 0 */
 
 			0x0
         }
@@ -226,19 +408,24 @@ static const IRectifyUtil_MIDL_TYPE_FORMAT_STRING IRectifyUtil__MIDL_TypeFormatS
         {
 			NdrFcShort( 0x0 ),	/* 0 */
 /*  2 */	
-			0x1d,		/* FC_SMFARRAY */
-			0x3,		/* 3 */
-/*  4 */	NdrFcShort( 0x4 ),	/* 4 */
-/*  6 */	0x8,		/* FC_LONG */
-			0x5b,		/* FC_END */
+			0x11, 0xc,	/* FC_RP [alloced_on_stack] [simple_pointer] */
+/*  4 */	0x8,		/* FC_LONG */
+			0x5c,		/* FC_PAD */
+/*  6 */	
+			0x11, 0xc,	/* FC_RP [alloced_on_stack] [simple_pointer] */
+/*  8 */	0xd,		/* FC_ENUM16 */
+			0x5c,		/* FC_PAD */
 
 			0x0
         }
     };
 
-static const unsigned short MyInterface_FormatStringOffsetTable[] =
+static const unsigned short IRectifyUtil_FormatStringOffsetTable[] =
     {
-    0
+    0,
+    48,
+    96,
+    138
     };
 
 
@@ -281,17 +468,9 @@ namespace {
 
 
 typedef 
-struct 
-{
-    struct _NDR64_FIX_ARRAY_HEADER_FORMAT frag1;
-}
-__midl_frag4_t;
-extern const __midl_frag4_t __midl_frag4;
-
-typedef 
 NDR64_FORMAT_CHAR
-__midl_frag3_t;
-extern const __midl_frag3_t __midl_frag3;
+__midl_frag18_t;
+extern const __midl_frag18_t __midl_frag18;
 
 typedef 
 struct 
@@ -301,6 +480,46 @@ struct
     struct _NDR64_PARAM_FORMAT frag3;
     struct _NDR64_PARAM_FORMAT frag4;
 }
+__midl_frag16_t;
+extern const __midl_frag16_t __midl_frag16;
+
+typedef 
+struct _NDR64_POINTER_FORMAT
+__midl_frag13_t;
+extern const __midl_frag13_t __midl_frag13;
+
+typedef 
+struct 
+{
+    struct _NDR64_PROC_FORMAT frag1;
+    struct _NDR64_BIND_AND_NOTIFY_EXTENSION frag2;
+    struct _NDR64_PARAM_FORMAT frag3;
+    struct _NDR64_PARAM_FORMAT frag4;
+}
+__midl_frag12_t;
+extern const __midl_frag12_t __midl_frag12;
+
+typedef 
+struct 
+{
+    struct _NDR64_PROC_FORMAT frag1;
+    struct _NDR64_BIND_AND_NOTIFY_EXTENSION frag2;
+    struct _NDR64_PARAM_FORMAT frag3;
+    struct _NDR64_PARAM_FORMAT frag4;
+    struct _NDR64_PARAM_FORMAT frag5;
+}
+__midl_frag8_t;
+extern const __midl_frag8_t __midl_frag8;
+
+typedef 
+struct 
+{
+    struct _NDR64_PROC_FORMAT frag1;
+    struct _NDR64_BIND_AND_NOTIFY_EXTENSION frag2;
+    struct _NDR64_PARAM_FORMAT frag3;
+    struct _NDR64_PARAM_FORMAT frag4;
+    struct _NDR64_PARAM_FORMAT frag5;
+}
 __midl_frag2_t;
 extern const __midl_frag2_t __midl_frag2;
 
@@ -309,41 +528,18 @@ NDR64_FORMAT_UINT32
 __midl_frag1_t;
 extern const __midl_frag1_t __midl_frag1;
 
-static const __midl_frag4_t __midl_frag4 =
-{ 
-/*  */
-    { 
-    /* struct _NDR64_FIX_ARRAY_HEADER_FORMAT */
-        0x40,    /* FC64_FIX_ARRAY */
-        (NDR64_UINT8) 3 /* 0x3 */,
-        { 
-        /* struct _NDR64_FIX_ARRAY_HEADER_FORMAT */
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-        },
-        (NDR64_UINT8) 0 /* 0x0 */,
-        (NDR64_UINT32) 4 /* 0x4 */
-    }
-};
-
-static const __midl_frag3_t __midl_frag3 =
+static const __midl_frag18_t __midl_frag18 =
 0x5    /* FC64_INT32 */;
 
-static const __midl_frag2_t __midl_frag2 =
+static const __midl_frag16_t __midl_frag16 =
 { 
-/* MyRemoteProc */
+/* SetCurrentMenuByIndex */
     { 
-    /* MyRemoteProc */      /* procedure MyRemoteProc */
-        (NDR64_UINT32) 16777280 /* 0x1000040 */,    /* explicit handle */ /* IsIntrepreted, HasExtensions */
+    /* SetCurrentMenuByIndex */      /* procedure SetCurrentMenuByIndex */
+        (NDR64_UINT32) 17301568 /* 0x1080040 */,    /* explicit handle */ /* IsIntrepreted, HasReturn, HasExtensions */
         (NDR64_UINT32) 24 /* 0x18 */ ,  /* Stack size */
         (NDR64_UINT32) 8 /* 0x8 */,
-        (NDR64_UINT32) 20 /* 0x14 */,
+        (NDR64_UINT32) 8 /* 0x8 */,
         (NDR64_UINT16) 0 /* 0x0 */,
         (NDR64_UINT16) 0 /* 0x0 */,
         (NDR64_UINT16) 2 /* 0x2 */,
@@ -362,10 +558,10 @@ static const __midl_frag2_t __midl_frag2 =
         (NDR64_UINT16) 0 /* 0x0 */      /* Notify index */
     },
     { 
-    /* param1 */      /* parameter param1 */
-        &__midl_frag3,
+    /* pMenuIndex */      /* parameter pMenuIndex */
+        &__midl_frag18,
         { 
-        /* param1 */
+        /* pMenuIndex */
             0,
             0,
             0,
@@ -386,18 +582,18 @@ static const __midl_frag2_t __midl_frag2 =
         8 /* 0x8 */,   /* Stack offset */
     },
     { 
-    /* outArray */      /* parameter outArray */
-        &__midl_frag4,
+    /* HRESULT */      /* parameter HRESULT */
+        &__midl_frag18,
         { 
-        /* outArray */
+        /* HRESULT */
             0,
+            0,
+            0,
+            0,
+            1,
             1,
-            0,
-            0,
             1,
-            0,
-            0,
-            0,
+            1,
             0,
             0,
             0,
@@ -405,9 +601,294 @@ static const __midl_frag2_t __midl_frag2 =
             0,
             (NDR64_UINT16) 0 /* 0x0 */,
             0
-        },    /* MustFree, [out] */
+        },    /* [out], IsReturn, Basetype, ByValue */
         (NDR64_UINT16) 0 /* 0x0 */,
         16 /* 0x10 */,   /* Stack offset */
+    }
+};
+
+static const __midl_frag13_t __midl_frag13 =
+{ 
+/* *MenuCustomizationType */
+    0x20,    /* FC64_RP */
+    (NDR64_UINT8) 12 /* 0xc */,
+    (NDR64_UINT16) 0 /* 0x0 */,
+    &__midl_frag18
+};
+
+static const __midl_frag12_t __midl_frag12 =
+{ 
+/* GetCurrentMenuIndex */
+    { 
+    /* GetCurrentMenuIndex */      /* procedure GetCurrentMenuIndex */
+        (NDR64_UINT32) 17301568 /* 0x1080040 */,    /* explicit handle */ /* IsIntrepreted, HasReturn, HasExtensions */
+        (NDR64_UINT32) 24 /* 0x18 */ ,  /* Stack size */
+        (NDR64_UINT32) 0 /* 0x0 */,
+        (NDR64_UINT32) 40 /* 0x28 */,
+        (NDR64_UINT16) 0 /* 0x0 */,
+        (NDR64_UINT16) 0 /* 0x0 */,
+        (NDR64_UINT16) 2 /* 0x2 */,
+        (NDR64_UINT16) 8 /* 0x8 */
+    },
+    { 
+    /* struct _NDR64_BIND_AND_NOTIFY_EXTENSION */
+        { 
+        /* struct _NDR64_BIND_AND_NOTIFY_EXTENSION */
+            0x72,    /* FC64_BIND_PRIMITIVE */
+            (NDR64_UINT8) 0 /* 0x0 */,
+            0 /* 0x0 */,   /* Stack offset */
+            (NDR64_UINT8) 0 /* 0x0 */,
+            (NDR64_UINT8) 0 /* 0x0 */
+        },
+        (NDR64_UINT16) 0 /* 0x0 */      /* Notify index */
+    },
+    { 
+    /* pMenuIndex */      /* parameter pMenuIndex */
+        &__midl_frag18,
+        { 
+        /* pMenuIndex */
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            (NDR64_UINT16) 0 /* 0x0 */,
+            1
+        },    /* [out], Basetype, SimpleRef, UseCache */
+        (NDR64_UINT16) 0 /* 0x0 */,
+        8 /* 0x8 */,   /* Stack offset */
+    },
+    { 
+    /* HRESULT */      /* parameter HRESULT */
+        &__midl_frag18,
+        { 
+        /* HRESULT */
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            (NDR64_UINT16) 0 /* 0x0 */,
+            0
+        },    /* [out], IsReturn, Basetype, ByValue */
+        (NDR64_UINT16) 0 /* 0x0 */,
+        16 /* 0x10 */,   /* Stack offset */
+    }
+};
+
+static const __midl_frag8_t __midl_frag8 =
+{ 
+/* SetMicaForEveryoneEnabled */
+    { 
+    /* SetMicaForEveryoneEnabled */      /* procedure SetMicaForEveryoneEnabled */
+        (NDR64_UINT32) 17301568 /* 0x1080040 */,    /* explicit handle */ /* IsIntrepreted, HasReturn, HasExtensions */
+        (NDR64_UINT32) 32 /* 0x20 */ ,  /* Stack size */
+        (NDR64_UINT32) 16 /* 0x10 */,
+        (NDR64_UINT32) 8 /* 0x8 */,
+        (NDR64_UINT16) 0 /* 0x0 */,
+        (NDR64_UINT16) 0 /* 0x0 */,
+        (NDR64_UINT16) 3 /* 0x3 */,
+        (NDR64_UINT16) 8 /* 0x8 */
+    },
+    { 
+    /* struct _NDR64_BIND_AND_NOTIFY_EXTENSION */
+        { 
+        /* struct _NDR64_BIND_AND_NOTIFY_EXTENSION */
+            0x72,    /* FC64_BIND_PRIMITIVE */
+            (NDR64_UINT8) 0 /* 0x0 */,
+            0 /* 0x0 */,   /* Stack offset */
+            (NDR64_UINT8) 0 /* 0x0 */,
+            (NDR64_UINT8) 0 /* 0x0 */
+        },
+        (NDR64_UINT16) 0 /* 0x0 */      /* Notify index */
+    },
+    { 
+    /* micaEnabled */      /* parameter micaEnabled */
+        &__midl_frag18,
+        { 
+        /* micaEnabled */
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            (NDR64_UINT16) 0 /* 0x0 */,
+            0
+        },    /* [in], Basetype, ByValue */
+        (NDR64_UINT16) 0 /* 0x0 */,
+        8 /* 0x8 */,   /* Stack offset */
+    },
+    { 
+    /* tabbed */      /* parameter tabbed */
+        &__midl_frag18,
+        { 
+        /* tabbed */
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            (NDR64_UINT16) 0 /* 0x0 */,
+            0
+        },    /* [in], Basetype, ByValue */
+        (NDR64_UINT16) 0 /* 0x0 */,
+        16 /* 0x10 */,   /* Stack offset */
+    },
+    { 
+    /* HRESULT */      /* parameter HRESULT */
+        &__midl_frag18,
+        { 
+        /* HRESULT */
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            (NDR64_UINT16) 0 /* 0x0 */,
+            0
+        },    /* [out], IsReturn, Basetype, ByValue */
+        (NDR64_UINT16) 0 /* 0x0 */,
+        24 /* 0x18 */,   /* Stack offset */
+    }
+};
+
+static const __midl_frag2_t __midl_frag2 =
+{ 
+/* GetMicaSettings */
+    { 
+    /* GetMicaSettings */      /* procedure GetMicaSettings */
+        (NDR64_UINT32) 17301568 /* 0x1080040 */,    /* explicit handle */ /* IsIntrepreted, HasReturn, HasExtensions */
+        (NDR64_UINT32) 32 /* 0x20 */ ,  /* Stack size */
+        (NDR64_UINT32) 0 /* 0x0 */,
+        (NDR64_UINT32) 72 /* 0x48 */,
+        (NDR64_UINT16) 0 /* 0x0 */,
+        (NDR64_UINT16) 0 /* 0x0 */,
+        (NDR64_UINT16) 3 /* 0x3 */,
+        (NDR64_UINT16) 8 /* 0x8 */
+    },
+    { 
+    /* struct _NDR64_BIND_AND_NOTIFY_EXTENSION */
+        { 
+        /* struct _NDR64_BIND_AND_NOTIFY_EXTENSION */
+            0x72,    /* FC64_BIND_PRIMITIVE */
+            (NDR64_UINT8) 0 /* 0x0 */,
+            0 /* 0x0 */,   /* Stack offset */
+            (NDR64_UINT8) 0 /* 0x0 */,
+            (NDR64_UINT8) 0 /* 0x0 */
+        },
+        (NDR64_UINT16) 0 /* 0x0 */      /* Notify index */
+    },
+    { 
+    /* pEnabled */      /* parameter pEnabled */
+        &__midl_frag18,
+        { 
+        /* pEnabled */
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            (NDR64_UINT16) 0 /* 0x0 */,
+            1
+        },    /* [out], Basetype, SimpleRef, UseCache */
+        (NDR64_UINT16) 0 /* 0x0 */,
+        8 /* 0x8 */,   /* Stack offset */
+    },
+    { 
+    /* pTabbed */      /* parameter pTabbed */
+        &__midl_frag18,
+        { 
+        /* pTabbed */
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            (NDR64_UINT16) 0 /* 0x0 */,
+            1
+        },    /* [out], Basetype, SimpleRef, UseCache */
+        (NDR64_UINT16) 0 /* 0x0 */,
+        16 /* 0x10 */,   /* Stack offset */
+    },
+    { 
+    /* HRESULT */      /* parameter HRESULT */
+        &__midl_frag18,
+        { 
+        /* HRESULT */
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            (NDR64_UINT16) 0 /* 0x0 */,
+            0
+        },    /* [out], IsReturn, Basetype, ByValue */
+        (NDR64_UINT16) 0 /* 0x0 */,
+        24 /* 0x18 */,   /* Stack offset */
     }
 };
 
@@ -421,21 +902,24 @@ static const __midl_frag1_t __midl_frag1 =
 #include "poppack.h"
 
 
-static const FormatInfoRef MyInterface_Ndr64ProcTable[] =
+static const FormatInfoRef IRectifyUtil_Ndr64ProcTable[] =
     {
-    &__midl_frag2
+    &__midl_frag2,
+    &__midl_frag8,
+    &__midl_frag12,
+    &__midl_frag16
     };
 
 
 #ifdef __cplusplus
 namespace {
 #endif
-static const MIDL_STUB_DESC MyInterface_StubDesc = 
+static const MIDL_STUB_DESC IRectifyUtil_StubDesc = 
     {
-    (void *)& MyInterface___RpcClientInterface,
+    (void *)& IRectifyUtil___RpcClientInterface,
     MIDL_user_allocate,
     MIDL_user_free,
-    &MyInterface__MIDL_AutoBindHandle,
+    &IRectifyUtil__MIDL_AutoBindHandle,
     0,
     0,
     0,
@@ -450,20 +934,20 @@ static const MIDL_STUB_DESC MyInterface_StubDesc =
     0,  /* notify & notify_flag routine table */
     0x2000001, /* MIDL flag */
     0, /* cs routines */
-    (void *)& MyInterface_ProxyInfo,   /* proxy/server info */
+    (void *)& IRectifyUtil_ProxyInfo,   /* proxy/server info */
     0
     };
 #ifdef __cplusplus
 }
 #endif
 
-static const MIDL_SYNTAX_INFO MyInterface_SyntaxInfo [  2 ] = 
+static const MIDL_SYNTAX_INFO IRectifyUtil_SyntaxInfo [  2 ] = 
     {
     {
     {{0x8A885D04,0x1CEB,0x11C9,{0x9F,0xE8,0x08,0x00,0x2B,0x10,0x48,0x60}},{2,0}},
     0,
     IRectifyUtil__MIDL_ProcFormatString.Format,
-    MyInterface_FormatStringOffsetTable,
+    IRectifyUtil_FormatStringOffsetTable,
     IRectifyUtil__MIDL_TypeFormatString.Format,
     0,
     0,
@@ -473,7 +957,7 @@ static const MIDL_SYNTAX_INFO MyInterface_SyntaxInfo [  2 ] =
     {{0x71710533,0xbeba,0x4937,{0x83,0x19,0xb5,0xdb,0xef,0x9c,0xcc,0x36}},{1,0}},
     0,
     0 ,
-    (unsigned short *) MyInterface_Ndr64ProcTable,
+    (unsigned short *) IRectifyUtil_Ndr64ProcTable,
     0,
     0,
     0,
@@ -481,14 +965,14 @@ static const MIDL_SYNTAX_INFO MyInterface_SyntaxInfo [  2 ] =
     }
     };
 
-static const MIDL_STUBLESS_PROXY_INFO MyInterface_ProxyInfo =
+static const MIDL_STUBLESS_PROXY_INFO IRectifyUtil_ProxyInfo =
     {
-    &MyInterface_StubDesc,
+    &IRectifyUtil_StubDesc,
     IRectifyUtil__MIDL_ProcFormatString.Format,
-    MyInterface_FormatStringOffsetTable,
+    IRectifyUtil_FormatStringOffsetTable,
     (RPC_SYNTAX_IDENTIFIER*)&_RpcTransferSyntax_2_0,
     2,
-    (MIDL_SYNTAX_INFO*)MyInterface_SyntaxInfo
+    (MIDL_SYNTAX_INFO*)IRectifyUtil_SyntaxInfo
     
     };
 

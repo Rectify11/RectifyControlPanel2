@@ -68,6 +68,24 @@ extern "C"{
 #endif 
 
 
+/* interface __MIDL_itf_IRectifyUtil_0000_0000 */
+/* [local] */ 
+
+typedef /* [public] */ 
+enum __MIDL___MIDL_itf_IRectifyUtil_0000_0000_0001
+    {
+        Normal	= 0,
+        NilesoftSmall	= 1,
+        NilesoftFull	= 2,
+        Classic	= 3,
+        ClassicTransparent	= 4
+    } 	MenuCustomizationType;
+
+
+
+extern RPC_IF_HANDLE __MIDL_itf_IRectifyUtil_0000_0000_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_IRectifyUtil_0000_0000_v0_0_s_ifspec;
+
 #ifndef __IRectifyUtil_INTERFACE_DEFINED__
 #define __IRectifyUtil_INTERFACE_DEFINED__
 
@@ -79,7 +97,7 @@ EXTERN_C const IID IID_IRectifyUtil;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    MIDL_INTERFACE("5BFF4E01-D379-4050-A382-C6504A980D46")
+    MIDL_INTERFACE("A7BCDC3B-C5A2-44BB-B8EC-560B24ACAAD8")
     IRectifyUtil : public IUnknown
     {
     public:
@@ -90,6 +108,12 @@ EXTERN_C const IID IID_IRectifyUtil;
         virtual HRESULT STDMETHODCALLTYPE SetMicaForEveryoneEnabled( 
             /* [in] */ BOOL micaEnabled,
             /* [in] */ BOOL tabbed) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetCurrentMenuIndex( 
+            /* [out] */ DWORD *pMenuIndex) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetCurrentMenuByIndex( 
+            /* [in] */ DWORD pMenuIndex) = 0;
         
     };
     
@@ -127,6 +151,16 @@ EXTERN_C const IID IID_IRectifyUtil;
             /* [in] */ BOOL micaEnabled,
             /* [in] */ BOOL tabbed);
         
+        DECLSPEC_XFGVIRT(IRectifyUtil, GetCurrentMenuIndex)
+        HRESULT ( STDMETHODCALLTYPE *GetCurrentMenuIndex )( 
+            IRectifyUtil * This,
+            /* [out] */ DWORD *pMenuIndex);
+        
+        DECLSPEC_XFGVIRT(IRectifyUtil, SetCurrentMenuByIndex)
+        HRESULT ( STDMETHODCALLTYPE *SetCurrentMenuByIndex )( 
+            IRectifyUtil * This,
+            /* [in] */ DWORD pMenuIndex);
+        
         END_INTERFACE
     } IRectifyUtilVtbl;
 
@@ -155,6 +189,12 @@ EXTERN_C const IID IID_IRectifyUtil;
 
 #define IRectifyUtil_SetMicaForEveryoneEnabled(This,micaEnabled,tabbed)	\
     ( (This)->lpVtbl -> SetMicaForEveryoneEnabled(This,micaEnabled,tabbed) ) 
+
+#define IRectifyUtil_GetCurrentMenuIndex(This,pMenuIndex)	\
+    ( (This)->lpVtbl -> GetCurrentMenuIndex(This,pMenuIndex) ) 
+
+#define IRectifyUtil_SetCurrentMenuByIndex(This,pMenuIndex)	\
+    ( (This)->lpVtbl -> SetCurrentMenuByIndex(This,pMenuIndex) ) 
 
 #endif /* COBJMACROS */
 

@@ -47,7 +47,7 @@
 #include "IRectifyUtil_h.h"
 
 #define TYPE_FORMAT_STRING_SIZE   7                                 
-#define PROC_FORMAT_STRING_SIZE   89                                
+#define PROC_FORMAT_STRING_SIZE   165                               
 #define EXPR_FORMAT_STRING_SIZE   1                                 
 #define TRANSMIT_AS_TABLE_SIZE    0            
 #define WIRE_MARSHAL_TABLE_SIZE   0            
@@ -239,6 +239,70 @@ static const IRectifyUtil_MIDL_PROC_FORMAT_STRING IRectifyUtil__MIDL_ProcFormatS
 /* 86 */	0x8,		/* FC_LONG */
 			0x0,		/* 0 */
 
+	/* Procedure GetCurrentMenuIndex */
+
+/* 88 */	0x33,		/* FC_AUTO_HANDLE */
+			0x6c,		/* Old Flags:  object, Oi2 */
+/* 90 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 94 */	NdrFcShort( 0x5 ),	/* 5 */
+/* 96 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 98 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 100 */	NdrFcShort( 0x24 ),	/* 36 */
+/* 102 */	0x44,		/* Oi2 Flags:  has return, has ext, */
+			0x2,		/* 2 */
+/* 104 */	0xa,		/* 10 */
+			0x1,		/* Ext Flags:  new corr desc, */
+/* 106 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 108 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 110 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 112 */	NdrFcShort( 0x0 ),	/* 0 */
+
+	/* Parameter pMenuIndex */
+
+/* 114 */	NdrFcShort( 0x2150 ),	/* Flags:  out, base type, simple ref, srv alloc size=8 */
+/* 116 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 118 */	0x8,		/* FC_LONG */
+			0x0,		/* 0 */
+
+	/* Return value */
+
+/* 120 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+/* 122 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
+/* 124 */	0x8,		/* FC_LONG */
+			0x0,		/* 0 */
+
+	/* Procedure SetCurrentMenuByIndex */
+
+/* 126 */	0x33,		/* FC_AUTO_HANDLE */
+			0x6c,		/* Old Flags:  object, Oi2 */
+/* 128 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 132 */	NdrFcShort( 0x6 ),	/* 6 */
+/* 134 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 136 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 138 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 140 */	0x44,		/* Oi2 Flags:  has return, has ext, */
+			0x2,		/* 2 */
+/* 142 */	0xa,		/* 10 */
+			0x1,		/* Ext Flags:  new corr desc, */
+/* 144 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 146 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 148 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 150 */	NdrFcShort( 0x0 ),	/* 0 */
+
+	/* Parameter pMenuIndex */
+
+/* 152 */	NdrFcShort( 0x48 ),	/* Flags:  in, base type, */
+/* 154 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 156 */	0x8,		/* FC_LONG */
+			0x0,		/* 0 */
+
+	/* Return value */
+
+/* 158 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+/* 160 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
+/* 162 */	0x8,		/* FC_LONG */
+			0x0,		/* 0 */
+
 			0x0
         }
     };
@@ -258,18 +322,24 @@ static const IRectifyUtil_MIDL_TYPE_FORMAT_STRING IRectifyUtil__MIDL_TypeFormatS
     };
 
 
+/* Standard interface: __MIDL_itf_IRectifyUtil_0000_0000, ver. 0.0,
+   GUID={0x00000000,0x0000,0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}} */
+
+
 /* Object interface: IUnknown, ver. 0.0,
    GUID={0x00000000,0x0000,0x0000,{0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46}} */
 
 
 /* Object interface: IRectifyUtil, ver. 1.0,
-   GUID={0x5BFF4E01,0xD379,0x4050,{0xA3,0x82,0xC6,0x50,0x4A,0x98,0x0D,0x46}} */
+   GUID={0xA7BCDC3B,0xC5A2,0x44BB,{0xB8,0xEC,0x56,0x0B,0x24,0xAC,0xAA,0xD8}} */
 
 #pragma code_seg(".orpc")
 static const unsigned short IRectifyUtil_FormatStringOffsetTable[] =
     {
     0,
-    44
+    44,
+    88,
+    126
     };
 
 
@@ -313,8 +383,33 @@ namespace {
 
 typedef 
 NDR64_FORMAT_CHAR
-__midl_frag11_t;
-extern const __midl_frag11_t __midl_frag11;
+__midl_frag18_t;
+extern const __midl_frag18_t __midl_frag18;
+
+typedef 
+struct 
+{
+    struct _NDR64_PROC_FORMAT frag1;
+    struct _NDR64_PARAM_FORMAT frag2;
+    struct _NDR64_PARAM_FORMAT frag3;
+}
+__midl_frag16_t;
+extern const __midl_frag16_t __midl_frag16;
+
+typedef 
+struct _NDR64_POINTER_FORMAT
+__midl_frag13_t;
+extern const __midl_frag13_t __midl_frag13;
+
+typedef 
+struct 
+{
+    struct _NDR64_PROC_FORMAT frag1;
+    struct _NDR64_PARAM_FORMAT frag2;
+    struct _NDR64_PARAM_FORMAT frag3;
+}
+__midl_frag12_t;
+extern const __midl_frag12_t __midl_frag12;
 
 typedef 
 struct 
@@ -326,11 +421,6 @@ struct
 }
 __midl_frag8_t;
 extern const __midl_frag8_t __midl_frag8;
-
-typedef 
-struct _NDR64_POINTER_FORMAT
-__midl_frag5_t;
-extern const __midl_frag5_t __midl_frag5;
 
 typedef 
 struct 
@@ -348,8 +438,145 @@ NDR64_FORMAT_UINT32
 __midl_frag1_t;
 extern const __midl_frag1_t __midl_frag1;
 
-static const __midl_frag11_t __midl_frag11 =
+static const __midl_frag18_t __midl_frag18 =
 0x5    /* FC64_INT32 */;
+
+static const __midl_frag16_t __midl_frag16 =
+{ 
+/* SetCurrentMenuByIndex */
+    { 
+    /* SetCurrentMenuByIndex */      /* procedure SetCurrentMenuByIndex */
+        (NDR64_UINT32) 524611 /* 0x80143 */,    /* auto handle */ /* IsIntrepreted, [object], HasReturn */
+        (NDR64_UINT32) 24 /* 0x18 */ ,  /* Stack size */
+        (NDR64_UINT32) 8 /* 0x8 */,
+        (NDR64_UINT32) 8 /* 0x8 */,
+        (NDR64_UINT16) 0 /* 0x0 */,
+        (NDR64_UINT16) 0 /* 0x0 */,
+        (NDR64_UINT16) 2 /* 0x2 */,
+        (NDR64_UINT16) 0 /* 0x0 */
+    },
+    { 
+    /* pMenuIndex */      /* parameter pMenuIndex */
+        &__midl_frag18,
+        { 
+        /* pMenuIndex */
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            (NDR64_UINT16) 0 /* 0x0 */,
+            0
+        },    /* [in], Basetype, ByValue */
+        (NDR64_UINT16) 0 /* 0x0 */,
+        8 /* 0x8 */,   /* Stack offset */
+    },
+    { 
+    /* HRESULT */      /* parameter HRESULT */
+        &__midl_frag18,
+        { 
+        /* HRESULT */
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            (NDR64_UINT16) 0 /* 0x0 */,
+            0
+        },    /* [out], IsReturn, Basetype, ByValue */
+        (NDR64_UINT16) 0 /* 0x0 */,
+        16 /* 0x10 */,   /* Stack offset */
+    }
+};
+
+static const __midl_frag13_t __midl_frag13 =
+{ 
+/* *DWORD */
+    0x20,    /* FC64_RP */
+    (NDR64_UINT8) 12 /* 0xc */,
+    (NDR64_UINT16) 0 /* 0x0 */,
+    &__midl_frag18
+};
+
+static const __midl_frag12_t __midl_frag12 =
+{ 
+/* GetCurrentMenuIndex */
+    { 
+    /* GetCurrentMenuIndex */      /* procedure GetCurrentMenuIndex */
+        (NDR64_UINT32) 524611 /* 0x80143 */,    /* auto handle */ /* IsIntrepreted, [object], HasReturn */
+        (NDR64_UINT32) 24 /* 0x18 */ ,  /* Stack size */
+        (NDR64_UINT32) 0 /* 0x0 */,
+        (NDR64_UINT32) 40 /* 0x28 */,
+        (NDR64_UINT16) 0 /* 0x0 */,
+        (NDR64_UINT16) 0 /* 0x0 */,
+        (NDR64_UINT16) 2 /* 0x2 */,
+        (NDR64_UINT16) 0 /* 0x0 */
+    },
+    { 
+    /* pMenuIndex */      /* parameter pMenuIndex */
+        &__midl_frag18,
+        { 
+        /* pMenuIndex */
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            (NDR64_UINT16) 0 /* 0x0 */,
+            1
+        },    /* [out], Basetype, SimpleRef, UseCache */
+        (NDR64_UINT16) 0 /* 0x0 */,
+        8 /* 0x8 */,   /* Stack offset */
+    },
+    { 
+    /* HRESULT */      /* parameter HRESULT */
+        &__midl_frag18,
+        { 
+        /* HRESULT */
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            (NDR64_UINT16) 0 /* 0x0 */,
+            0
+        },    /* [out], IsReturn, Basetype, ByValue */
+        (NDR64_UINT16) 0 /* 0x0 */,
+        16 /* 0x10 */,   /* Stack offset */
+    }
+};
 
 static const __midl_frag8_t __midl_frag8 =
 { 
@@ -367,7 +594,7 @@ static const __midl_frag8_t __midl_frag8 =
     },
     { 
     /* micaEnabled */      /* parameter micaEnabled */
-        &__midl_frag11,
+        &__midl_frag18,
         { 
         /* micaEnabled */
             0,
@@ -391,7 +618,7 @@ static const __midl_frag8_t __midl_frag8 =
     },
     { 
     /* tabbed */      /* parameter tabbed */
-        &__midl_frag11,
+        &__midl_frag18,
         { 
         /* tabbed */
             0,
@@ -415,7 +642,7 @@ static const __midl_frag8_t __midl_frag8 =
     },
     { 
     /* HRESULT */      /* parameter HRESULT */
-        &__midl_frag11,
+        &__midl_frag18,
         { 
         /* HRESULT */
             0,
@@ -439,15 +666,6 @@ static const __midl_frag8_t __midl_frag8 =
     }
 };
 
-static const __midl_frag5_t __midl_frag5 =
-{ 
-/* *BOOL */
-    0x20,    /* FC64_RP */
-    (NDR64_UINT8) 12 /* 0xc */,
-    (NDR64_UINT16) 0 /* 0x0 */,
-    &__midl_frag11
-};
-
 static const __midl_frag2_t __midl_frag2 =
 { 
 /* GetMicaSettings */
@@ -464,7 +682,7 @@ static const __midl_frag2_t __midl_frag2 =
     },
     { 
     /* pEnabled */      /* parameter pEnabled */
-        &__midl_frag11,
+        &__midl_frag18,
         { 
         /* pEnabled */
             0,
@@ -488,7 +706,7 @@ static const __midl_frag2_t __midl_frag2 =
     },
     { 
     /* pTabbed */      /* parameter pTabbed */
-        &__midl_frag11,
+        &__midl_frag18,
         { 
         /* pTabbed */
             0,
@@ -512,7 +730,7 @@ static const __midl_frag2_t __midl_frag2 =
     },
     { 
     /* HRESULT */      /* parameter HRESULT */
-        &__midl_frag11,
+        &__midl_frag18,
         { 
         /* HRESULT */
             0,
@@ -547,18 +765,24 @@ static const __midl_frag1_t __midl_frag1 =
 
 
 
+/* Standard interface: __MIDL_itf_IRectifyUtil_0000_0000, ver. 0.0,
+   GUID={0x00000000,0x0000,0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}} */
+
+
 /* Object interface: IUnknown, ver. 0.0,
    GUID={0x00000000,0x0000,0x0000,{0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46}} */
 
 
 /* Object interface: IRectifyUtil, ver. 1.0,
-   GUID={0x5BFF4E01,0xD379,0x4050,{0xA3,0x82,0xC6,0x50,0x4A,0x98,0x0D,0x46}} */
+   GUID={0xA7BCDC3B,0xC5A2,0x44BB,{0xB8,0xEC,0x56,0x0B,0x24,0xAC,0xAA,0xD8}} */
 
 #pragma code_seg(".orpc")
 static const FormatInfoRef IRectifyUtil_Ndr64ProcTable[] =
     {
     &__midl_frag2,
-    &__midl_frag8
+    &__midl_frag8,
+    &__midl_frag12,
+    &__midl_frag16
     };
 
 
@@ -609,7 +833,7 @@ static const MIDL_SERVER_INFO IRectifyUtil_ServerInfo =
     2,
     (MIDL_SYNTAX_INFO*)IRectifyUtil_SyntaxInfo
     };
-CINTERFACE_PROXY_VTABLE(5) _IRectifyUtilProxyVtbl = 
+CINTERFACE_PROXY_VTABLE(7) _IRectifyUtilProxyVtbl = 
 {
     &IRectifyUtil_ProxyInfo,
     &IID_IRectifyUtil,
@@ -617,14 +841,16 @@ CINTERFACE_PROXY_VTABLE(5) _IRectifyUtilProxyVtbl =
     IUnknown_AddRef_Proxy,
     IUnknown_Release_Proxy ,
     (void *) (INT_PTR) -1 /* IRectifyUtil::GetMicaSettings */ ,
-    (void *) (INT_PTR) -1 /* IRectifyUtil::SetMicaForEveryoneEnabled */
+    (void *) (INT_PTR) -1 /* IRectifyUtil::SetMicaForEveryoneEnabled */ ,
+    (void *) (INT_PTR) -1 /* IRectifyUtil::GetCurrentMenuIndex */ ,
+    (void *) (INT_PTR) -1 /* IRectifyUtil::SetCurrentMenuByIndex */
 };
 
 const CInterfaceStubVtbl _IRectifyUtilStubVtbl =
 {
     &IID_IRectifyUtil,
     &IRectifyUtil_ServerInfo,
-    5,
+    7,
     0, /* pure interpreted */
     CStdStubBuffer_METHODS
 };

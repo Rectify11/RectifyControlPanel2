@@ -1,14 +1,22 @@
 import "oaidl.idl";
 import "ocidl.idl";
 
-
+typedef  enum {
+    Normal = 0,
+    NilesoftSmall = 1,
+    NilesoftFull = 2,
+    Classic = 3,
+    ClassicTransparent = 4
+} MenuCustomizationType;
 
 [
-    object, uuid(5BFF4E01-D379-4050-A382-C6504A980D46),
+     object, uuid(A7BCDC3B-C5A2-44BB-B8EC-560B24ACAAD8),
         version(1.0)
 ]
 interface IRectifyUtil : IUnknown
 {
     HRESULT GetMicaSettings([out] BOOL* pEnabled, [out] BOOL* pTabbed);
     HRESULT SetMicaForEveryoneEnabled([in] BOOL micaEnabled, [in] BOOL tabbed);
+    HRESULT GetCurrentMenuIndex([out] DWORD* pMenuIndex);
+    HRESULT SetCurrentMenuByIndex([in] DWORD pMenuIndex);
 }

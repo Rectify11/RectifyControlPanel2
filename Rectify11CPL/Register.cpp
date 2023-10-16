@@ -1,7 +1,3 @@
-#include <windows.h>
-#include <shlwapi.h>
-#include <objbase.h>
-#include <Shlobj.h>
 #include <olectl.h>
 #include <strsafe.h>
 // The GUID for the FolderViewImpl
@@ -20,6 +16,7 @@
 HINSTANCE g_hInst = NULL;
 LONG g_cRefModule = 0;
 WCHAR g_szExtTitle[1024];
+
 
 void DllAddRef()
 {
@@ -58,7 +55,10 @@ STDAPI DllCanUnloadNow(void)
 {
 	return g_cRefModule ? S_FALSE : S_OK;
 }
-
+extern "C"
+{
+	HRESULT __stdcall DllGetClassObject2(const IID* rclsid, const IID* riid, void** ppv); //proxy.c
+}
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
 {
 	*ppv = NULL;
@@ -70,11 +70,20 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
 		hr = pClassFactory->QueryInterface(riid, ppv);
 		pClassFactory->Release();
 	}
+
 	if (FAILED(hr))
 	{
-		WCHAR szGuid[40] = { 0 };
+		// for some reason rclsid is IPSFactoryBuffer?? Work around this by replacing it. ugly but it works
 
-		swprintf(szGuid, 40, L"{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}", riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7]);
+		hr = DllGetClassObject2(&IID_IRectifyUtil, &riid, ppv);
+	}
+	if (FAILED(hr))
+	{
+		WCHAR szGuid[100] = { 0 };
+
+		swprintf(szGuid, 100, L"{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}\n{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
+			rclsid.Data1, rclsid.Data2, rclsid.Data3, rclsid.Data4[0], rclsid.Data4[1], rclsid.Data4[2], rclsid.Data4[3], rclsid.Data4[4], rclsid.Data4[5], rclsid.Data4[6], rclsid.Data4[7],
+			riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7]);
 
 		MessageBox(NULL, szGuid, TEXT("Unknown interface in DllGetClassObject()"), 0);
 	}
@@ -114,7 +123,7 @@ typedef struct
 //
 STDAPI DllRegisterServer()
 {
-	WCHAR szFolderViewImplClassID[64], szElementClassID[64], szServerID[64], szAPIClass[64], szApiInterface[64], szSubKey[MAX_PATH], szData[MAX_PATH];
+	WCHAR szFolderViewImplClassID[64], szElementClassID[64], szServerID[64], szAPIClass[64], szApiInterface[64], szProxy[64], szSubKey[MAX_PATH], szData[MAX_PATH];
 	if (FAILED(StringFromGUID2(CLSID_FolderViewImpl, szFolderViewImplClassID, ARRAYSIZE(szFolderViewImplClassID))))
 	{
 		return GetLastError();
@@ -132,6 +141,10 @@ STDAPI DllRegisterServer()
 		return GetLastError();
 	}
 	if (FAILED(StringFromGUID2(CLSID_RectifyUtilServer, szServerID, ARRAYSIZE(szServerID))))
+	{
+		return GetLastError();
+	}
+	if (FAILED(StringFromGUID2(CLSID_PROXY, szProxy, ARRAYSIZE(szProxy))))
 	{
 		return GetLastError();
 	}
@@ -171,8 +184,8 @@ STDAPI DllRegisterServer()
 		//LUA server API interface
 		// 
 		// NOTE: It is 100% intentonal that this interface CLSID already exists, otherwide some actxprxy thing fails...
-		//HKEY_CLASSES_ROOT,  L"Interface\\%s",                 szApiInterface, NULL,                       (LPBYTE)L"IRectifyUtil",   REG_SZ, 0,
-		//HKEY_CLASSES_ROOT,  L"Interface\\%s\\ProxyStubClsid32", szApiInterface, NULL,                     (LPBYTE)L"{C90250F3-4D7D-4991-9B69-A5C5BC1C2AE6}",          REG_SZ, 0,
+		HKEY_CLASSES_ROOT,  L"Interface\\%s",                 szApiInterface, NULL,                       (LPBYTE)L"IRectifyUtil",   REG_SZ, 0,
+		HKEY_CLASSES_ROOT,  L"Interface\\%s\\ProxyStubClsid32", szApiInterface, NULL,                     (LPBYTE)szProxy,          REG_SZ, 0,
 
 		// CRectifyUtil
 		HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szAPIClass, NULL,                       (LPBYTE)L"CRectifyUtil",   REG_SZ, 0,
@@ -194,6 +207,11 @@ STDAPI DllRegisterServer()
 		HKEY_CLASSES_ROOT,  L"AppID\\%s",                szServerID, L"DllSurrogate",                       (LPBYTE)L"",   REG_SZ, 0,
 		HKEY_CLASSES_ROOT,  L"AppID\\%s",                szServerID, L"AccessPermission",                       (LPBYTE)&AccessPermission,   REG_BINARY, sizeof(AccessPermission),
 		HKEY_CLASSES_ROOT,  L"AppID\\%s",                szServerID, L"LaunchPermission",                       (LPBYTE)&LaunchPermission,   REG_BINARY, sizeof(LaunchPermission),
+	
+		// Proxy
+		HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szProxy, NULL,                       (LPBYTE)L"IRectifyUtil_PSFactory",   REG_SZ, 0,
+		HKEY_CLASSES_ROOT,  L"CLSID\\%s\\InprocServer32", szProxy, NULL,                       (LPBYTE)L"%s",          REG_SZ, 0,
+		HKEY_CLASSES_ROOT,  L"CLSID\\%s\\InprocServer32", szProxy, L"ThreadingModel",          (LPBYTE)L"Both",   REG_SZ, 0,
 	};
 
 	HKEY hKey = NULL;
@@ -377,6 +395,32 @@ STDAPI DllUnregisterServer()
 	if (SUCCEEDED(hrCM))
 	{
 		hrCM = StringCchPrintfW(szSubKey, ARRAYSIZE(szSubKey), L"AppID\\%s", szElementID);
+		if (SUCCEEDED(hrCM))
+		{
+			hrCM = SHDeleteKeyW(HKEY_CLASSES_ROOT, szSubKey);
+		}
+	}
+
+	// Delete Proxy
+	hrCM = StringFromGUID2(CLSID_PROXY,
+		szElementID,
+		ARRAYSIZE(szElementID));
+	if (SUCCEEDED(hrCM))
+	{
+		hrCM = StringCchPrintfW(szSubKey, ARRAYSIZE(szSubKey), L"CLSID\\%s", szElementID);
+		if (SUCCEEDED(hrCM))
+		{
+			hrCM = SHDeleteKeyW(HKEY_CLASSES_ROOT, szSubKey);
+		}
+	}
+
+	// Delete Interface
+	hrCM = StringFromGUID2(IID_IRectifyUtil,
+		szElementID,
+		ARRAYSIZE(szElementID));
+	if (SUCCEEDED(hrCM))
+	{
+		hrCM = StringCchPrintfW(szSubKey, ARRAYSIZE(szSubKey), L"Interface\\%s", szElementID);
 		if (SUCCEEDED(hrCM))
 		{
 			hrCM = SHDeleteKeyW(HKEY_CLASSES_ROOT, szSubKey);

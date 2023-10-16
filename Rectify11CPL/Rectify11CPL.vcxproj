@@ -108,7 +108,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;FOLDERVIEWIMPL_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;FOLDERVIEWIMPL_EXPORTS;PROXY_CLSID=a;PROXY_CLSID_IS=b;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <BufferSecurityCheck>true</BufferSecurityCheck>
@@ -125,11 +125,16 @@
       <ProgramDatabaseFile>$(OutDir)Rectify11CPL.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <ImportLibrary>$(OutDir)Rectify11CPL.lib</ImportLibrary>
-      <AdditionalDependencies>Comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Comctl32.lib;rpcns4.lib;rpcrt4.lib;uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y $(OutDir)Rectify11CPL.dll $(SolutionDir)\Rectify11Installer\Resources\</Command>
     </PostBuildEvent>
+    <Midl>
+      <ProxyFileName>
+      </ProxyFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+    </Midl>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -188,6 +193,8 @@
     <ClCompile Include="CControlPanelNavLinks.cpp" />
     <ClCompile Include="ClassFactory.cpp" />
     <ClCompile Include="CRectifyUtil.cpp" />
+    <ClCompile Include="IRectifyUtil_p.c" />
+    <ClCompile Include="proxy.c" />
     <ClCompile Include="ElementProvider.cpp" />
     <ClCompile Include="ElevationManager.cpp" />
     <ClCompile Include="Register.cpp" />

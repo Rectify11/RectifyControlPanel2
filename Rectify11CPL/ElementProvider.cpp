@@ -251,7 +251,7 @@ void TabChk_OnEvent(Element* elem, Event* iev)
 	{
 
 		RectifyUtil->SetMicaForEveryoneEnabled(TRUE, TabbedCheckbox->GetCheckedState() ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
-		
+
 	}
 }
 
@@ -267,9 +267,10 @@ void EnableAdminBtn_OnEvent(Element* elem, Event* iev)
 {
 	if (iev->type == TouchButton::Click)
 	{
+		Element* root = elem->GetRoot();
 		IRectifyUtil* utility = ElevationManager::Initialize(TRUE);
-		TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"MicaChk"));
-		TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"TabChk"));
+		TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"MicaChk"));
+		TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"TabChk"));
 		if (utility != NULL)
 		{
 			RectifyUtil = utility;
@@ -280,19 +281,34 @@ void EnableAdminBtn_OnEvent(Element* elem, Event* iev)
 			MicaForEveryoneCheckbox->SetEnabled(TRUE);
 			if (MicaForEveryoneCheckbox->GetCheckedState() != CheckedStateFlags_NONE)
 				TabbedCheckbox->SetEnabled(TRUE);
+
+
+			CCRadioButton* Win11DefaultMenus = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"Win11DefaultMenus"));
+			CCRadioButton* NilesoftSmall = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"NilesoftSmall"));
+			CCRadioButton* NilesoftFull = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"NilesoftFull"));
+			CCRadioButton* Classic = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"Classic"));
+			CCRadioButton* ClassicTransparent = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"ClassicTransparent"));
+
+
+			CCRadioButton* Options[] = { Win11DefaultMenus, NilesoftSmall, NilesoftFull, Classic, ClassicTransparent };
+			for (size_t i = 0; i < 5; i++)
+			{
+				Options[i]->SetEnabled(TRUE);
+			}
 		}
 	}
 }
 
 void ThemeCmb_OnEvent(Element* elem, Event* iev)
 {
-	TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"MicaChk"));
-	TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"TabChk"));
+	Element* root = elem->GetRoot();
+	TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"MicaChk"));
+	TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"TabChk"));
 	if (iev->type == Combobox::SelectionChange)
 	{
 		int selection = ((Combobox*)iev->target)->GetSelection();
 		themetool_set_active(NULL, themes[selection], TRUE, 0, 0);
-		CElementProvider::UpdateThemeGraphic(elem->GetRoot());
+		CElementProvider::UpdateThemeGraphic(root);
 
 		// update mica
 		if (HasAdmin)
@@ -310,6 +326,78 @@ void ThemeCmb_OnEvent(Element* elem, Event* iev)
 	}
 }
 
+void Win11DefaultMenus_OnEvent(Element* elem, Event* iev)
+{
+	if (iev->type == Button::Click && ((CCCheckBox*)elem)->GetSelected()) {
+		HRESULT hr = RectifyUtil->SetCurrentMenuByIndex(Normal);
+
+		if (FAILED(hr))
+		{
+			WCHAR buffer[200];
+
+			swprintf(buffer, 199, L"Failed to update menu settings. HRESULT is %x", hr);
+			MessageBox(NULL, buffer, TEXT("Win11DefaultMenus_OnEvent"), MB_ICONERROR);
+		}
+	}
+}
+
+void NilesoftSmall_OnEvent(Element* elem, Event* iev)
+{
+	if (iev->type == Button::Click && ((CCCheckBox*)elem)->GetSelected()) {
+		HRESULT hr = RectifyUtil->SetCurrentMenuByIndex(NilesoftSmall);
+
+		if (FAILED(hr))
+		{
+			WCHAR buffer[200];
+
+			swprintf(buffer, 199, L"Failed to update menu settings. HRESULT is %x", hr);
+			MessageBox(NULL, buffer, TEXT("NilesoftSmall_OnEvent"), MB_ICONERROR);
+		}
+	}
+}
+
+void NilesoftFull_OnEvent(Element* elem, Event* iev)
+{
+	if (iev->type == Button::Click && ((CCCheckBox*)elem)->GetSelected()) {
+		HRESULT hr = RectifyUtil->SetCurrentMenuByIndex(NilesoftFull);
+
+		if (FAILED(hr))
+		{
+			WCHAR buffer[200];
+			swprintf(buffer, 199, L"Failed to update menu settings. HRESULT is %x", hr);
+			MessageBox(NULL, buffer, TEXT("NilesoftFull_OnEvent"), MB_ICONERROR);
+		}
+	}
+}
+
+void Classic_OnEvent(Element* elem, Event* iev)
+{
+	if (iev->type == Button::Click && ((CCCheckBox*)elem)->GetSelected()) {
+		HRESULT hr = RectifyUtil->SetCurrentMenuByIndex(Classic);
+
+		if (FAILED(hr))
+		{
+			WCHAR buffer[200];
+			swprintf(buffer, 199, L"Failed to update menu settings. HRESULT is %x", hr);
+			MessageBox(NULL, buffer, TEXT("Classic_OnEvent"), MB_ICONERROR);
+		}
+	}
+}
+
+void ClassicTransparent_OnEvent(Element* elem, Event* iev)
+{
+	if (iev->type == Button::Click && ((CCCheckBox*)elem)->GetSelected()) {
+		HRESULT hr = RectifyUtil->SetCurrentMenuByIndex(ClassicTransparent);
+
+		if (FAILED(hr))
+		{
+			WCHAR buffer[200];
+			swprintf(buffer, 199, L"Failed to update menu settings. HRESULT is %x", hr);
+			MessageBox(NULL, buffer, TEXT("ClassicTransparent_OnEvent"), MB_ICONERROR);
+		}
+	}
+}
+
 void CElementProvider::InitMainPage()
 {
 	RectifyUtil = (IRectifyUtil*)new CRectifyUtil();
@@ -321,9 +409,17 @@ void CElementProvider::InitMainPage()
 	Element* version = (Element*)root->FindDescendent(StrToID((UCString)L"RectifyVersion"));
 	TouchButton* enableAdmin = (TouchButton*)root->FindDescendent(StrToID((UCString)L"Link_EnableAdmin"));
 
+	CCRadioButton* Win11DefaultMenus = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"Win11DefaultMenus"));
+	CCRadioButton* NilesoftSmall = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"NilesoftSmall"));
+	CCRadioButton* NilesoftFull = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"NilesoftFull"));
+	CCRadioButton* Classic = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"Classic"));
+	CCRadioButton* ClassicTransparent = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"ClassicTransparent"));
+
+	CCRadioButton* Options[] = { Win11DefaultMenus, NilesoftSmall, NilesoftFull, Classic, ClassicTransparent };
+
 	if (ThemeCombo != NULL)
 	{
-		WCHAR value[255] = {0};
+		WCHAR value[255] = { 0 };
 		PVOID pvData = value;
 		DWORD size = sizeof(value);
 		RegGetValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\ThemeManager", L"DllName", RRF_RT_REG_SZ, 0, pvData, &size);
@@ -450,11 +546,63 @@ void CElementProvider::InitMainPage()
 		}
 	}
 
+	DWORD menuIndex;
+
+
+	for (size_t i = 0; i < 5; i++)
+	{
+		if (!HasAdmin)
+			Options[i]->SetEnabled(FALSE);
+		else
+			Options[i]->SetEnabled(TRUE);
+	}
+	if (SUCCEEDED(RectifyUtil->GetCurrentMenuIndex(&menuIndex)))
+	{
+		Options[menuIndex]->SetSelected(true);
+	}
+
+	//add listeners to radiobuttons
+
+	static EventListener Win11DefaultMenus_listener(Win11DefaultMenus_OnEvent);
+
+	if (Win11DefaultMenus->AddListener(&Win11DefaultMenus_listener) != S_OK)
+	{
+		MessageBox(NULL, TEXT("Failed to add listener for radio button"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
+	}
+
+	static EventListener NilesoftSmall_listener(NilesoftSmall_OnEvent);
+
+	if (NilesoftSmall->AddListener(&NilesoftSmall_listener) != S_OK)
+	{
+		MessageBox(NULL, TEXT("Failed to add listener for radio button"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
+	}
+
+	static EventListener NilesoftFull_listener(NilesoftFull_OnEvent);
+
+	if (NilesoftFull->AddListener(&NilesoftFull_listener) != S_OK)
+	{
+		MessageBox(NULL, TEXT("Failed to add listener for radio button"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
+	}
+
+	static EventListener Classic_listener(Classic_OnEvent);
+
+	if (Classic->AddListener(&Classic_listener) != S_OK)
+	{
+		MessageBox(NULL, TEXT("Failed to add listener for radio button"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
+	}
+
+	static EventListener ClassicTransparent_listener(ClassicTransparent_OnEvent);
+
+	if (ClassicTransparent->AddListener(&ClassicTransparent_listener) != S_OK)
+	{
+		MessageBox(NULL, TEXT("Failed to add listener for radio button"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
+	}
+
 	if (!HasAdmin)
 	{
 		MicaForEveryoneCheckbox->SetEnabled(FALSE);
 		TabbedCheckbox->SetEnabled(FALSE);
-		
+
 	}
 	else {
 		enableAdmin->SetLayoutPos(-3);
@@ -552,13 +700,9 @@ HRESULT STDMETHODCALLTYPE CElementProvider::OnNavigateAway() {
 	//TODO: this causes a crash
 	//DirectUI::XProvider::SetHandleEnterKey(false);
 	//SetDefaultButtonTracking(false);
-
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnInnerElementDestroyed() {
-	if (RectifyUtil != NULL)
-		RectifyUtil->Release();
-	HasAdmin = FALSE;
 	return 0;
 }
 

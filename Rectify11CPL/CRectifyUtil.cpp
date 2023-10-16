@@ -12,7 +12,7 @@
 
 CRectifyUtil::CRectifyUtil() : m_ref(1)
 {
-	
+
 }
 
 DWORD FindProcessId(const std::wstring& processName)
@@ -362,6 +362,21 @@ HRESULT CRectifyUtil::GetMicaSettings(BOOL* pEnabled, BOOL* pTabbed)
 	return S_OK;
 }
 
+HRESULT CRectifyUtil::_DeleteClassicTransparent()
+{
+	CHAR path[MAX_PATH];
+	HRESULT hr = SHGetFolderPathA(NULL, CSIDL_COMMON_STARTMENU, NULL, 0, path);
+	if (SUCCEEDED(hr))
+	{
+		string file = string(path);
+		file += +"\\programs\\startup\\acrylmenu.lnk";
+		return !DeleteFileA(file.c_str());
+	}
+	else
+	{
+		return hr;
+	}
+}
 
 /// <summary>
 /// Enable/disable micaforeveryone tool
@@ -486,6 +501,83 @@ HRESULT CRectifyUtil::SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed)
 	return hr;
 }
 
+HRESULT CRectifyUtil::GetCurrentMenuIndex(DWORD* menuIndex)
+{
+	*menuIndex = Normal;
+	struct stat sb;
+	if (stat("c:\\windows\\nilesoft\\shell.nss", &sb) != 0)
+	{
+		HKEY key = HKEY_CURRENT_USER;
+		HKEY result;
+		HRESULT hr = RegOpenKey(key, L"Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}", &result);
+
+
+		if (SUCCEEDED(hr))
+		{
+			*menuIndex = Classic;
+			RegCloseKey(result);
+		}
+
+		CHAR path[MAX_PATH];
+
+		hr = SHGetFolderPathA(NULL, CSIDL_COMMON_STARTMENU, NULL, 0, path);
+
+		string file = string(path);
+		file += +"\\programs\\startup\\acrylmenu.lnk";
+		if (stat(file.c_str(), &sb) == 0)
+		{
+			*menuIndex = ClassicTransparent;
+		}
+	}
+	else
+	{
+		wstring config = LoadUtf8FileToString(L"c:\\windows\\nilesoft\\shell.nss");
+		if (config.compare(L"modify(where=this.title.length > 15 menu=title.more_options)"))
+		{
+			*menuIndex = NilesoftSmall;
+		}
+		else
+		{
+			*menuIndex = NilesoftFull;
+		}
+	}
+	return S_OK;
+}
+
+HRESULT CRectifyUtil::SetCurrentMenuByIndex(DWORD menuIndex)
+{
+	if (menuIndex == Normal)
+	{
+		// Restore default Windows 11 menus
+		RegDeleteKey(HKEY_CURRENT_USER, TEXT("Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}"));
+		_DeleteClassicTransparent();
+		KillTask(L"AcrylicMenusLoader");
+		return S_OK;
+	}
+	else if (menuIndex == Classic)
+	{
+		_DeleteClassicTransparent();
+		KillTask(L"AcrylicMenusLoader");
+
+		HKEY result;
+		HRESULT status = RegCreateKey(HKEY_CURRENT_USER, TEXT("Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}"), &result);
+		if (SUCCEEDED(status))
+		{
+			RegCloseKey(result);
+			return S_OK;
+		}
+		
+		return status;
+	}
+	else
+	{
+		WCHAR buffer[200];
+
+		swprintf(buffer, 199, L"Failed to update menu settings. Unknown enum index %d", menuIndex);
+		MessageBox(NULL, buffer, TEXT("SetCurrentMenuByIndex"), MB_ICONERROR);
+		return E_NOTIMPL;
+	}
+}
 
 BOOL IsDarkTheme()
 {
