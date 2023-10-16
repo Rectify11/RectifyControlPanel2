@@ -273,6 +273,12 @@ void EnableAdminBtn_OnEvent(Element* elem, Event* iev)
 		TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"TabChk"));
 		if (utility != NULL)
 		{
+			// Destroy old class
+			if (RectifyUtil != NULL)
+			{
+				RectifyUtil->Release();
+			}
+
 			RectifyUtil = utility;
 			HasAdmin = TRUE;
 			elem->SetLayoutPos(-3);
@@ -429,8 +435,8 @@ void BtnRestartExplorer_OnEvent(Element* elem, Event* iev)
 
 void CElementProvider::InitMainPage()
 {
+	Element* root = GetRoot();
 	RectifyUtil = (IRectifyUtil*)new CRectifyUtil();
-	Element* root = XProvider::GetRoot();
 	ThemeCombo = (Combobox*)root->FindDescendent(StrToID((UCString)L"ThemeCmb"));
 	Button* HelpButton = (Button*)root->FindDescendent(StrToID((UCString)L"buttonHelp"));
 	TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"MicaChk"));
@@ -654,6 +660,30 @@ void CElementProvider::InitMainPage()
 	UpdateThemeGraphic(root);
 }
 
+
+void CElementProvider::InitThemeSettingPage()
+{
+	Element* root = GetRoot();
+
+	TouchCheckBox* IgnoreBg = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"IgnoreBg"));
+	TouchCheckBox* IgnoreCursors = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"IgnoreCursors"));
+	TouchCheckBox* IgnoreIcons = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"IgnoreIcons"));
+	TouchCheckBox* IgnoreColors = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"IgnoreColors"));
+	TouchCheckBox* IgnoreSounds = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"IgnoreSounds"));
+	TouchCheckBox* IgnoreScreensavers = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"IgnoreScreensavers"));
+
+	TouchButton* SaveThemePreferences = (TouchButton*)root->FindDescendent(StrToID((UCString)L"SaveThemePreferences"));
+	TouchButton* IgnoreThemePreferences = (TouchButton*)root->FindDescendent(StrToID((UCString)L"IgnoreThemePreferences"));
+
+	IgnoreBg->SetToggleOnClick(true);
+	IgnoreCursors->SetToggleOnClick(true);
+	IgnoreIcons->SetToggleOnClick(true);
+	IgnoreColors->SetToggleOnClick(true);
+	IgnoreSounds->SetToggleOnClick(true);
+	IgnoreScreensavers->SetToggleOnClick(true);
+
+
+}
 void CElementProvider::UpdateThemeGraphic(Element* root)
 {
 	LPCWSTR id = IsDarkTheme() ? MAKEINTRESOURCE(IDB_DARKPREVIEW) : MAKEINTRESOURCE(IDB_LIGHTPREVIEW);
@@ -683,9 +713,15 @@ HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
 	{
 		InitMainPage();
 	}
+	else if (root->FindDescendent(StrToID((UCString)L"IgnoreCursors")) != NULL)
+	{
+		InitThemeSettingPage();
+	}
+	else {
+		MessageBox(NULL, TEXT("Unknown page. Both ThemeCmb or IgnoreCursors are missing. Failed to initialize any page."), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
+	}
 
-
-	return 0;
+	return S_OK;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param)
 {
@@ -742,10 +778,20 @@ HRESULT STDMETHODCALLTYPE CElementProvider::OnNavigateAway() {
 	//DirectUI::XProvider::SetHandleEnterKey(false);
 	//SetDefaultButtonTracking(false);
 	HasAdmin = FALSE;
+	if (RectifyUtil != NULL)
+	{
+		RectifyUtil->Release();
+		RectifyUtil = NULL;
+	}
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnInnerElementDestroyed() {
 	HasAdmin = FALSE;
+	if (RectifyUtil != NULL)
+	{
+		RectifyUtil->Release();
+		RectifyUtil = NULL;
+	}
 	return 0;
 }
 

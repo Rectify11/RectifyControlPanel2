@@ -12,7 +12,12 @@
 
 CRectifyUtil::CRectifyUtil() : m_ref(1)
 {
+	DllAddRef();
+}
 
+CRectifyUtil::~CRectifyUtil()
+{
+	DllRelease();
 }
 
 DWORD FindProcessId(const WCHAR* procname)

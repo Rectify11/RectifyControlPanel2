@@ -17,6 +17,14 @@ HINSTANCE g_hInst = NULL;
 LONG g_cRefModule = 0;
 WCHAR g_szExtTitle[1024];
 
+extern "C"
+{
+	HRESULT __stdcall DllGetClassObject2(const IID* rclsid, const IID* riid, void** ppv); //proxy.c
+}
+extern "C"
+{
+	HRESULT DllCanUnloadNow2(void); //proxy.c
+}
 
 void DllAddRef()
 {
@@ -51,14 +59,12 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void* lpReserved)
 	return TRUE;
 }
 
-STDAPI DllCanUnloadNow(void)
+HRESULT DllCanUnloadNow(void)
 {
-	return g_cRefModule ? S_FALSE : S_OK;
+	HRESULT proxyUnload = DllCanUnloadNow2();
+	return g_cRefModule ? S_FALSE : proxyUnload;
 }
-extern "C"
-{
-	HRESULT __stdcall DllGetClassObject2(const IID* rclsid, const IID* riid, void** ppv); //proxy.c
-}
+
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
 {
 	*ppv = NULL;

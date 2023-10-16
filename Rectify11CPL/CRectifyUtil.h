@@ -8,6 +8,7 @@ class CRectifyUtil : IRectifyUtil
 {
 public:
 	CRectifyUtil();
+	~CRectifyUtil();
 	virtual HRESULT QueryInterface(
 		REFIID riid,
 		_COM_Outptr_ void __RPC_FAR* __RPC_FAR* ppvObject);

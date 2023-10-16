@@ -62,6 +62,8 @@ public:
 
 	void InitMainPage();
 
+	void InitThemeSettingPage();
+
 	static void UpdateThemeGraphic(Element* root);
 
 private:

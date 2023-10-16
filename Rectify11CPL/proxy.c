@@ -17,7 +17,9 @@ extern "C" {
 
 
 	CStdPSFactoryBuffer gPFactory = { 0,0,0,0 };
-	
+	HRESULT __stdcall DllCanUnloadNow2() {
+		return NdrDllCanUnloadNow(&gPFactory);
+	}
 	void __stdcall GetProxyDllInfo(const ProxyFileInfo*** pInfo, const CLSID** pId) {
 		*pInfo = (const ProxyFileInfo**)aProxyFileList; *pId = (aProxyFileList[0]->pStubVtblList[0] != 0 ? aProxyFileList[0]->pStubVtblList[0]->header.piid : 0);
 	};
