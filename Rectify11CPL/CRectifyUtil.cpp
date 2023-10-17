@@ -153,7 +153,9 @@ HRESULT createTask(std::wstring taskName, std::wstring taskExe)
 		return hr;
 	}
 
-	wstring taskxml = wstring(L"<?xml version=\"1.0\" encoding=\"UTF-16\"?><Task version=\"1.2\" xmlns=\"http://schemas.microsoft.com/windows/2004/02/mit/task\"><RegistrationInfo><URI>\micafix</URI></RegistrationInfo><Triggers><LogonTrigger><Enabled>true</Enabled></LogonTrigger></Triggers><Principals><Principal id=\"Author\"><GroupId>S-1-5-32-545</GroupId><RunLevel>HighestAvailable</RunLevel></Principal></Principals><Settings><MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy><DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries><StopIfGoingOnBatteries>false</StopIfGoingOnBatteries><AllowHardTerminate>true</AllowHardTerminate><StartWhenAvailable>false</StartWhenAvailable><RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable><IdleSettings><StopOnIdleEnd>true</StopOnIdleEnd><RestartOnIdle>false</RestartOnIdle></IdleSettings><AllowStartOnDemand>true</AllowStartOnDemand><Enabled>true</Enabled><Hidden>false</Hidden><RunOnlyIfIdle>false</RunOnlyIfIdle><WakeToRun>false</WakeToRun><ExecutionTimeLimit>PT0S</ExecutionTimeLimit><Priority>5</Priority></Settings><Actions Context=\"Author\"><Exec><Command>");
+	wstring taskxml = wstring(L"<?xml version=\"1.0\" encoding=\"UTF-16\"?><Task version=\"1.2\" xmlns=\"http://schemas.microsoft.com/windows/2004/02/mit/task\"><RegistrationInfo><URI>\\");
+	taskxml += taskName;
+	taskxml += L"</URI></RegistrationInfo><Triggers><LogonTrigger><Enabled>true</Enabled></LogonTrigger></Triggers><Principals><Principal id=\"Author\"><GroupId>S-1-5-32-545</GroupId><RunLevel>HighestAvailable</RunLevel></Principal></Principals><Settings><MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy><DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries><StopIfGoingOnBatteries>false</StopIfGoingOnBatteries><AllowHardTerminate>true</AllowHardTerminate><StartWhenAvailable>false</StartWhenAvailable><RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable><IdleSettings><StopOnIdleEnd>true</StopOnIdleEnd><RestartOnIdle>false</RestartOnIdle></IdleSettings><AllowStartOnDemand>true</AllowStartOnDemand><Enabled>true</Enabled><Hidden>false</Hidden><RunOnlyIfIdle>false</RunOnlyIfIdle><WakeToRun>false</WakeToRun><ExecutionTimeLimit>PT0S</ExecutionTimeLimit><Priority>5</Priority></Settings><Actions Context=\"Author\"><Exec><Command>";
 	taskxml += taskExe;
 	taskxml += L"</Command></Exec></Actions></Task>";
 
@@ -245,16 +247,19 @@ int DeleteDirectory(const std::string& refcstrRootDirectory,
 
 BOOL CRectifyUtil::KillTask(wstring proc)
 {
-	DWORD pid = FindProcessId(proc.c_str());
-	if (pid == 0)
+	while (1)
 	{
-		return FALSE;
-	}
+		DWORD pid = FindProcessId(proc.c_str());
+		if (pid == 0)
+		{
+			return FALSE;
+		}
 
-	const auto explorer = OpenProcess(PROCESS_TERMINATE, false, pid);
-	BOOL result = TerminateProcess(explorer, 1);
-	CloseHandle(explorer);
-	return result;
+		const auto explorer = OpenProcess(PROCESS_TERMINATE, false, pid);
+		BOOL result = TerminateProcess(explorer, 1);
+		CloseHandle(explorer);
+	}
+	return TRUE;
 }
 
 

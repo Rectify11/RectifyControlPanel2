@@ -433,6 +433,16 @@ void BtnRestartExplorer_OnEvent(Element* elem, Event* iev)
 	}
 }
 
+void SaveThemePreferences_OnEvent(Element* elem, Event* iev)
+{
+
+}
+
+void IgnoreThemePreferences_OnEvent(Element* elem, Event* iev)
+{
+	
+}
+
 void CElementProvider::InitMainPage()
 {
 	Element* root = GetRoot();
@@ -675,6 +685,30 @@ void CElementProvider::InitThemeSettingPage()
 	TouchButton* SaveThemePreferences = (TouchButton*)root->FindDescendent(StrToID((UCString)L"SaveThemePreferences"));
 	TouchButton* IgnoreThemePreferences = (TouchButton*)root->FindDescendent(StrToID((UCString)L"IgnoreThemePreferences"));
 
+	HKEY Rectify11;
+	if (RegCreateKey(HKEY_CURRENT_USER, TEXT("SOFTWARE\\Rectify11"), &Rectify11))
+	{
+		SHOW_ERROR("Failed to create rectify11 key");
+		return;
+	}
+
+	DWORD size = 4;
+
+	DWORD IgnoreBgVal = 0;
+	DWORD IgnoreCursorsVal = 0;
+	DWORD IgnoreIconsVal = 0;
+	DWORD IgnoreColorsVal = 0;
+	DWORD IgnoreSoundsVal = 0;
+	DWORD IgnoreScreensaversVal = 0;
+
+	RegQueryValueExW(Rectify11, L"IgnoreBg", 0, NULL, (LPBYTE)&IgnoreBgVal, &size);
+	RegQueryValueExW(Rectify11, L"IgnoreCursors", 0, NULL, (LPBYTE)&IgnoreCursorsVal, &size);
+	RegQueryValueExW(Rectify11, L"IgnoreIcons", 0, NULL, (LPBYTE)&IgnoreIconsVal, &size);
+	RegQueryValueExW(Rectify11, L"IgnoreColors", 0, NULL, (LPBYTE)&IgnoreColorsVal, &size);
+	RegQueryValueExW(Rectify11, L"IgnoreSounds", 0, NULL, (LPBYTE)&IgnoreSoundsVal, &size);
+	RegQueryValueExW(Rectify11, L"IgnoreScreensavers", 0, NULL, (LPBYTE)&IgnoreScreensaversVal, &size);
+
+
 	IgnoreBg->SetToggleOnClick(true);
 	IgnoreCursors->SetToggleOnClick(true);
 	IgnoreIcons->SetToggleOnClick(true);
@@ -682,7 +716,27 @@ void CElementProvider::InitThemeSettingPage()
 	IgnoreSounds->SetToggleOnClick(true);
 	IgnoreScreensavers->SetToggleOnClick(true);
 
+	IgnoreBg->SetCheckedState(IgnoreBgVal ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+	IgnoreCursors->SetCheckedState(IgnoreCursorsVal ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+	IgnoreIcons->SetCheckedState(IgnoreIconsVal ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+	IgnoreColors->SetCheckedState(IgnoreColorsVal ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+	IgnoreSounds->SetCheckedState(IgnoreSoundsVal ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+	IgnoreScreensavers->SetCheckedState(IgnoreScreensaversVal ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
 
+	// register buttons
+	static EventListener SaveThemePreferences_listener(SaveThemePreferences_OnEvent);
+
+	if (SaveThemePreferences->AddListener(&SaveThemePreferences_listener) != S_OK)
+	{
+		MessageBox(NULL, TEXT("Failed to add listener for radio button"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
+	}
+
+	static EventListener IgnoreThemePreferences_listener(IgnoreThemePreferences_OnEvent);
+
+	if (IgnoreThemePreferences->AddListener(&IgnoreThemePreferences_listener) != S_OK)
+	{
+		MessageBox(NULL, TEXT("Failed to add listener for radio button"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
+	}
 }
 void CElementProvider::UpdateThemeGraphic(Element* root)
 {
