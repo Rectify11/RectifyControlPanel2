@@ -17,14 +17,21 @@ HINSTANCE g_hInst = NULL;
 LONG g_cRefModule = 0;
 WCHAR g_szExtTitle[1024];
 
+
 extern "C"
 {
 	HRESULT __stdcall DllGetClassObject2(const IID* rclsid, const IID* riid, void** ppv); //proxy.c
-}
-extern "C"
-{
 	HRESULT DllCanUnloadNow2(void); //proxy.c
 }
+void* operator new(std::size_t size)
+{
+	return HeapAlloc(GetProcessHeap(), 8, size);
+}
+void operator delete(void* rawMemory, std::size_t size) throw()
+{
+	HeapFree(GetProcessHeap(), 0, rawMemory);
+}
+
 
 void DllAddRef()
 {
