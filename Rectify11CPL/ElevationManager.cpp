@@ -54,7 +54,7 @@ IRectifyUtil* ElevationManager::Initialize(BOOL elevate)
         {
             std::string message = std::system_category().message(hr);
             CHAR buffer[1024];
-            sprintf(buffer, "CreateElevatedObject() failed with %d (%s)", hr, message.c_str());
+            sprintf_s(buffer, "CreateElevatedObject() failed with %d (%s)", hr, message.c_str());
             MessageBoxA(NULL, buffer, "work", MB_ICONERROR);
         }
         ppv->Release();

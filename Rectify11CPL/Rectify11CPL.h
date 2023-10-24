@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <shlwapi.h>
 #include <objbase.h>
+
 #include <Shlobj.h>
 #include <olectl.h>
 #include <strsafe.h>
@@ -29,6 +30,9 @@ using namespace std;
 #include "CControlPanelNavLinkCommand.h"
 #include "CControlPanelNavLink.h"
 #include "CControlPanelNavLinks.h"
+
+#include "CRectifyMainCPLPage.h"
+
 #include "theme.h"
 
 extern HINSTANCE g_hInst;

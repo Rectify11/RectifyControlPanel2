@@ -12,7 +12,7 @@
 #include "ElementProvider.h"
 #include "ClassFactory.h"
 #include "Guid.h"
-#include "Rectify11CPL.h"
+#include "Templetes.h"
 
 CFolderViewImplClassFactory::CFolderViewImplClassFactory(REFCLSID rclsid) : m_cRef(1), m_rclsid(rclsid)
 {
@@ -56,8 +56,8 @@ HRESULT CElementProvider_CreateInstance(__in REFIID riid, __deref_out void** ppv
     if (SUCCEEDED(hr))
     {
         hr = pElementProvider->QueryInterface(riid, ppv);
-        //CElementWithSite::Register(g_hInst, (const unsigned short*)g_hInst, FALSE, NULL,0);
-        //ClassInfo_CRectifyMainCPLPage::Register(g_hInst, (const unsigned short*)g_hInst, FALSE, NULL, 0, FALSE);
+
+        DirectUI::ClassInfo<CRectifyMainCPLPage, DirectUI::Element, DirectUI::StandardCreator<CRectifyMainCPLPage>>::Register();
         pElementProvider->Release();
     }
     return hr;

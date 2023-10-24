@@ -7,9 +7,6 @@
     <ClCompile Include="CControlPanelNavLink.cpp">
       <Filter>Navpane</Filter>
     </ClCompile>
-    <ClCompile Include="CControlPanelNavLinkCommand.cpp">
-      <Filter>Navpane</Filter>
-    </ClCompile>
     <ClCompile Include="CControlPanelNavLinks.cpp">
       <Filter>Navpane</Filter>
     </ClCompile>
@@ -18,6 +15,7 @@
     <ClCompile Include="ElevationManager.cpp" />
     <ClCompile Include="proxy.c" />
     <ClCompile Include="IRectifyUtil_p.c" />
+    <ClCompile Include="CRectifyMainCPLPage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClassFactory.h" />
@@ -38,6 +36,8 @@
     <ClInclude Include="theme.h" />
     <ClInclude Include="CRectifyUtil.h" />
     <ClInclude Include="ElevationManager.h" />
+    <ClInclude Include="CRectifyMainCPLPage.h" />
+    <ClInclude Include="Templetes.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Rectify11CPL.rc" />

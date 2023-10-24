@@ -189,7 +189,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CControlPanelNavLink.cpp" />
-    <ClCompile Include="CControlPanelNavLinkCommand.cpp" />
     <ClCompile Include="CControlPanelNavLinks.cpp" />
     <ClCompile Include="ClassFactory.cpp" />
     <ClCompile Include="CRectifyUtil.cpp" />
@@ -214,6 +213,7 @@
     <ClInclude Include="ElevationManager.h" />
     <ClInclude Include="Rectify11CPL.h" />
     <ClInclude Include="Guid.h" />
+    <ClInclude Include="Templetes.h" />
     <ClInclude Include="theme.h" />
     <ClInclude Include="undoc.h" />
     <ClInclude Include="resource.h" />

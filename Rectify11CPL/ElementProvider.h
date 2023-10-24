@@ -14,8 +14,6 @@
 #include <strsafe.h>
 
 #include "Rectify11CPL.h"
-#include "undoc.h"
-#include "pch.h"
 #include "CRectifyUtil.h"
 
 class CElementProvider : public DirectUI::XProvider, public IDUIElementProviderInit, public IFrameNotificationClient, public IFrameShellViewClient, public IObjectWithSite, public IServiceProvider
@@ -70,7 +68,5 @@ private:
 	IUnknown* _punkSite;
 	DirectUI::XResourceProvider* resourceProvider = NULL;
 	DirectUI::IXProviderCP** provider = NULL;
-
-	Combobox* ThemeCombo = NULL;
 	~CElementProvider();
 };

@@ -9,7 +9,6 @@
 #include "ElevationManager.h"
 #include "ElementProvider.h"
 #include "resource.h"
-#include "pch.h"
 #include <map>
 
 static vector<ULONG> themes;
@@ -32,6 +31,7 @@ CElementProvider::CElementProvider() : _punkSite(NULL)
 	{
 		SHOW_ERROR("Failed to initialize DirectUI for thread\n");
 	}
+	refCount = 1;
 	DllAddRef();
 }
 
@@ -54,7 +54,6 @@ HRESULT CElementProvider::QueryInterface(REFIID riid, __out void** ppv)
 		{ 0 },
 	};
 	HRESULT hr = QISearch(this, qit, riid, ppv);
-
 	if (hr != S_OK)
 	{
 		hr = DirectUI::XProvider::QueryInterface(riid, ppv);
@@ -77,17 +76,13 @@ ULONG CElementProvider::AddRef()
 
 ULONG CElementProvider::Release()
 {
-	DWORD ret = refCount;
-	ret--;
-	if (ret == 0)
+	DWORD ret = refCount--;
+	if (refCount == 0)
 	{
 		delete this;
 	}
-	else
-	{
-		refCount = ret;
-	}
-	return ret;
+
+	return refCount;
 }
 
 HRESULT CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* result_handle)
@@ -155,12 +150,6 @@ HRESULT STDMETHODCALLTYPE CElementProvider::SetResourceID(UINT id)
 HRESULT STDMETHODCALLTYPE CElementProvider::OptionallyTakeInitialFocus(BOOL* result)
 {
 	*result = 0;
-	Element* root = DirectUI::XProvider::GetRoot();
-	if (root != NULL)
-	{
-		//root->GetClassInfoPtr();
-		//TODO
-	}
 	return 0;
 }
 class EventListener : public IElementListener {
@@ -249,9 +238,7 @@ void TabChk_OnEvent(Element* elem, Event* iev)
 
 	if (iev->type == TouchButton::Click)
 	{
-
 		RectifyUtil->SetMicaForEveryoneEnabled(TRUE, TabbedCheckbox->GetCheckedState() ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
-
 	}
 }
 
@@ -447,7 +434,7 @@ void CElementProvider::InitMainPage()
 {
 	Element* root = GetRoot();
 	RectifyUtil = (IRectifyUtil*)new CRectifyUtil();
-	ThemeCombo = (Combobox*)root->FindDescendent(StrToID((UCString)L"ThemeCmb"));
+	Combobox* ThemeCombo = (Combobox*)root->FindDescendent(StrToID((UCString)L"ThemeCmb"));
 	Button* HelpButton = (Button*)root->FindDescendent(StrToID((UCString)L"buttonHelp"));
 	TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"MicaChk"));
 	TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"TabChk"));

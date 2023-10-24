@@ -153,7 +153,8 @@ HRESULT createTask(std::wstring taskName, std::wstring taskExe)
 		return hr;
 	}
 
-	wstring taskxml = wstring(L"<?xml version=\"1.0\" encoding=\"UTF-16\"?><Task version=\"1.2\" xmlns=\"http://schemas.microsoft.com/windows/2004/02/mit/task\"><RegistrationInfo><URI>\\");
+	wstring taskxml = wstring(L"<?xml version=\"1.0\" encoding=\"UTF-16\"?><Task version=\"1.2\" xmlns=\"http://schemas.microsoft.com/windows/2004/02/mit/task\"><RegistrationInfo><URI>");
+	taskxml += L"\\";
 	taskxml += taskName;
 	taskxml += L"</URI></RegistrationInfo><Triggers><LogonTrigger><Enabled>true</Enabled></LogonTrigger></Triggers><Principals><Principal id=\"Author\"><GroupId>S-1-5-32-545</GroupId><RunLevel>HighestAvailable</RunLevel></Principal></Principals><Settings><MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy><DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries><StopIfGoingOnBatteries>false</StopIfGoingOnBatteries><AllowHardTerminate>true</AllowHardTerminate><StartWhenAvailable>false</StartWhenAvailable><RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable><IdleSettings><StopOnIdleEnd>true</StopOnIdleEnd><RestartOnIdle>false</RestartOnIdle></IdleSettings><AllowStartOnDemand>true</AllowStartOnDemand><Enabled>true</Enabled><Hidden>false</Hidden><RunOnlyIfIdle>false</RunOnlyIfIdle><WakeToRun>false</WakeToRun><ExecutionTimeLimit>PT0S</ExecutionTimeLimit><Priority>5</Priority></Settings><Actions Context=\"Author\"><Exec><Command>";
 	taskxml += taskExe;
@@ -333,7 +334,8 @@ size_t GetSizeOfFile(const std::wstring& path)
 std::wstring LoadUtf8FileToString(const std::wstring& filename)
 {
 	std::wstring buffer;            // stores file contents
-	FILE* f = _wfopen(filename.c_str(), L"rtS, ccs=UTF-8");
+	FILE* f = NULL;
+	_wfopen_s(&f, filename.c_str(), L"rtS, ccs=UTF-8");
 
 	// Failed to open file
 	if (f == NULL)
@@ -549,74 +551,83 @@ HRESULT CRectifyUtil::SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed)
 		struct stat sb;
 		if (stat("c:/windows/MicaForEveryone", &sb) == 0)
 		{
-			string appdata = string(getenv("localappdata"));
-			string micaFolder = appdata + "/Mica For Everyone/";
-			if (stat(micaFolder.c_str(), &sb) != 0)
+			char* localappdata = nullptr;
+			size_t sz = 0;
+			if (_dupenv_s(&localappdata, &sz, "localappdata") == 0 && localappdata != nullptr)
 			{
-				if (DeleteDirectory(micaFolder.c_str()))
+				string appdata = string(localappdata);
+				string micaFolder = appdata + "/Mica For Everyone/";
+				if (stat(micaFolder.c_str(), &sb) != 0)
 				{
-					MessageBox(NULL, L"Failed to delete local micaforeveryone folder.", L"Failed to create MFE task", MB_ICONERROR);
+					if (DeleteDirectory(micaFolder.c_str()))
+					{
+						MessageBox(NULL, L"Failed to delete local micaforeveryone folder.", L"Failed to create MFE task", MB_ICONERROR);
+					}
 				}
-			}
-			HRESULT hr = createTask(TEXT("mfe"), TEXT("%systemroot%\\MicaForEveryone\\MicaForEveryone.exe"));
-			if (FAILED(hr))
-			{
-				swprintf(buffer, 1024, L"Failed create MFE task: %x", hr);
-				MessageBox(NULL, buffer, L"Failed to create MFE task", MB_ICONERROR);
-			}
-
-			wstring config_file_src = wstring(L"c:\\windows\\micaforeveryone\\CONF\\");
-			if (tabbed)
-				config_file_src += L"T";
-			config_file_src += currentThemeName;
-			config_file_src += L".conf";
-
-			if (!check_if_file_exists(config_file_src))
-			{
-				swprintf(buffer, 1024, L"Warning: Micaforeveryone configuration file is missing! File name is %ws", config_file_src.c_str());
-				MessageBox(NULL, buffer, L"Warning", MB_ICONWARNING);
-			}
-			else
-			{
-				if (!CopyFileExW(config_file_src.c_str(), L"c:\\windows\\micaforeveryone\\MicaForEveryone.conf", NULL, NULL, NULL, 0))
+				HRESULT hr = createTask(TEXT("mfe"), TEXT("%systemroot%\\MicaForEveryone\\MicaForEveryone.exe"));
+				if (FAILED(hr))
 				{
-					swprintf(buffer, 1024, L"Warning: Failed to copy micaforeveryone configuration file with result %x", GetLastError());
+					swprintf(buffer, 1024, L"Failed create MFE task: %x", hr);
+					MessageBox(NULL, buffer, L"Failed to create MFE task", MB_ICONERROR);
+				}
+
+				wstring config_file_src = wstring(L"c:\\windows\\micaforeveryone\\CONF\\");
+				if (tabbed)
+					config_file_src += L"T";
+				config_file_src += currentThemeName;
+				config_file_src += L".conf";
+
+				if (!check_if_file_exists(config_file_src))
+				{
+					swprintf(buffer, 1024, L"Warning: Micaforeveryone configuration file is missing! File name is %ws", config_file_src.c_str());
 					MessageBox(NULL, buffer, L"Warning", MB_ICONWARNING);
 				}
-			}
+				else
+				{
+					if (!CopyFileExW(config_file_src.c_str(), L"c:\\windows\\micaforeveryone\\MicaForEveryone.conf", NULL, NULL, NULL, 0))
+					{
+						swprintf(buffer, 1024, L"Warning: Failed to copy micaforeveryone configuration file with result %x", GetLastError());
+						MessageBox(NULL, buffer, L"Warning", MB_ICONWARNING);
+					}
+				}
 
-			// Enable micafix if black theme
-			if (currentThemeName.compare(L"black"))
-			{
-				createTask(L"mfefix", L"%systemroot%\\MicaForEveryone\\EFamd64\\ExplorerFrame.exe");
-				startProc(L"%systemroot%\\MicaForEveryone\\EFamd64\\ExplorerFrame.exe");
+				// Enable micafix if black theme
+				if (currentThemeName.compare(L"black"))
+				{
+					createTask(L"mfefix", L"%systemroot%\\MicaForEveryone\\EFamd64\\ExplorerFrame.exe");
+					startProc(L"%systemroot%\\MicaForEveryone\\EFamd64\\ExplorerFrame.exe");
+				}
+				else
+				{
+					deleteTask(L"mfefix");
+					KillTask(L"explorerframe.exe");
+				}
+
+				// Start mica for everyone
+				STARTUPINFOW si;
+				PROCESS_INFORMATION pi;
+				ZeroMemory(&si, sizeof(si));
+				si.cb = sizeof(si);
+				ZeroMemory(&pi, sizeof(pi));
+				CreateProcessW(L"%systemroot%\\MicaForEveryone\\MicaForEveryone.exe",
+					NULL,        // Command line
+					NULL,           // Process handle not inheritable
+					NULL,           // Thread handle not inheritable
+					FALSE,          // Set handle inheritance to FALSE
+					0,              // No creation flags
+					NULL,           // Use parent's environment block
+					NULL,           // Use parent's starting directory 
+					&si,            // Pointer to STARTUPINFO structure
+					&pi             // Pointer to PROCESS_INFORMATION structure (removed extra parentheses)
+				);
+
+				CloseHandle(pi.hProcess);
+				CloseHandle(pi.hThread);
 			}
 			else
 			{
-				deleteTask(L"mfefix");
-				KillTask(L"explorerframe.exe");
+				MessageBox(NULL, L"Appdata env variable not found", L"Failed to create MFE task", MB_ICONERROR);
 			}
-
-			// Start mica for everyone
-			STARTUPINFOW si;
-			PROCESS_INFORMATION pi;
-			ZeroMemory(&si, sizeof(si));
-			si.cb = sizeof(si);
-			ZeroMemory(&pi, sizeof(pi));
-			CreateProcessW(L"%systemroot%\\MicaForEveryone\\MicaForEveryone.exe",
-				NULL,        // Command line
-				NULL,           // Process handle not inheritable
-				NULL,           // Thread handle not inheritable
-				FALSE,          // Set handle inheritance to FALSE
-				0,              // No creation flags
-				NULL,           // Use parent's environment block
-				NULL,           // Use parent's starting directory 
-				&si,            // Pointer to STARTUPINFO structure
-				&pi             // Pointer to PROCESS_INFORMATION structure (removed extra parentheses)
-			);
-
-			CloseHandle(pi.hProcess);
-			CloseHandle(pi.hThread);
 		}
 		else
 		{
