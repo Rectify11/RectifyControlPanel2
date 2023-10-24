@@ -191,6 +191,7 @@
     <ClCompile Include="CControlPanelNavLink.cpp" />
     <ClCompile Include="CControlPanelNavLinks.cpp" />
     <ClCompile Include="ClassFactory.cpp" />
+    <ClCompile Include="CRectifyMainCPLPage.cpp" />
     <ClCompile Include="CRectifyUtil.cpp" />
     <ClCompile Include="IRectifyUtil_p.c" />
     <ClCompile Include="proxy.c" />
@@ -208,6 +209,7 @@
     <ClInclude Include="CControlPanelNavLinkCommand.h" />
     <ClInclude Include="CControlPanelNavLinks.h" />
     <ClInclude Include="ClassFactory.h" />
+    <ClInclude Include="CRectifyMainCPLPage.h" />
     <ClInclude Include="CRectifyUtil.h" />
     <ClInclude Include="ElementProvider.h" />
     <ClInclude Include="ElevationManager.h" />

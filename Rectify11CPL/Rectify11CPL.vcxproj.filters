@@ -36,8 +36,8 @@
     <ClInclude Include="theme.h" />
     <ClInclude Include="CRectifyUtil.h" />
     <ClInclude Include="ElevationManager.h" />
-    <ClInclude Include="CRectifyMainCPLPage.h" />
     <ClInclude Include="Templetes.h" />
+    <ClInclude Include="CRectifyMainCPLPage.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Rectify11CPL.rc" />

@@ -63,7 +63,7 @@ HRESULT CRectifyMainCPLPage::CreateInstance(Element* rootElement, unsigned long*
 
 IClassInfo* CRectifyMainCPLPage::GetClassInfoW()
 {
-	return Element::GetClassInfoW();// CRectifyMainCPLPage::Class;
+	return CRectifyMainCPLPage::Class;
 }
 
 ////IUnknown

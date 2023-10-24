@@ -38,7 +38,7 @@ CElementProvider::CElementProvider() : _punkSite(NULL)
 CElementProvider::~CElementProvider()
 {
 	UnInitThread();
-	UnInitProcessPriv((unsigned short*)0x180000000);
+	UnInitProcessPriv((unsigned short*)g_hInst);
 
 	DllRelease();
 }
