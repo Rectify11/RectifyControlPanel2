@@ -17,19 +17,21 @@ public:
 	virtual IClassInfo* GetClassInfoW() override;
 
 	// Element overrides
-	virtual void OnEvent(Event* iev);
+	virtual void OnEvent(Event* iev) override;
+	virtual void OnDestroy() override;
 
 	// Important methods
 	virtual void OnInit();
-	virtual void OnNavigateAway();
 
 	static inline DirectUI::IClassInfo* GetClassInfoPtr() { return Class; }
 	static inline UCString DoGetClassName() { return (UCString)L"CRectifyMainCPLPage"; }
 private:
 	bool HasAdmin;
 	IRectifyUtil* RectifyUtil;
-	static vector<ULONG> themes;
-	static ThemesMapBase ThemesMap;
+	vector<ULONG> themes;
+	ThemesMapBase ThemesMap;
+	bool initializing = true;
 
 	void UpdateThemeGraphic();
+	void ShowRestartExplorer();
 };

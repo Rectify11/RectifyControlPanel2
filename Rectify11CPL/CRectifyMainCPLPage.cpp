@@ -3,8 +3,6 @@
 #include "CRectifyUtil.h"
 #include "ElevationManager.h"
 
-ThemesMapBase CRectifyMainCPLPage::ThemesMap;
-vector<ULONG> CRectifyMainCPLPage::themes;
 IClassInfo* CRectifyMainCPLPage::Class = NULL;
 #define NOT_IMPLEMENTED MessageBox(NULL, TEXT(__FUNCTION__), TEXT("Non implementented function in CRectifyMainCPLPage"), 0)
 
@@ -13,9 +11,10 @@ CRectifyMainCPLPage::CRectifyMainCPLPage()
 {
 	
 }
+
 CRectifyMainCPLPage::~CRectifyMainCPLPage()
 {
-	
+
 }
 
 HRESULT CRectifyMainCPLPage::CreateInstance(Element* rootElement, unsigned long* debug_variable, Element** newElement)
@@ -51,9 +50,14 @@ IClassInfo* CRectifyMainCPLPage::GetClassInfoW()
 
 void CRectifyMainCPLPage::OnEvent(Event* iev)
 {
+	if (iev->flag != GMF_ROUTED)
+		return;
+	if (!iev->handled)
+		Element::OnEvent(iev);
+	if (initializing) return;
 	if (iev->target->GetID() == StrToID((UCString)L"Link_EnableAdmin"))
 	{
-		if (iev->type == TouchButton::Click && iev->flag == GMF_ROUTED)
+		if (iev->type == TouchButton::Click)
 		{
 			IRectifyUtil* utility = ElevationManager::Initialize(TRUE);
 			TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)FindDescendent(StrToID((UCString)L"MicaChk"));
@@ -91,9 +95,123 @@ void CRectifyMainCPLPage::OnEvent(Event* iev)
 			}
 		}
 	}
-	Element::OnEvent(iev);
-}
+	else if (iev->target->GetID() == StrToID((UCString)L"BtnRestartExplorer"))
+	{
+		if (iev->type == TouchButton::Click)
+		{
+			CRectifyUtil::RestartExplorer();
 
+			// hide restart explorer button
+			iev->target->SetLayoutPos(-3);
+			iev->target->SetVisible(FALSE);
+		}
+	}
+	else if (iev->target->GetID() == StrToID((UCString)L"ThemeCmb"))
+	{
+		if (iev->type == Combobox::SelectionChange)
+		{
+			TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)FindDescendent(StrToID((UCString)L"MicaChk"));
+			TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)FindDescendent(StrToID((UCString)L"TabChk"));
+			int selection = ((Combobox*)iev->target)->GetSelection();
+			themetool_set_active(NULL, themes[selection], TRUE, 0, 0);
+			UpdateThemeGraphic();
+
+			// update mica
+			if (HasAdmin)
+			{
+				BOOL hasMica = FALSE;
+				BOOL hasTabbed = FALSE;
+				RectifyUtil->GetMicaSettings(&hasMica, &hasTabbed);
+				RectifyUtil->SetMicaForEveryoneEnabled(hasMica, hasTabbed);
+
+				// update checkboxes in case we aren't using a mica theme anymore
+				MicaForEveryoneCheckbox->SetCheckedState(hasMica ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+				TabbedCheckbox->SetCheckedState(hasTabbed ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+			}
+		}
+	}
+	else if (iev->target->GetID() == StrToID((UCString)L"buttonHelp"))
+	{
+		if (iev->type == Button::Click)
+		{
+			ShellExecute(0, 0, TEXT("http://rectify11.net"), 0, 0, SW_SHOW);
+		}
+	}
+	else if (iev->target->GetID() == StrToID((UCString)L"MicaChk"))
+	{
+		TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)iev->target;
+		TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)GetRoot()->FindDescendent(StrToID((UCString)L"TabChk"));
+		Combobox* ThemeCombo = (Combobox*)GetRoot()->FindDescendent(StrToID((UCString)L"ThemeCmb"));
+		if (iev->type == TouchButton::Click)
+		{
+			CheckedStateFlags MicaEnabled2 = MicaForEveryoneCheckbox->GetCheckedState();
+			CheckedStateFlags TabbedEnabled = TabbedCheckbox->GetCheckedState();
+
+			RectifyUtil->SetMicaForEveryoneEnabled(MicaEnabled2 ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE, TabbedEnabled ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+
+			// Enable/disable the tabbed checkbox
+			if (TabbedCheckbox != NULL)
+				TabbedCheckbox->SetEnabled(MicaEnabled2 ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+		}
+	}
+	else if (iev->target->GetID() == StrToID((UCString)L"TabChk"))
+	{
+		TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)iev->target;
+		Combobox* ThemeCombo = (Combobox*)FindDescendent(StrToID((UCString)L"ThemeCmb"));
+
+		if (iev->type == TouchButton::Click)
+		{
+			RectifyUtil->SetMicaForEveryoneEnabled(TRUE, TabbedCheckbox->GetCheckedState() ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+		}
+	}
+
+	// handle menu section
+	if (iev->type == Button::Click && iev->target->GetClassInfoW() == CCCheckBox::GetClassInfoPtr())
+	{
+		CCCheckBox* chkbox = (CCCheckBox*)iev->target;
+		if (chkbox->GetSelected())
+		{
+			HRESULT hr = E_ACTIVATIONDENIED_SHELLERROR;
+			if (chkbox->GetID() == StrToID((UCString)L"Win11DefaultMenus"))
+			{
+				hr = RectifyUtil->SetCurrentMenuByIndex(Normal);
+			}
+			else if (chkbox->GetID() == StrToID((UCString)L"NilesoftSmall"))
+			{
+				hr = RectifyUtil->SetCurrentMenuByIndex(NilesoftSmall);
+			}
+			else if (chkbox->GetID() == StrToID((UCString)L"NilesoftFull"))
+			{
+				hr = RectifyUtil->SetCurrentMenuByIndex(NilesoftFull);
+			}
+			else if (chkbox->GetID() == StrToID((UCString)L"Classic"))
+			{
+				hr = RectifyUtil->SetCurrentMenuByIndex(Classic);
+			}
+			else if (chkbox->GetID() == StrToID((UCString)L"ClassicTransparent"))
+			{
+				hr = RectifyUtil->SetCurrentMenuByIndex(ClassicTransparent);
+			}
+
+			if (FAILED(hr))
+			{
+				WCHAR buffer[200];
+				swprintf(buffer, 199, L"Failed to update menu settings. HRESULT is %x", hr);
+				MessageBox(NULL, buffer, TEXT("ClassicTransparent_OnEvent"), MB_ICONERROR);
+			}
+			else
+			{
+				ShowRestartExplorer();
+			}
+		}
+	}
+}
+void CRectifyMainCPLPage::ShowRestartExplorer()
+{
+	TouchButton* BtnRestartExplorer = (TouchButton*)FindDescendent(StrToID((UCString)L"BtnRestartExplorer"));
+	BtnRestartExplorer->SetLayoutPos(0);
+	BtnRestartExplorer->SetVisible(TRUE);
+}
 void CRectifyMainCPLPage::UpdateThemeGraphic()
 {
 	LPCWSTR id = IsDarkTheme() ? MAKEINTRESOURCE(IDB_DARKPREVIEW) : MAKEINTRESOURCE(IDB_LIGHTPREVIEW);
@@ -173,7 +291,7 @@ void CRectifyMainCPLPage::OnInit()
 						ThemesMap[k] = msstylePathClean;
 						if (pathBuff == msstylePath)
 						{
-							ThemeCombo->SetSelection(k);
+							ThemeCombo->SetSelection(i);
 						}
 						themes.push_back(i);
 						k++;
@@ -242,24 +360,24 @@ void CRectifyMainCPLPage::OnInit()
 		Options[menuIndex]->SetSelected(true);
 	}
 
-	if (!HasAdmin)
+	if (HasAdmin)
+	{
+		enableAdmin->SetLayoutPos(-3);
+		enableAdmin->SetVisible(FALSE);
+
+	}
+	else
 	{
 		MicaForEveryoneCheckbox->SetEnabled(FALSE);
 		TabbedCheckbox->SetEnabled(FALSE);
-
 	}
-	else {
-		enableAdmin->SetLayoutPos(-3);
-		enableAdmin->SetVisible(FALSE);
-	}
-
 
 	UpdateThemeGraphic();
+	initializing = false;
 }
 
-void CRectifyMainCPLPage::OnNavigateAway()
+void CRectifyMainCPLPage::OnDestroy()
 {
-	HasAdmin = FALSE;
 	if (RectifyUtil != NULL)
 	{
 		RectifyUtil->Release();

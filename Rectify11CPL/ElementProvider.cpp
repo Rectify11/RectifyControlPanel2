@@ -234,15 +234,6 @@ void CElementProvider::InitNavLinks()
 }
 
 
-void BtnRestartExplorer_OnEvent(Element* elem, Event* iev)
-{
-	if (iev->type == TouchButton::Click) {
-		CRectifyUtil::RestartExplorer();
-		elem->SetLayoutPos(-3);
-		elem->SetVisible(FALSE);
-	}
-}
-
 void SaveThemePreferences_OnEvent(Element* elem, Event* iev)
 {
 
@@ -409,21 +400,9 @@ HRESULT STDMETHODCALLTYPE CElementProvider::OnNavigateAway() {
 	//TODO: this causes a crash
 	//DirectUI::XProvider::SetHandleEnterKey(false);
 	//SetDefaultButtonTracking(false);
-	//HasAdmin = FALSE;
-	//if (RectifyUtil != NULL)
-	//{
-	//	RectifyUtil->Release();
-	//	RectifyUtil = NULL;
-	//}
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnInnerElementDestroyed() {
-	//HasAdmin = FALSE;
-	//if (RectifyUtil != NULL)
-	//{
-	//	RectifyUtil->Release();
-	//	RectifyUtil = NULL;
-	//}
 	return 0;
 }
 
