@@ -11,16 +11,16 @@ namespace DirectUI {
 	class ClassInfo : ClassInfoBase
 	{
 	public:
-		HRESULT WINAPI CreateInstance(Element* rootElement, unsigned long* unknown, Element** result)
+		HRESULT CreateInstance(Element* rootElement, unsigned long* unknown, Element** result) override
 		{
 			return NewClass::CreateInstance(rootElement, unknown, result);
 		}
-		IClassInfo* WINAPI GetBaseClass()
+		IClassInfo* GetBaseClass() override
 		{
 			return BaseClass::GetClassInfoPtr();
 		}
 		HRESULT DoRegister() { return ClassInfoBase::Register(); }
-		void WINAPI Destroy()
+		void Destroy() override
 		{
 			delete this;
 			NewClass::Class = NULL;
@@ -29,7 +29,7 @@ namespace DirectUI {
 		static HRESULT Create(ClassInfo** result)
 		{
 			ClassInfo* theClass = new ClassInfo();
-			HRESULT hr = theClass->Initialize(g_hInst, (UCString)NewClass::DoGetClassName(), 0, 0, 0);
+			HRESULT hr = theClass->Initialize((HINSTANCE)0xFFFFFFFFFFFFFFFF, (UCString)NewClass::DoGetClassName(), false, NULL, 0);
 			if (SUCCEEDED(hr))
 			{
 				*result = theClass;
@@ -50,13 +50,12 @@ namespace DirectUI {
 
 			if (SUCCEEDED(hr))
 			{
-				auto lock = Element::GetFactoryLock();
-				auto lock2 = new DirectUI::CritSecLock(lock);
-				IClassInfo* ptr = BaseClass::GetClassInfoPtr();
+				CritSecLock* lock = new DirectUI::CritSecLock(Element::GetFactoryLock());
+				IClassInfo* baseclassptr = BaseClass::GetClassInfoPtr();
 				IClassInfo* newrclass = NewClass::GetClassInfoPtr();
-				if (DirectUI::ClassInfoBase::ClassExist(&ptr, NULL, 0, newrclass, g_hInst, (UCString)NewClass::DoGetClassName(), false))
+				if (DirectUI::ClassInfoBase::ClassExist(&baseclassptr, NULL, 0, newrclass, g_hInst, (UCString)NewClass::DoGetClassName(), false))
 				{
-					NewClass::Class = ptr;
+					NewClass::Class = baseclassptr;
 				}
 				else
 				{

@@ -58,8 +58,6 @@ public:
 
 	void InitNavLinks();
 
-	void InitMainPage();
-
 	void InitThemeSettingPage();
 
 private:

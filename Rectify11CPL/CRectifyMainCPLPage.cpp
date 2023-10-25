@@ -291,7 +291,7 @@ void CRectifyMainCPLPage::OnInit()
 						ThemesMap[k] = msstylePathClean;
 						if (pathBuff == msstylePath)
 						{
-							ThemeCombo->SetSelection(i);
+							ThemeCombo->SetSelection(k);
 						}
 						themes.push_back(i);
 						k++;
@@ -364,7 +364,6 @@ void CRectifyMainCPLPage::OnInit()
 	{
 		enableAdmin->SetLayoutPos(-3);
 		enableAdmin->SetVisible(FALSE);
-
 	}
 	else
 	{
@@ -383,4 +382,5 @@ void CRectifyMainCPLPage::OnDestroy()
 		RectifyUtil->Release();
 		RectifyUtil = NULL;
 	}
+	Element::OnDestroy();
 }

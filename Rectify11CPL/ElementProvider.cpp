@@ -173,25 +173,6 @@ HRESULT STDMETHODCALLTYPE CElementProvider::OptionallyTakeInitialFocus(BOOL* res
 	*result = 0;
 	return 0;
 }
-class EventListener : public IElementListener {
-
-	using handler_t = std::function<void(Element*, Event*)>;
-
-	handler_t f;
-public:
-	EventListener(handler_t f) : f(f) { }
-
-	void OnListenerAttach(Element* elem) override { }
-	void OnListenerDetach(Element* elem) override { }
-	bool OnPropertyChanging(Element* elem, const PropertyInfo* prop, int unk, Value* v1, Value* v2) override {
-		return true;
-	}
-	void OnListenedPropertyChanged(Element* elem, const PropertyInfo* prop, int type, Value* v1, Value* v2) override { }
-	void OnListenedEvent(Element* elem, struct Event* iev) override {
-		f(elem, iev);
-	}
-	void OnListenedInput(Element* elem, struct InputEvent* ev) override { }
-};
 
 void CElementProvider::InitNavLinks()
 {
@@ -231,22 +212,6 @@ void CElementProvider::InitNavLinks()
 	{
 		MessageBox(NULL, TEXT("Failed to parse hardcoded GUID (SID_PerLayoutPropertyBag)"), TEXT("CElementProvider::InitNavLinks"), 0);
 	}
-}
-
-
-void SaveThemePreferences_OnEvent(Element* elem, Event* iev)
-{
-
-}
-
-void IgnoreThemePreferences_OnEvent(Element* elem, Event* iev)
-{
-	
-}
-
-void CElementProvider::InitMainPage()
-{
-	
 }
 
 
@@ -302,20 +267,20 @@ void CElementProvider::InitThemeSettingPage()
 	IgnoreSounds->SetCheckedState(IgnoreSoundsVal ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
 	IgnoreScreensavers->SetCheckedState(IgnoreScreensaversVal ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
 
-	// register buttons
-	static EventListener SaveThemePreferences_listener(SaveThemePreferences_OnEvent);
+	//// register buttons
+	//static EventListener SaveThemePreferences_listener(SaveThemePreferences_OnEvent);
 
-	if (SaveThemePreferences->AddListener(&SaveThemePreferences_listener) != S_OK)
-	{
-		MessageBox(NULL, TEXT("Failed to add listener for radio button"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-	}
+	//if (SaveThemePreferences->AddListener(&SaveThemePreferences_listener) != S_OK)
+	//{
+	//	MessageBox(NULL, TEXT("Failed to add listener for radio button"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
+	//}
 
-	static EventListener IgnoreThemePreferences_listener(IgnoreThemePreferences_OnEvent);
+	//static EventListener IgnoreThemePreferences_listener(IgnoreThemePreferences_OnEvent);
 
-	if (IgnoreThemePreferences->AddListener(&IgnoreThemePreferences_listener) != S_OK)
-	{
-		MessageBox(NULL, TEXT("Failed to add listener for radio button"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-	}
+	//if (IgnoreThemePreferences->AddListener(&IgnoreThemePreferences_listener) != S_OK)
+	//{
+	//	MessageBox(NULL, TEXT("Failed to add listener for radio button"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
+	//}
 }
 
 HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
@@ -332,17 +297,6 @@ HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
 		CRectifyMainCPLPage* page = (CRectifyMainCPLPage*)root->FindDescendent(StrToID((UCString)L"MainPageElem"));
 		page->OnInit();
 	}
-	//if (root->FindDescendent(StrToID((UCString)L"ThemeCmb")) != NULL)
-	//{
-	//	InitMainPage();
-	//}
-	//else if (root->FindDescendent(StrToID((UCString)L"IgnoreCursors")) != NULL)
-	//{
-	//	InitThemeSettingPage();
-	//}
-	//else {
-	//	MessageBox(NULL, TEXT("Unknown page. Both ThemeCmb or IgnoreCursors are missing. Failed to initialize any page."), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-	//}
 
 	return S_OK;
 }
@@ -353,7 +307,6 @@ HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param)
 	if (!StrCmpCW((LPCWSTR)param, L"SettingsChanged"))
 	{
 		//This is invoked when the UI is refreshed!
-		//UpdateThemeGraphic(GetRoot());
 	}
 
 	if (!StrCmpCW((LPCWSTR)param, L"SearchText"))
@@ -402,28 +355,25 @@ HRESULT STDMETHODCALLTYPE CElementProvider::OnNavigateAway() {
 	//SetDefaultButtonTracking(false);
 	return 0;
 }
-HRESULT STDMETHODCALLTYPE CElementProvider::OnInnerElementDestroyed() {
+HRESULT STDMETHODCALLTYPE CElementProvider::OnInnerElementDestroyed()
+{
 	return 0;
 }
 
 HRESULT STDMETHODCALLTYPE CElementProvider::OnSelectedItemChanged()
 {
-	NOT_IMPLEMENTED;
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnSelectionChanged()
 {
-	//NOT_IMPLEMENTED;
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnContentsChanged()
 {
-	//NOT_IMPLEMENTED;
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnFolderChanged()
 {
-	//NOT_IMPLEMENTED;
 	return 0;
 }
 
@@ -450,8 +400,6 @@ HRESULT CElementProvider::SetSite(IUnknown* punkSite)
 
 HRESULT CElementProvider::GetSite(REFIID riid, void** ppvSite)
 {
-	NOT_IMPLEMENTED;
-
 	if (Site == NULL)
 	{
 		return E_FAIL;
