@@ -20,7 +20,7 @@
 
 CElementProvider::CElementProvider() : _punkSite(NULL)
 {
-	if (FAILED(InitProcessPriv(14, NULL, 1, true)))
+	if (FAILED(InitProcessPriv(14, (unsigned short*)g_hInst, 1, true)))
 	{
 		SHOW_ERROR("Failed to initialize DirectUI\n");
 	}

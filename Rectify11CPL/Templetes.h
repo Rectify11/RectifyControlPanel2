@@ -29,7 +29,7 @@ namespace DirectUI {
 		static HRESULT Create(ClassInfo** result)
 		{
 			ClassInfo* theClass = new ClassInfo();
-			HRESULT hr = theClass->Initialize((HINSTANCE)0xFFFFFFFFFFFFFFFF, (UCString)NewClass::DoGetClassName(), false, NULL, 0);
+			HRESULT hr = theClass->Initialize(g_hInst, (UCString)NewClass::DoGetClassName(), false, NULL, 0);
 			if (SUCCEEDED(hr))
 			{
 				*result = theClass;
