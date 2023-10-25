@@ -1,6 +1,7 @@
 #include "Rectify11CPL.h"
 #include "CRectifyMainCPLPage.h"
 #include "CRectifyUtil.h"
+#include "ElevationManager.h"
 
 ThemesMapBase CRectifyMainCPLPage::ThemesMap;
 vector<ULONG> CRectifyMainCPLPage::themes;
@@ -50,6 +51,46 @@ IClassInfo* CRectifyMainCPLPage::GetClassInfoW()
 
 void CRectifyMainCPLPage::OnEvent(Event* iev)
 {
+	if (iev->target->GetID() == StrToID((UCString)L"Link_EnableAdmin"))
+	{
+		if (iev->type == TouchButton::Click && iev->flag == GMF_ROUTED)
+		{
+			IRectifyUtil* utility = ElevationManager::Initialize(TRUE);
+			TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)FindDescendent(StrToID((UCString)L"MicaChk"));
+			TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)FindDescendent(StrToID((UCString)L"TabChk"));
+			if (utility != NULL)
+			{
+				// Destroy old class
+				if (RectifyUtil != NULL)
+				{
+					RectifyUtil->Release();
+				}
+
+				RectifyUtil = utility;
+				HasAdmin = TRUE;
+				iev->target->SetLayoutPos(-3);
+				iev->target->SetVisible(FALSE);
+
+				MicaForEveryoneCheckbox->SetEnabled(TRUE);
+				if (MicaForEveryoneCheckbox->GetCheckedState() != CheckedStateFlags_NONE)
+					TabbedCheckbox->SetEnabled(TRUE);
+
+
+				CCRadioButton* Win11DefaultMenus = (CCRadioButton*)FindDescendent(StrToID((UCString)L"Win11DefaultMenus"));
+				CCRadioButton* NilesoftSmall = (CCRadioButton*)FindDescendent(StrToID((UCString)L"NilesoftSmall"));
+				CCRadioButton* NilesoftFull = (CCRadioButton*)FindDescendent(StrToID((UCString)L"NilesoftFull"));
+				CCRadioButton* Classic = (CCRadioButton*)FindDescendent(StrToID((UCString)L"Classic"));
+				CCRadioButton* ClassicTransparent = (CCRadioButton*)FindDescendent(StrToID((UCString)L"ClassicTransparent"));
+
+
+				CCRadioButton* Options[] = { Win11DefaultMenus, NilesoftSmall, NilesoftFull, Classic, ClassicTransparent };
+				for (size_t i = 0; i < 5; i++)
+				{
+					Options[i]->SetEnabled(TRUE);
+				}
+			}
+		}
+	}
 	Element::OnEvent(iev);
 }
 
