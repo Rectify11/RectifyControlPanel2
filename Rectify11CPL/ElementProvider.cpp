@@ -11,11 +11,8 @@
 #include "resource.h"
 #include <map>
 
-static vector<ULONG> themes;
-typedef std::map<int, wstring> ThemesMapBase;
-static ThemesMapBase ThemesMap;
-static IRectifyUtil* RectifyUtil = NULL;
-static bool HasAdmin = FALSE;
+
+
 
 #define NOT_IMPLEMENTED MessageBox(NULL, TEXT(__FUNCTION__), TEXT("Non implementented function in CElementProvider"), MB_ICONERROR)
 #define SHOW_ERROR(x) MessageBox(NULL, TEXT(x), TEXT("Error in CElementProvider"), MB_ICONERROR)
@@ -82,7 +79,7 @@ ULONG CElementProvider::Release()
 		delete this;
 	}
 
-	return refCount;
+	return ret;
 }
 
 HRESULT CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* result_handle)
@@ -95,13 +92,37 @@ HRESULT CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* result_handl
 	else
 	{
 		WCHAR buffer[200];
-		if (hr == 0x800403EF)
+		if (hr == 0x800403ED)
+		{
+			swprintf(buffer, 200, L"Failed to create DirectUI parser: Bad markup.");
+		}
+		else if (hr == 0x800403EF)
 		{
 			swprintf(buffer, 200, L"Failed to create DirectUI parser: A required property is missing. (are you sure that resid=main exists?)");
+		}
+		else if (hr == 0x800403F1)
+		{
+			swprintf(buffer, 200, L"Failed to create DirectUI parser: Invaild property value");
 		}
 		else if (hr == 0x8004005A)
 		{
 			swprintf(buffer, 200, L"Failed to create DirectUI parser: Probaby can't find the UIFILE?");
+		}
+		else if (hr == 0x800403EE)
+		{
+			swprintf(buffer, 200, L"Failed to create DirectUI parser: Unregistered element");
+		}
+		else if (hr == 0x800403F0)
+		{
+			swprintf(buffer, 200, L"Failed to create DirectUI parser: Something is not found");
+		}
+		else if (hr == 0x800403F0)
+		{
+			swprintf(buffer, 200, L"Failed to create DirectUI parser: Something is not found");
+		}
+		else if (hr == E_FAIL)
+		{
+			swprintf(buffer, 200, L"Failed to create DirectUI parser: E_FAIL");
 		}
 		else
 		{
@@ -212,204 +233,6 @@ void CElementProvider::InitNavLinks()
 	}
 }
 
-void MicaChk_OnEvent(Element* elem, Event* iev)
-{
-	TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)elem;
-	TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"TabChk"));
-	Combobox* ThemeCombo = (Combobox*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"ThemeCmb"));
-
-	if (iev->type == TouchButton::Click)
-	{
-		CheckedStateFlags MicaEnabled2 = MicaForEveryoneCheckbox->GetCheckedState();
-		CheckedStateFlags TabbedEnabled = TabbedCheckbox->GetCheckedState();
-
-		RectifyUtil->SetMicaForEveryoneEnabled(MicaEnabled2 ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE, TabbedEnabled ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
-
-		// Enable/disable the tabbed checkbox
-		if (TabbedCheckbox != NULL)
-			TabbedCheckbox->SetEnabled(MicaEnabled2 ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
-	}
-}
-
-void TabChk_OnEvent(Element* elem, Event* iev)
-{
-	TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)elem;
-	Combobox* ThemeCombo = (Combobox*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"ThemeCmb"));
-
-	if (iev->type == TouchButton::Click)
-	{
-		RectifyUtil->SetMicaForEveryoneEnabled(TRUE, TabbedCheckbox->GetCheckedState() ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
-	}
-}
-
-void HelpButton_OnEvent(Element* elem, Event* iev)
-{
-	if (iev->type == Button::Click)
-	{
-		ShellExecute(0, 0, TEXT("http://rectify11.net"), 0, 0, SW_SHOW);
-	}
-}
-
-void EnableAdminBtn_OnEvent(Element* elem, Event* iev)
-{
-	if (iev->type == TouchButton::Click)
-	{
-		Element* root = elem->GetRoot();
-		IRectifyUtil* utility = ElevationManager::Initialize(TRUE);
-		TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"MicaChk"));
-		TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"TabChk"));
-		if (utility != NULL)
-		{
-			// Destroy old class
-			if (RectifyUtil != NULL)
-			{
-				RectifyUtil->Release();
-			}
-
-			RectifyUtil = utility;
-			HasAdmin = TRUE;
-			elem->SetLayoutPos(-3);
-			elem->SetVisible(FALSE);
-
-			MicaForEveryoneCheckbox->SetEnabled(TRUE);
-			if (MicaForEveryoneCheckbox->GetCheckedState() != CheckedStateFlags_NONE)
-				TabbedCheckbox->SetEnabled(TRUE);
-
-
-			CCRadioButton* Win11DefaultMenus = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"Win11DefaultMenus"));
-			CCRadioButton* NilesoftSmall = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"NilesoftSmall"));
-			CCRadioButton* NilesoftFull = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"NilesoftFull"));
-			CCRadioButton* Classic = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"Classic"));
-			CCRadioButton* ClassicTransparent = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"ClassicTransparent"));
-
-
-			CCRadioButton* Options[] = { Win11DefaultMenus, NilesoftSmall, NilesoftFull, Classic, ClassicTransparent };
-			for (size_t i = 0; i < 5; i++)
-			{
-				Options[i]->SetEnabled(TRUE);
-			}
-		}
-	}
-}
-
-void ThemeCmb_OnEvent(Element* elem, Event* iev)
-{
-	Element* root = elem->GetRoot();
-	TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"MicaChk"));
-	TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"TabChk"));
-	if (iev->type == Combobox::SelectionChange)
-	{
-		int selection = ((Combobox*)iev->target)->GetSelection();
-		themetool_set_active(NULL, themes[selection], TRUE, 0, 0);
-		CElementProvider::UpdateThemeGraphic(root);
-
-		// update mica
-		if (HasAdmin)
-		{
-			BOOL hasMica = FALSE;
-			BOOL hasTabbed = FALSE;
-			RectifyUtil->GetMicaSettings(&hasMica, &hasTabbed);
-
-			RectifyUtil->SetMicaForEveryoneEnabled(hasMica, hasTabbed);
-
-			// update checkboxes in case we aren't using a mica theme anymore
-			MicaForEveryoneCheckbox->SetCheckedState(hasMica ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
-			TabbedCheckbox->SetCheckedState(hasTabbed ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
-		}
-	}
-}
-
-void Win11DefaultMenus_OnEvent(Element* elem, Event* iev)
-{
-	if (iev->type == Button::Click && ((CCCheckBox*)elem)->GetSelected()) {
-		HRESULT hr = RectifyUtil->SetCurrentMenuByIndex(Normal);
-
-		if (FAILED(hr))
-		{
-			WCHAR buffer[200];
-
-			swprintf(buffer, 199, L"Failed to update menu settings. HRESULT is %x", hr);
-			MessageBox(NULL, buffer, TEXT("Win11DefaultMenus_OnEvent"), MB_ICONERROR);
-		}
-
-		TouchButton* BtnRestartExplorer = (TouchButton*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"BtnRestartExplorer"));
-		BtnRestartExplorer->SetLayoutPos(0);
-		BtnRestartExplorer->SetVisible(TRUE);
-	}
-}
-
-void NilesoftSmall_OnEvent(Element* elem, Event* iev)
-{
-	if (iev->type == Button::Click && ((CCCheckBox*)elem)->GetSelected()) {
-		HRESULT hr = RectifyUtil->SetCurrentMenuByIndex(NilesoftSmall);
-
-		if (FAILED(hr))
-		{
-			WCHAR buffer[200];
-
-			swprintf(buffer, 199, L"Failed to update menu settings. HRESULT is %x", hr);
-			MessageBox(NULL, buffer, TEXT("NilesoftSmall_OnEvent"), MB_ICONERROR);
-		}
-
-		TouchButton* BtnRestartExplorer = (TouchButton*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"BtnRestartExplorer"));
-		BtnRestartExplorer->SetLayoutPos(0);
-		BtnRestartExplorer->SetVisible(TRUE);
-	}
-}
-
-void NilesoftFull_OnEvent(Element* elem, Event* iev)
-{
-	if (iev->type == Button::Click && ((CCCheckBox*)elem)->GetSelected()) {
-		HRESULT hr = RectifyUtil->SetCurrentMenuByIndex(NilesoftFull);
-
-		if (FAILED(hr))
-		{
-			WCHAR buffer[200];
-			swprintf(buffer, 199, L"Failed to update menu settings. HRESULT is %x", hr);
-			MessageBox(NULL, buffer, TEXT("NilesoftFull_OnEvent"), MB_ICONERROR);
-		}
-
-		TouchButton* BtnRestartExplorer = (TouchButton*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"BtnRestartExplorer"));
-		BtnRestartExplorer->SetLayoutPos(0);
-		BtnRestartExplorer->SetVisible(TRUE);
-	}
-}
-
-void Classic_OnEvent(Element* elem, Event* iev)
-{
-	if (iev->type == Button::Click && ((CCCheckBox*)elem)->GetSelected()) {
-		HRESULT hr = RectifyUtil->SetCurrentMenuByIndex(Classic);
-
-		if (FAILED(hr))
-		{
-			WCHAR buffer[200];
-			swprintf(buffer, 199, L"Failed to update menu settings. HRESULT is %x", hr);
-			MessageBox(NULL, buffer, TEXT("Classic_OnEvent"), MB_ICONERROR);
-		}
-
-		TouchButton* BtnRestartExplorer = (TouchButton*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"BtnRestartExplorer"));
-		BtnRestartExplorer->SetLayoutPos(0);
-		BtnRestartExplorer->SetVisible(TRUE);
-	}
-}
-
-void ClassicTransparent_OnEvent(Element* elem, Event* iev)
-{
-	if (iev->type == Button::Click && ((CCCheckBox*)elem)->GetSelected()) {
-		HRESULT hr = RectifyUtil->SetCurrentMenuByIndex(ClassicTransparent);
-
-		if (FAILED(hr))
-		{
-			WCHAR buffer[200];
-			swprintf(buffer, 199, L"Failed to update menu settings. HRESULT is %x", hr);
-			MessageBox(NULL, buffer, TEXT("ClassicTransparent_OnEvent"), MB_ICONERROR);
-		}
-
-		TouchButton* BtnRestartExplorer = (TouchButton*)elem->GetRoot()->FindDescendent(StrToID((UCString)L"BtnRestartExplorer"));
-		BtnRestartExplorer->SetLayoutPos(0);
-		BtnRestartExplorer->SetVisible(TRUE);
-	}
-}
 
 void BtnRestartExplorer_OnEvent(Element* elem, Event* iev)
 {
@@ -432,229 +255,7 @@ void IgnoreThemePreferences_OnEvent(Element* elem, Event* iev)
 
 void CElementProvider::InitMainPage()
 {
-	Element* root = GetRoot();
-	RectifyUtil = (IRectifyUtil*)new CRectifyUtil();
-	Combobox* ThemeCombo = (Combobox*)root->FindDescendent(StrToID((UCString)L"ThemeCmb"));
-	Button* HelpButton = (Button*)root->FindDescendent(StrToID((UCString)L"buttonHelp"));
-	TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"MicaChk"));
-	TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"TabChk"));
-	Element* version = (Element*)root->FindDescendent(StrToID((UCString)L"RectifyVersion"));
-	TouchButton* enableAdmin = (TouchButton*)root->FindDescendent(StrToID((UCString)L"Link_EnableAdmin"));
-	TouchButton* BtnRestartExplorer = (TouchButton*)root->FindDescendent(StrToID((UCString)L"BtnRestartExplorer"));
-
-	CCRadioButton* Win11DefaultMenus = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"Win11DefaultMenus"));
-	CCRadioButton* NilesoftSmall = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"NilesoftSmall"));
-	CCRadioButton* NilesoftFull = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"NilesoftFull"));
-	CCRadioButton* Classic = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"Classic"));
-	CCRadioButton* ClassicTransparent = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"ClassicTransparent"));
-
-	CCRadioButton* Options[] = { Win11DefaultMenus, NilesoftSmall, NilesoftFull, Classic, ClassicTransparent };
-
-	if (ThemeCombo != NULL)
-	{
-		WCHAR value[255] = { 0 };
-		PVOID pvData = value;
-		DWORD size = sizeof(value);
-		RegGetValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\ThemeManager", L"DllName", RRF_RT_REG_SZ, 0, pvData, &size);
-		std::wstring msstylePath = std::wstring((LPCWSTR)pvData);
-		int k = 0;
-		ULONG themeCount = 0;
-		if (SUCCEEDED(themetool_get_theme_count(&themeCount)))
-		{
-			for (ULONG i = 0; i < themeCount; i++)
-			{
-				ITheme* theme = NULL;
-				if (SUCCEEDED(themetool_get_theme(i, &theme)))
-				{
-					std::wstring nameBuffer = std::wstring(255, '\0');
-					theme->GetDisplayName(nameBuffer);
-
-					if (nameBuffer.starts_with(L"Rectify11"))
-					{
-						ThemeCombo->AddString((UString)nameBuffer.c_str());
-						std::wstring pathBuff = std::wstring();
-						theme->GetVisualStyle(pathBuff);
-						std::wstring msstylePath = std::wstring((LPCWSTR)pvData);
-
-						std::wstring msstylePathClean = msstylePath;
-
-						const size_t last_slash_idx = msstylePathClean.find_last_of(L"\\/");
-						if (std::string::npos != last_slash_idx)
-						{
-							msstylePathClean.erase(0, last_slash_idx + 1);
-						}
-
-						// Remove extension if present.
-						const size_t period_idx = msstylePathClean.rfind('.');
-						if (std::string::npos != period_idx)
-						{
-							msstylePathClean.erase(period_idx);
-						}
-
-						ThemesMap[k] = msstylePathClean;
-						if (pathBuff == msstylePath)
-						{
-							ThemeCombo->SetSelection(k);
-						}
-						themes.push_back(i);
-						k++;
-					}
-				}
-				themetool_theme_release(theme);
-			}
-		}
-		else {
-			MessageBox(NULL, TEXT("Failed to count the amount of themes"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-		}
-		if (version != NULL)
-		{
-			WCHAR value[255] = { 0 };
-			PVOID pvData = value;
-			DWORD size = sizeof(value);
-			RegGetValue(HKEY_LOCAL_MACHINE, L"Software\\Rectify11", L"Version", RRF_RT_REG_SZ, 0, pvData, &size);
-			std::wstring vstr = std::wstring(L"Rectify11 version: ");
-			vstr += (LPCWSTR)pvData;
-			version->SetContentString((UCString)vstr.c_str());
-		}
-		static EventListener accept_listener(ThemeCmb_OnEvent);
-
-		if (ThemeCombo->AddListener(&accept_listener) != S_OK)
-		{
-			MessageBox(NULL, TEXT("Failed to add"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-		}
-	}
-
-	if (HelpButton != NULL)
-	{
-		static EventListener help_listener(HelpButton_OnEvent);
-		if (HelpButton->AddListener(&help_listener) != S_OK)
-		{
-			MessageBox(NULL, TEXT("Failed to add helpbutton licenser"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-		}
-	}
-
-	if (enableAdmin != NULL)
-	{
-		static EventListener help_listener(EnableAdminBtn_OnEvent);
-		if (enableAdmin->AddListener(&help_listener) != S_OK)
-		{
-			MessageBox(NULL, TEXT("Failed to add elevation button licenser"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-		}
-	}
-
-	if (MicaForEveryoneCheckbox != NULL)
-	{
-		MicaForEveryoneCheckbox->SetToggleOnClick(true);
-		BOOL MicaEnabled;
-		BOOL TabbedEnabled;
-		RectifyUtil->GetMicaSettings(&MicaEnabled, &TabbedEnabled);
-
-		MicaForEveryoneCheckbox->SetCheckedState(MicaEnabled ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
-
-		if (!MicaEnabled && TabbedCheckbox != NULL)
-		{
-			TabbedCheckbox->SetEnabled(FALSE);
-		}
-
-		static EventListener mica_listener(MicaChk_OnEvent);
-		if (MicaForEveryoneCheckbox->AddListener(&mica_listener) != S_OK)
-		{
-			MessageBox(NULL, TEXT("Failed to add mica checkbox licenser"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-		}
-	}
-
-	if (TabbedCheckbox != NULL)
-	{
-		BOOL MicaEnabled;
-		BOOL TabbedEnabled;
-		RectifyUtil->GetMicaSettings(&MicaEnabled, &TabbedEnabled);
-
-		TabbedCheckbox->SetToggleOnClick(true);
-		TabbedCheckbox->SetCheckedState(MicaEnabled ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
-
-		static EventListener tab_listener(TabChk_OnEvent);
-		if (TabbedCheckbox->AddListener(&tab_listener) != S_OK)
-		{
-			MessageBox(NULL, TEXT("Failed to add mica tab checkbox licenser"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-		}
-	}
-
-	if (BtnRestartExplorer != NULL)
-	{
-		static EventListener tab_listener(BtnRestartExplorer_OnEvent);
-		if (BtnRestartExplorer->AddListener(&tab_listener) != S_OK)
-		{
-			MessageBox(NULL, TEXT("Failed to add restart explorer licenser"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-		}
-
-		BtnRestartExplorer->SetLayoutPos(-3);
-		BtnRestartExplorer->SetVisible(FALSE);
-	}
-
-	DWORD menuIndex;
-
-	for (size_t i = 0; i < 5; i++)
-	{
-		if (!HasAdmin)
-			Options[i]->SetEnabled(FALSE);
-		else
-			Options[i]->SetEnabled(TRUE);
-	}
-	if (SUCCEEDED(RectifyUtil->GetCurrentMenuIndex(&menuIndex)))
-	{
-		Options[menuIndex]->SetSelected(true);
-	}
-
-	//add listeners to radiobuttons
-
-	static EventListener Win11DefaultMenus_listener(Win11DefaultMenus_OnEvent);
-
-	if (Win11DefaultMenus->AddListener(&Win11DefaultMenus_listener) != S_OK)
-	{
-		MessageBox(NULL, TEXT("Failed to add listener for radio button"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-	}
-
-	static EventListener NilesoftSmall_listener(NilesoftSmall_OnEvent);
-
-	if (NilesoftSmall->AddListener(&NilesoftSmall_listener) != S_OK)
-	{
-		MessageBox(NULL, TEXT("Failed to add listener for radio button"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-	}
-
-	static EventListener NilesoftFull_listener(NilesoftFull_OnEvent);
-
-	if (NilesoftFull->AddListener(&NilesoftFull_listener) != S_OK)
-	{
-		MessageBox(NULL, TEXT("Failed to add listener for radio button"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-	}
-
-	static EventListener Classic_listener(Classic_OnEvent);
-
-	if (Classic->AddListener(&Classic_listener) != S_OK)
-	{
-		MessageBox(NULL, TEXT("Failed to add listener for radio button"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-	}
-
-	static EventListener ClassicTransparent_listener(ClassicTransparent_OnEvent);
-
-	if (ClassicTransparent->AddListener(&ClassicTransparent_listener) != S_OK)
-	{
-		MessageBox(NULL, TEXT("Failed to add listener for radio button"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-	}
-
-	if (!HasAdmin)
-	{
-		MicaForEveryoneCheckbox->SetEnabled(FALSE);
-		TabbedCheckbox->SetEnabled(FALSE);
-
-	}
-	else {
-		enableAdmin->SetLayoutPos(-3);
-		enableAdmin->SetVisible(FALSE);
-	}
-
-
-	UpdateThemeGraphic(root);
+	
 }
 
 
@@ -725,21 +326,6 @@ void CElementProvider::InitThemeSettingPage()
 		MessageBox(NULL, TEXT("Failed to add listener for radio button"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
 	}
 }
-void CElementProvider::UpdateThemeGraphic(Element* root)
-{
-	LPCWSTR id = IsDarkTheme() ? MAKEINTRESOURCE(IDB_DARKPREVIEW) : MAKEINTRESOURCE(IDB_LIGHTPREVIEW);
-	HBITMAP bmp = (HBITMAP)LoadImage(g_hInst, id, IMAGE_BITMAP, 256, 256, 0);
-	if (bmp == NULL)
-	{
-		SHOW_ERROR("failure to load bitmap");
-		return;
-	}
-	Value* bitmap = DirectUI::Value::CreateGraphic(bmp, 3, 0xffffffff, false, false, false);
-	Element* PreviewElement = root->FindDescendent(StrToID((UCString)L"ThemePreview"));
-	if (PreviewElement != NULL)
-		PreviewElement->SetValue(Element::ContentProp, 1, bitmap);
-	bitmap->Release();
-}
 
 HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
 {
@@ -750,17 +336,22 @@ HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
 		MessageBox(NULL, TEXT("Failed to initialize SecureUXTheme ThemeTool. Theme information will not be loaded."), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
 	}
 	Element* root = XProvider::GetRoot();
-	if (root->FindDescendent(StrToID((UCString)L"ThemeCmb")) != NULL)
+	if (root->FindDescendent(StrToID((UCString)L"MainPageElem")) != NULL)
 	{
-		InitMainPage();
+		CRectifyMainCPLPage* page = (CRectifyMainCPLPage*)root->FindDescendent(StrToID((UCString)L"MainPageElem"));
+		page->OnInit();
 	}
-	else if (root->FindDescendent(StrToID((UCString)L"IgnoreCursors")) != NULL)
-	{
-		InitThemeSettingPage();
-	}
-	else {
-		MessageBox(NULL, TEXT("Unknown page. Both ThemeCmb or IgnoreCursors are missing. Failed to initialize any page."), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-	}
+	//if (root->FindDescendent(StrToID((UCString)L"ThemeCmb")) != NULL)
+	//{
+	//	InitMainPage();
+	//}
+	//else if (root->FindDescendent(StrToID((UCString)L"IgnoreCursors")) != NULL)
+	//{
+	//	InitThemeSettingPage();
+	//}
+	//else {
+	//	MessageBox(NULL, TEXT("Unknown page. Both ThemeCmb or IgnoreCursors are missing. Failed to initialize any page."), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
+	//}
 
 	return S_OK;
 }
@@ -771,7 +362,7 @@ HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param)
 	if (!StrCmpCW((LPCWSTR)param, L"SettingsChanged"))
 	{
 		//This is invoked when the UI is refreshed!
-		UpdateThemeGraphic(GetRoot());
+		//UpdateThemeGraphic(GetRoot());
 	}
 
 	if (!StrCmpCW((LPCWSTR)param, L"SearchText"))
@@ -818,21 +409,21 @@ HRESULT STDMETHODCALLTYPE CElementProvider::OnNavigateAway() {
 	//TODO: this causes a crash
 	//DirectUI::XProvider::SetHandleEnterKey(false);
 	//SetDefaultButtonTracking(false);
-	HasAdmin = FALSE;
-	if (RectifyUtil != NULL)
-	{
-		RectifyUtil->Release();
-		RectifyUtil = NULL;
-	}
+	//HasAdmin = FALSE;
+	//if (RectifyUtil != NULL)
+	//{
+	//	RectifyUtil->Release();
+	//	RectifyUtil = NULL;
+	//}
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnInnerElementDestroyed() {
-	HasAdmin = FALSE;
-	if (RectifyUtil != NULL)
-	{
-		RectifyUtil->Release();
-		RectifyUtil = NULL;
-	}
+	//HasAdmin = FALSE;
+	//if (RectifyUtil != NULL)
+	//{
+	//	RectifyUtil->Release();
+	//	RectifyUtil = NULL;
+	//}
 	return 0;
 }
 

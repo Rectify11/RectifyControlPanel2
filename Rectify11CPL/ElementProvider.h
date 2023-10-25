@@ -62,8 +62,6 @@ public:
 
 	void InitThemeSettingPage();
 
-	static void UpdateThemeGraphic(Element* root);
-
 private:
 	IUnknown* _punkSite;
 	DirectUI::XResourceProvider* resourceProvider = NULL;

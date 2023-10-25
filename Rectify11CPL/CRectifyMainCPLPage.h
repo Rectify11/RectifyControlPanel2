@@ -1,5 +1,9 @@
 #pragma once
-class CRectifyMainCPLPage : public Element//, public IFrameNotificationClient
+#include <map>
+#include "IRectifyUtil_h.h"
+typedef std::map<int, wstring> ThemesMapBase;
+
+class CRectifyMainCPLPage : public Element
 {
 public:
 
@@ -12,23 +16,20 @@ public:
 	//Element
 	virtual IClassInfo* GetClassInfoW() override;
 
-	//Iunknown
-	//virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** ppvObject);
-	//virtual ULONG STDMETHODCALLTYPE AddRef(void);
-	//virtual ULONG STDMETHODCALLTYPE Release(void);
-
-
-
-	//IFrameNotificationClient implementation
-	//virtual HRESULT STDMETHODCALLTYPE LayoutInitialized();
-	//virtual HRESULT STDMETHODCALLTYPE Notify(WORD* param);
-	//virtual HRESULT STDMETHODCALLTYPE OnNavigateAway();
-	//virtual HRESULT STDMETHODCALLTYPE OnInnerElementDestroyed();
-
 	// Element overrides
 	virtual void OnEvent(Event* iev);
 
+	// Important methods
+	virtual void OnInit();
+	virtual void OnNavigateAway();
+
 	static inline DirectUI::IClassInfo* GetClassInfoPtr() { return Class; }
 	static inline UCString DoGetClassName() { return (UCString)L"CRectifyMainCPLPage"; }
+private:
+	bool HasAdmin;
+	IRectifyUtil* RectifyUtil;
+	static vector<ULONG> themes;
+	static ThemesMapBase ThemesMap;
 
+	void UpdateThemeGraphic();
 };
