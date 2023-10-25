@@ -76,9 +76,9 @@ IDR_TASK                XML                     "taskslist.xml"
 // UIFILE
 //
 
-IDR_MAINPAGE            UIFILE                  "MainPage.xml"
+IDR_MAINPAGE            UIFILE                  "RectifyMainPage.xml"
 
-IDR_UPDATEPAGE          UIFILE                  "ThemeSettingPage.xml"
+IDR_UPDATEPAGE          UIFILE                  "RectifyThemeCfgPage.xml"
 
 
 /////////////////////////////////////////////////////////////////////////////

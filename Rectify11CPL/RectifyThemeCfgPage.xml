@@ -163,7 +163,7 @@
 			</if>
 		</style>
 	</stylesheets>
-	<element resid="main" layout="borderlayout()" accessible="true" accrole="window" layoutpos="top" sheet="common">
+	<RectifyThemeCfgPage resid="main" layout="borderlayout()" accessible="true" accrole="window" layoutpos="top" sheet="common" id="atom(ThemePageElem)">
 		<ScrollViewer xscrollable="false" layoutpos="top" sheet="common" accessible="true" accrole="pane" class="cp_topbox">
 			<element sheet="cp_style" class="cp_topbox" width="9999rp" padding="rect(60rp,15rp,10rp,10rp)" layoutpos="client" layout="borderlayout()" accessible="true" accname="resstr(104)">
 
@@ -197,5 +197,6 @@
 				</Element>
 			</element>
 		</ScrollViewer>
-	</element>
+	</RectifyThemeCfgPage>
+
 </duixml>

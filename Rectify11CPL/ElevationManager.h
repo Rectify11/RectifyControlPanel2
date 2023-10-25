@@ -4,6 +4,6 @@
 class ElevationManager
 {
 public:
-	static IRectifyUtil* Initialize(BOOL b);
+	static IRectifyUtil* Initialize(HWND window);
 };
 

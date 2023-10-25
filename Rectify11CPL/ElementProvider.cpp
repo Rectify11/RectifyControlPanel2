@@ -9,14 +9,9 @@
 #include "ElevationManager.h"
 #include "ElementProvider.h"
 #include "resource.h"
+#include "RectifyMainPage.h"
+#include "RectifyThemeCfgPage.h"
 #include <map>
-
-
-
-
-#define NOT_IMPLEMENTED MessageBox(NULL, TEXT(__FUNCTION__), TEXT("Non implementented function in CElementProvider"), MB_ICONERROR)
-#define SHOW_ERROR(x) MessageBox(NULL, TEXT(x), TEXT("Error in CElementProvider"), MB_ICONERROR)
-
 
 CElementProvider::CElementProvider() : _punkSite(NULL)
 {
@@ -174,127 +169,26 @@ HRESULT STDMETHODCALLTYPE CElementProvider::OptionallyTakeInitialFocus(BOOL* res
 	return 0;
 }
 
-void CElementProvider::InitNavLinks()
-{
-	auto links = new CControlPanelNavLinks();
-
-	WCHAR buffer[1024];
-	if (FAILED(LoadStringW(g_hInst, IDS_UPDATE, buffer, 1023)))
-	{
-		wcscpy_s(buffer, L"Failed to load localized string");
-	}
-	links->AddLinkControlPanel(buffer, L"Rectify11.SettingsCPL", L"pageThemePref", CPNAV_Normal, NULL);
-	links->AddLinkControlPanel(L"System information", L"Microsoft.System", L"", CPNAV_SeeAlso, NULL);
-
-
-	GUID SID_PerLayoutPropertyBag = {};
-	HRESULT hr = CLSIDFromString(L"{a46e5c25-c09c-4ca8-9a53-49cf7f865525}", (LPCLSID)&SID_PerLayoutPropertyBag);
-	if (SUCCEEDED(hr))
-	{
-		IPropertyBag* bag = NULL;
-		int hr = IUnknown_QueryService(_punkSite, SID_PerLayoutPropertyBag, IID_IPropertyBag, (LPVOID*)&bag);
-		if (SUCCEEDED(hr))
-		{
-			if (SUCCEEDED(PSPropertyBag_WriteUnknown(bag, L"ControlPanelNavLinks", links)))
-			{
-
-			}
-			else {
-				MessageBox(NULL, TEXT("Failed to write property bag for navigation links"), TEXT("CElementProvider::InitNavLinks"), 0);
-			}
-			bag->Release();
-		}
-		else {
-			MessageBox(NULL, TEXT("Failed to get property bag for navigation links"), TEXT("CElementProvider::InitNavLinks"), 0);
-		}
-	}
-	else
-	{
-		MessageBox(NULL, TEXT("Failed to parse hardcoded GUID (SID_PerLayoutPropertyBag)"), TEXT("CElementProvider::InitNavLinks"), 0);
-	}
-}
-
-
-void CElementProvider::InitThemeSettingPage()
-{
-	Element* root = GetRoot();
-
-	TouchCheckBox* IgnoreBg = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"IgnoreBg"));
-	TouchCheckBox* IgnoreCursors = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"IgnoreCursors"));
-	TouchCheckBox* IgnoreIcons = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"IgnoreIcons"));
-	TouchCheckBox* IgnoreColors = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"IgnoreColors"));
-	TouchCheckBox* IgnoreSounds = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"IgnoreSounds"));
-	TouchCheckBox* IgnoreScreensavers = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"IgnoreScreensavers"));
-
-	TouchButton* SaveThemePreferences = (TouchButton*)root->FindDescendent(StrToID((UCString)L"SaveThemePreferences"));
-	TouchButton* IgnoreThemePreferences = (TouchButton*)root->FindDescendent(StrToID((UCString)L"IgnoreThemePreferences"));
-
-	HKEY Rectify11;
-	if (RegCreateKey(HKEY_CURRENT_USER, TEXT("SOFTWARE\\Rectify11"), &Rectify11))
-	{
-		SHOW_ERROR("Failed to create rectify11 key");
-		return;
-	}
-
-	DWORD size = 4;
-
-	DWORD IgnoreBgVal = 0;
-	DWORD IgnoreCursorsVal = 0;
-	DWORD IgnoreIconsVal = 0;
-	DWORD IgnoreColorsVal = 0;
-	DWORD IgnoreSoundsVal = 0;
-	DWORD IgnoreScreensaversVal = 0;
-
-	RegQueryValueExW(Rectify11, L"IgnoreBg", 0, NULL, (LPBYTE)&IgnoreBgVal, &size);
-	RegQueryValueExW(Rectify11, L"IgnoreCursors", 0, NULL, (LPBYTE)&IgnoreCursorsVal, &size);
-	RegQueryValueExW(Rectify11, L"IgnoreIcons", 0, NULL, (LPBYTE)&IgnoreIconsVal, &size);
-	RegQueryValueExW(Rectify11, L"IgnoreColors", 0, NULL, (LPBYTE)&IgnoreColorsVal, &size);
-	RegQueryValueExW(Rectify11, L"IgnoreSounds", 0, NULL, (LPBYTE)&IgnoreSoundsVal, &size);
-	RegQueryValueExW(Rectify11, L"IgnoreScreensavers", 0, NULL, (LPBYTE)&IgnoreScreensaversVal, &size);
-
-
-	IgnoreBg->SetToggleOnClick(true);
-	IgnoreCursors->SetToggleOnClick(true);
-	IgnoreIcons->SetToggleOnClick(true);
-	IgnoreColors->SetToggleOnClick(true);
-	IgnoreSounds->SetToggleOnClick(true);
-	IgnoreScreensavers->SetToggleOnClick(true);
-
-	IgnoreBg->SetCheckedState(IgnoreBgVal ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
-	IgnoreCursors->SetCheckedState(IgnoreCursorsVal ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
-	IgnoreIcons->SetCheckedState(IgnoreIconsVal ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
-	IgnoreColors->SetCheckedState(IgnoreColorsVal ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
-	IgnoreSounds->SetCheckedState(IgnoreSoundsVal ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
-	IgnoreScreensavers->SetCheckedState(IgnoreScreensaversVal ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
-
-	//// register buttons
-	//static EventListener SaveThemePreferences_listener(SaveThemePreferences_OnEvent);
-
-	//if (SaveThemePreferences->AddListener(&SaveThemePreferences_listener) != S_OK)
-	//{
-	//	MessageBox(NULL, TEXT("Failed to add listener for radio button"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-	//}
-
-	//static EventListener IgnoreThemePreferences_listener(IgnoreThemePreferences_OnEvent);
-
-	//if (IgnoreThemePreferences->AddListener(&IgnoreThemePreferences_listener) != S_OK)
-	//{
-	//	MessageBox(NULL, TEXT("Failed to add listener for radio button"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-	//}
-}
-
 HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
 {
-	InitNavLinks();
 	HRESULT hr = themetool_init();
 	if (FAILED(hr) && hr != HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED))
 	{
 		MessageBox(NULL, TEXT("Failed to initialize SecureUXTheme ThemeTool. Theme information will not be loaded."), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
 	}
+
 	Element* root = XProvider::GetRoot();
+
 	if (root->FindDescendent(StrToID((UCString)L"MainPageElem")) != NULL)
 	{
-		CRectifyMainCPLPage* page = (CRectifyMainCPLPage*)root->FindDescendent(StrToID((UCString)L"MainPageElem"));
+		RectifyMainPage* page = (RectifyMainPage*)root->FindDescendent(StrToID((UCString)L"MainPageElem"));
+		page->SetSite(_punkSite);
+		page->OnInit();
+	}
+	else if (root->FindDescendent(StrToID((UCString)L"ThemePageElem")) != NULL)
+	{
+		RectifyThemeCfgPage* page = (RectifyThemeCfgPage*)root->FindDescendent(StrToID((UCString)L"ThemePageElem"));
+		page->SetSite(_punkSite);
 		page->OnInit();
 	}
 
@@ -383,7 +277,6 @@ HRESULT STDMETHODCALLTYPE CElementProvider::QueryService(
 	void** ppvObject)
 {
 	*ppvObject = 0;
-	NOT_IMPLEMENTED;
 	return E_NOTIMPL;
 }
 

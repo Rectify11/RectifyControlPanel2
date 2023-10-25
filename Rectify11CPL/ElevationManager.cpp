@@ -7,7 +7,7 @@ using namespace std;
 #include <system_error>
 #include "CRectifyUtil.h"
 
-IRectifyUtil* ElevationManager::Initialize(BOOL elevate)
+IRectifyUtil* ElevationManager::Initialize(HWND window)
 {
     GUID CLSID_MultiObjectElevationFactory = {0}, GUID_IMultiObjectElevationFactory = { 0 };
 
@@ -40,11 +40,11 @@ IRectifyUtil* ElevationManager::Initialize(BOOL elevate)
     if (SUCCEEDED(hr))
     {
         HWND hwnd = FindWindow(TEXT("Progman"), TEXT("Program Manager"));
-        hr = ppv->InitializeNoWaitCursor(hwnd, CLSID_RectifyUtilServer);
+        hr = ppv->Initialize(window, CLSID_RectifyUtilServer);
         if (FAILED(hr))
         {
             WCHAR buffer[1024];
-            swprintf(buffer, 1024, L"InitializeNoWaitCursor() failed with %d", hr);
+            swprintf(buffer, 1024, L"MultiObjectElevationFactory::Initialize() failed with %d", hr);
             MessageBox(NULL, buffer, L"work", MB_ICONERROR);
             return NULL;
         }

@@ -191,30 +191,32 @@
     <ClCompile Include="CControlPanelNavLink.cpp" />
     <ClCompile Include="CControlPanelNavLinks.cpp" />
     <ClCompile Include="ClassFactory.cpp" />
-    <ClCompile Include="CRectifyMainCPLPage.cpp" />
+    <ClCompile Include="RectifyMainPage.cpp" />
     <ClCompile Include="CRectifyUtil.cpp" />
     <ClCompile Include="IRectifyUtil_p.c" />
     <ClCompile Include="proxy.c" />
     <ClCompile Include="ElementProvider.cpp" />
     <ClCompile Include="ElevationManager.cpp" />
+    <ClCompile Include="RectifyThemeCfgPage.cpp" />
     <ClCompile Include="Register.cpp" />
     <ClCompile Include="theme.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Rectify11CPL.def" />
-    <None Include="MainPage.xml" />
+    <None Include="RectifyMainPage.xml" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CControlPanelNavLink.h" />
     <ClInclude Include="CControlPanelNavLinkCommand.h" />
     <ClInclude Include="CControlPanelNavLinks.h" />
     <ClInclude Include="ClassFactory.h" />
-    <ClInclude Include="CRectifyMainCPLPage.h" />
+    <ClInclude Include="RectifyMainPage.h" />
     <ClInclude Include="CRectifyUtil.h" />
     <ClInclude Include="ElementProvider.h" />
     <ClInclude Include="ElevationManager.h" />
     <ClInclude Include="Rectify11CPL.h" />
     <ClInclude Include="Guid.h" />
+    <ClInclude Include="RectifyThemeCfgPage.h" />
     <ClInclude Include="Templetes.h" />
     <ClInclude Include="theme.h" />
     <ClInclude Include="undoc.h" />
@@ -231,7 +233,7 @@
   <ItemGroup>
     <Xml Include="pages.xml" />
     <Xml Include="taskslist.xml" />
-    <Xml Include="ThemeSettingPage.xml" />
+    <Xml Include="RectifyThemeCfgPage.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dui70\DirectUI\DirectUI.vcxproj">

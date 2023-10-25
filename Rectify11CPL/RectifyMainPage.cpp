@@ -1,27 +1,26 @@
 #include "Rectify11CPL.h"
-#include "CRectifyMainCPLPage.h"
+#include "RectifyMainPage.h"
 #include "CRectifyUtil.h"
 #include "ElevationManager.h"
 
-IClassInfo* CRectifyMainCPLPage::Class = NULL;
-#define NOT_IMPLEMENTED MessageBox(NULL, TEXT(__FUNCTION__), TEXT("Non implementented function in CRectifyMainCPLPage"), 0)
+IClassInfo* RectifyMainPage::Class = NULL;
 
 
-CRectifyMainCPLPage::CRectifyMainCPLPage()
-{
-	
-}
-
-CRectifyMainCPLPage::~CRectifyMainCPLPage()
+RectifyMainPage::RectifyMainPage()
 {
 
 }
 
-HRESULT CRectifyMainCPLPage::CreateInstance(Element* rootElement, unsigned long* debug_variable, Element** newElement)
+RectifyMainPage::~RectifyMainPage()
+{
+
+}
+
+HRESULT RectifyMainPage::CreateInstance(Element* rootElement, unsigned long* debug_variable, Element** newElement)
 {
 	int hr = E_OUTOFMEMORY;
 
-	CRectifyMainCPLPage* instance = new CRectifyMainCPLPage();
+	RectifyMainPage* instance = new RectifyMainPage();
 
 	if (instance != NULL)
 	{
@@ -43,12 +42,12 @@ HRESULT CRectifyMainCPLPage::CreateInstance(Element* rootElement, unsigned long*
 	return hr;
 }
 
-IClassInfo* CRectifyMainCPLPage::GetClassInfoW()
+IClassInfo* RectifyMainPage::GetClassInfoW()
 {
-	return CRectifyMainCPLPage::Class;
+	return RectifyMainPage::Class;
 }
 
-void CRectifyMainCPLPage::OnEvent(Event* iev)
+void RectifyMainPage::OnEvent(Event* iev)
 {
 	if (iev->flag != GMF_ROUTED)
 		return;
@@ -59,7 +58,7 @@ void CRectifyMainCPLPage::OnEvent(Event* iev)
 	{
 		if (iev->type == TouchButton::Click)
 		{
-			IRectifyUtil* utility = ElevationManager::Initialize(TRUE);
+			IRectifyUtil* utility = ElevationManager::Initialize(GetMainHwnd());
 			TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)FindDescendent(StrToID((UCString)L"MicaChk"));
 			TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)FindDescendent(StrToID((UCString)L"TabChk"));
 			if (utility != NULL)
@@ -113,7 +112,61 @@ void CRectifyMainCPLPage::OnEvent(Event* iev)
 			TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)FindDescendent(StrToID((UCString)L"MicaChk"));
 			TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)FindDescendent(StrToID((UCString)L"TabChk"));
 			int selection = ((Combobox*)iev->target)->GetSelection();
-			themetool_set_active(NULL, themes[selection], TRUE, 0, 0);
+
+			ULONG apply_flags = 0;
+			
+			// load appy flags
+			HKEY Rectify11;
+			if (RegCreateKey(HKEY_CURRENT_USER, TEXT("SOFTWARE\\Rectify11"), &Rectify11))
+			{
+				SHOW_ERROR("Failed to create rectify11 key");
+				return;
+			}
+
+			DWORD size = 4;
+
+			DWORD IgnoreBgVal = 0;
+			DWORD IgnoreCursorsVal = 0;
+			DWORD IgnoreIconsVal = 0;
+			DWORD IgnoreColorsVal = 0;
+			DWORD IgnoreSoundsVal = 0;
+			DWORD IgnoreScreensaversVal = 0;
+
+			RegQueryValueExW(Rectify11, L"IgnoreBg", 0, NULL, (LPBYTE)&IgnoreBgVal, &size);
+			RegQueryValueExW(Rectify11, L"IgnoreCursors", 0, NULL, (LPBYTE)&IgnoreCursorsVal, &size);
+			RegQueryValueExW(Rectify11, L"IgnoreIcons", 0, NULL, (LPBYTE)&IgnoreIconsVal, &size);
+			RegQueryValueExW(Rectify11, L"IgnoreColors", 0, NULL, (LPBYTE)&IgnoreColorsVal, &size);
+			RegQueryValueExW(Rectify11, L"IgnoreSounds", 0, NULL, (LPBYTE)&IgnoreSoundsVal, &size);
+			RegQueryValueExW(Rectify11, L"IgnoreScreensavers", 0, NULL, (LPBYTE)&IgnoreScreensaversVal, &size);
+			RegCloseKey(Rectify11);
+
+			if (IgnoreBgVal)
+			{
+				apply_flags |= THEMETOOL_APPLY_FLAG_IGNORE_BACKGROUND;
+			}
+			if (IgnoreCursorsVal)
+			{
+				apply_flags |= THEMETOOL_APPLY_FLAG_IGNORE_CURSOR;
+			}
+			if (IgnoreIconsVal)
+			{
+				apply_flags |= THEMETOOL_APPLY_FLAG_IGNORE_DESKTOP_ICONS;
+			}
+			if (IgnoreColorsVal)
+			{
+				apply_flags |= THEMETOOL_APPLY_FLAG_IGNORE_COLOR;
+			}
+			if (IgnoreSoundsVal)
+			{
+				apply_flags |= THEMETOOL_APPLY_FLAG_IGNORE_SOUND;
+			}
+			if (IgnoreSoundsVal)
+			{
+				apply_flags |= THEMETOOL_APPLY_FLAG_IGNORE_SCREENSAVER;
+			}
+
+			// apply the theme
+			themetool_set_active(NULL, themes[selection], TRUE, apply_flags, 0);
 			UpdateThemeGraphic();
 
 			// update mica
@@ -206,13 +259,13 @@ void CRectifyMainCPLPage::OnEvent(Event* iev)
 		}
 	}
 }
-void CRectifyMainCPLPage::ShowRestartExplorer()
+void RectifyMainPage::ShowRestartExplorer()
 {
 	TouchButton* BtnRestartExplorer = (TouchButton*)FindDescendent(StrToID((UCString)L"BtnRestartExplorer"));
 	BtnRestartExplorer->SetLayoutPos(0);
 	BtnRestartExplorer->SetVisible(TRUE);
 }
-void CRectifyMainCPLPage::UpdateThemeGraphic()
+void RectifyMainPage::UpdateThemeGraphic()
 {
 	LPCWSTR id = IsDarkTheme() ? MAKEINTRESOURCE(IDB_DARKPREVIEW) : MAKEINTRESOURCE(IDB_LIGHTPREVIEW);
 	HBITMAP bmp = (HBITMAP)LoadImage(g_hInst, id, IMAGE_BITMAP, 256, 256, 0);
@@ -227,10 +280,53 @@ void CRectifyMainCPLPage::UpdateThemeGraphic()
 	bitmap->Release();
 }
 
-void CRectifyMainCPLPage::OnInit()
+void RectifyMainPage::InitNavLinks()
+{
+	auto links = new CControlPanelNavLinks();
+
+	WCHAR buffer[1024];
+	if (FAILED(LoadStringW(g_hInst, IDS_UPDATE, buffer, 1023)))
+	{
+		wcscpy_s(buffer, L"Failed to load localized string");
+	}
+	links->AddLinkControlPanel(buffer, L"Rectify11.SettingsCPL", L"pageThemePref", CPNAV_Normal, NULL);
+	links->AddLinkControlPanel(L"System information", L"Microsoft.System", L"", CPNAV_SeeAlso, NULL);
+
+
+	GUID SID_PerLayoutPropertyBag = {};
+	HRESULT hr = CLSIDFromString(L"{a46e5c25-c09c-4ca8-9a53-49cf7f865525}", (LPCLSID)&SID_PerLayoutPropertyBag);
+	if (SUCCEEDED(hr))
+	{
+		IPropertyBag* bag = NULL;
+		int hr = IUnknown_QueryService(site, SID_PerLayoutPropertyBag, IID_IPropertyBag, (LPVOID*)&bag);
+		if (SUCCEEDED(hr))
+		{
+			if (SUCCEEDED(PSPropertyBag_WriteUnknown(bag, L"ControlPanelNavLinks", links)))
+			{
+
+			}
+			else {
+				MessageBox(NULL, TEXT("Failed to write property bag for navigation links"), TEXT("CElementProvider::InitNavLinks"), 0);
+			}
+			bag->Release();
+		}
+		else {
+			MessageBox(NULL, TEXT("Failed to get property bag for navigation links"), TEXT("CElementProvider::InitNavLinks"), 0);
+		}
+	}
+	else
+	{
+		MessageBox(NULL, TEXT("Failed to parse hardcoded GUID (SID_PerLayoutPropertyBag)"), TEXT("CElementProvider::InitNavLinks"), 0);
+	}
+}
+
+
+void RectifyMainPage::OnInit()
 {
 	Element* root = GetRoot();
 	RectifyUtil = (IRectifyUtil*)new CRectifyUtil();
+	InitNavLinks();
+
 	Combobox* ThemeCombo = (Combobox*)root->FindDescendent(StrToID((UCString)L"ThemeCmb"));
 	Button* HelpButton = (Button*)root->FindDescendent(StrToID((UCString)L"buttonHelp"));
 	TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)root->FindDescendent(StrToID((UCString)L"MicaChk"));
@@ -375,7 +471,29 @@ void CRectifyMainCPLPage::OnInit()
 	initializing = false;
 }
 
-void CRectifyMainCPLPage::OnDestroy()
+HWND RectifyMainPage::GetMainHwnd()
+{
+	GUID SID_STopLevelBrowser = {}, IID_IFrameManager = {};
+	HRESULT hr = CLSIDFromString(L"{4c96be40-915c-11cf-99d3-00aa004ae837}", (LPCLSID)&SID_STopLevelBrowser);
+	HWND result = NULL;
+	if (SUCCEEDED(hr))
+	{
+		hr = CLSIDFromString(L"{31e4fa78-02b4-419f-9430-7b7585237c77}", (LPCLSID)&IID_IFrameManager);
+		if (SUCCEEDED(hr))
+		{
+			IShellBrowser* browser = NULL;
+			if (SUCCEEDED(IUnknown_QueryService(site, SID_STopLevelBrowser, IID_IShellBrowser, (LPVOID*)&browser)))
+			{
+				browser->GetWindow(&result);
+				browser->Release();
+			}
+		}
+	}
+
+	return result;
+}
+
+void RectifyMainPage::OnDestroy()
 {
 	if (RectifyUtil != NULL)
 	{
