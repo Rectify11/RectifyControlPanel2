@@ -1,11 +1,3 @@
-/**************************************************************************
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
- 
-   (c) Microsoft Corporation. All Rights Reserved.
-**************************************************************************/
 #include <shlobj.h>
 #include <shlwapi.h>
 #include "Rectify11CPL.h"

@@ -35,6 +35,8 @@ CElementProvider::~CElementProvider()
 	DllRelease();
 }
 
+// IUnknown Implementation
+
 HRESULT CElementProvider::QueryInterface(REFIID riid, __out void** ppv)
 {
 	static const QITAB qit[] = {
@@ -77,11 +79,13 @@ ULONG CElementProvider::Release()
 	return ret;
 }
 
+// XProvider implementation
 HRESULT CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* result_handle)
 {
 	int hr = XProvider::CreateDUI(a, result_handle);
 	if (SUCCEEDED(hr))
 	{
+		disabledEnterKey = false;
 		DirectUI::XProvider::SetHandleEnterKey(true);
 	}
 	else
@@ -128,6 +132,8 @@ HRESULT CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* result_handl
 	}
 	return 0;
 }
+
+// IDUIElementProviderInit implementation
 #pragma warning( push )
 #pragma warning( disable : 4312 ) // disable warning about compiler complaining about casting ID to pointer
 HRESULT STDMETHODCALLTYPE CElementProvider::SetResourceID(UINT id)
@@ -169,6 +175,7 @@ HRESULT STDMETHODCALLTYPE CElementProvider::OptionallyTakeInitialFocus(BOOL* res
 	return 0;
 }
 
+// IFrameNotificationClient implementation
 HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
 {
 	HRESULT hr = themetool_init();
@@ -244,16 +251,19 @@ HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param)
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnNavigateAway() {
-	//TODO: this causes a crash
-	//DirectUI::XProvider::SetHandleEnterKey(false);
-	//SetDefaultButtonTracking(false);
+	if (!disabledEnterKey)
+	{
+		// for whatever reason, this function is called twice. The second call to sethandleenterkey crashes explorer, so work around this by storing a field
+		disabledEnterKey = true;
+		DirectUI::XProvider::SetHandleEnterKey(false);
+	}
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnInnerElementDestroyed()
 {
 	return 0;
 }
-
+// IFrameShellViewClient implementation
 HRESULT STDMETHODCALLTYPE CElementProvider::OnSelectedItemChanged()
 {
 	return 0;
@@ -271,6 +281,7 @@ HRESULT STDMETHODCALLTYPE CElementProvider::OnFolderChanged()
 	return 0;
 }
 
+// IServiceProvider implementation
 HRESULT STDMETHODCALLTYPE CElementProvider::QueryService(
 	REFGUID guidService,
 	REFIID riid,
@@ -280,6 +291,7 @@ HRESULT STDMETHODCALLTYPE CElementProvider::QueryService(
 	return E_NOTIMPL;
 }
 
+// IObjectWithSite implementation
 HRESULT CElementProvider::SetSite(IUnknown* punkSite)
 {
 	if (punkSite != NULL)

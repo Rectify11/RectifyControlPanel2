@@ -404,9 +404,16 @@ void RectifyMainPage::OnInit()
 			WCHAR value[255] = { 0 };
 			PVOID pvData = value;
 			DWORD size = sizeof(value);
-			RegGetValue(HKEY_LOCAL_MACHINE, L"Software\\Rectify11", L"Version", RRF_RT_REG_SZ, 0, pvData, &size);
+			LONG result = RegGetValue(HKEY_LOCAL_MACHINE, L"Software\\Rectify11", L"Version", RRF_RT_REG_SZ, 0, pvData, &size);
 			std::wstring vstr = std::wstring(L"Rectify11 version: ");
-			vstr += (LPCWSTR)pvData;
+			if (result == 0)
+			{
+				vstr += (LPCWSTR)pvData;
+			}
+			else
+			{
+				vstr += L"Unknown";
+			}
 			version->SetContentString((UCString)vstr.c_str());
 		}
 	}

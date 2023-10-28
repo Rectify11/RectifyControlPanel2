@@ -1,12 +1,3 @@
-/**************************************************************************
-	THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
-
-   (c) Microsoft Corporation. All Rights Reserved.
-**************************************************************************/
-
 #include <windows.h>
 #include <shlobj.h>
 #include <propkey.h>
@@ -26,7 +17,8 @@ public:
 	IFACEMETHODIMP_(ULONG) AddRef();
 	IFACEMETHODIMP_(ULONG) Release();
 
-	virtual long CreateDUI(DirectUI::IXElementCP* a, HWND* hwnd);
+	// XProvider
+	virtual long CreateDUI(DirectUI::IXElementCP* a, HWND* hwnd) override;
 
 	// IDUIElementProviderInit
 	virtual HRESULT STDMETHODCALLTYPE SetResourceID(UINT id);
@@ -44,21 +36,17 @@ public:
 	virtual HRESULT STDMETHODCALLTYPE OnContentsChanged();
 	virtual HRESULT STDMETHODCALLTYPE OnFolderChanged();
 
-
-
 	//IServiceProvider
-
 	virtual HRESULT STDMETHODCALLTYPE QueryService(REFGUID guidService, REFIID riid, void** ppvObject);
 
-
-	//IobjectWithSite
+	//IObjectWithSite
 	virtual HRESULT STDMETHODCALLTYPE SetSite(IUnknown* pUnkSite);
-
 	virtual HRESULT STDMETHODCALLTYPE GetSite(REFIID riid, void** ppvSite);
 
 private:
 	IUnknown* _punkSite;
 	DirectUI::XResourceProvider* resourceProvider = NULL;
 	DirectUI::IXProviderCP** provider = NULL;
+	bool disabledEnterKey = false;
 	~CElementProvider();
 };
