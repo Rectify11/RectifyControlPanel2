@@ -45,8 +45,5 @@ public:
 
 private:
 	IUnknown* _punkSite;
-	DirectUI::XResourceProvider* resourceProvider = NULL;
-	DirectUI::IXProviderCP** provider = NULL;
-	bool disabledEnterKey = false;
 	~CElementProvider();
 };

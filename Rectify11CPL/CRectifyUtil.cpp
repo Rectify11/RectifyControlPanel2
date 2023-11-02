@@ -579,8 +579,8 @@ HRESULT CRectifyUtil::SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed)
 
 				if (!check_if_file_exists(config_file_src))
 				{
-					swprintf(buffer, 1024, L"Warning: Micaforeveryone configuration file is missing! File name is %ws", config_file_src.c_str());
-					MessageBox(NULL, buffer, L"Warning", MB_ICONWARNING);
+					swprintf(buffer, 1024, L"Warning: Micaforeveryone configuration file is missing! File name is %ws. Is micaforeveryone installed correctly in the rectify11 installer?", config_file_src.c_str());
+					MessageBox(NULL, buffer, L"Rectify11 control panel applet", MB_ICONWARNING);
 				}
 				else
 				{

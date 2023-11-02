@@ -53,6 +53,7 @@ void RectifyMainPage::OnEvent(Event* iev)
 		return;
 	if (!iev->handled)
 		Element::OnEvent(iev);
+
 	if (initializing) return;
 	if (iev->target->GetID() == StrToID((UCString)L"Link_EnableAdmin"))
 	{
@@ -114,7 +115,7 @@ void RectifyMainPage::OnEvent(Event* iev)
 			int selection = ((Combobox*)iev->target)->GetSelection();
 
 			ULONG apply_flags = 0;
-			
+
 			// load appy flags
 			HKEY Rectify11;
 			if (RegCreateKey(HKEY_CURRENT_USER, TEXT("SOFTWARE\\Rectify11"), &Rectify11))
@@ -259,12 +260,14 @@ void RectifyMainPage::OnEvent(Event* iev)
 		}
 	}
 }
+
 void RectifyMainPage::ShowRestartExplorer()
 {
 	TouchButton* BtnRestartExplorer = (TouchButton*)FindDescendent(StrToID((UCString)L"BtnRestartExplorer"));
 	BtnRestartExplorer->SetLayoutPos(0);
 	BtnRestartExplorer->SetVisible(TRUE);
 }
+
 void RectifyMainPage::UpdateThemeGraphic()
 {
 	LPCWSTR id = IsDarkTheme() ? MAKEINTRESOURCE(IDB_DARKPREVIEW) : MAKEINTRESOURCE(IDB_LIGHTPREVIEW);
@@ -507,5 +510,6 @@ void RectifyMainPage::OnDestroy()
 		RectifyUtil->Release();
 		RectifyUtil = NULL;
 	}
+
 	Element::OnDestroy();
 }

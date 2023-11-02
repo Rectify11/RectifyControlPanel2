@@ -70,7 +70,7 @@ ULONG CElementProvider::AddRef()
 
 ULONG CElementProvider::Release()
 {
-	DWORD ret = refCount--;
+	LONGLONG ret = refCount--;
 	if (refCount == 0)
 	{
 		delete this;
@@ -85,7 +85,6 @@ HRESULT CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* result_handl
 	int hr = XProvider::CreateDUI(a, result_handle);
 	if (SUCCEEDED(hr))
 	{
-		disabledEnterKey = false;
 		DirectUI::XProvider::SetHandleEnterKey(true);
 	}
 	else
@@ -121,7 +120,14 @@ HRESULT CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* result_handl
 		}
 		else if (hr == E_FAIL)
 		{
-			swprintf(buffer, 200, L"Failed to create DirectUI parser: E_FAIL");
+			if (this->XProviderCP)
+			{
+				swprintf(buffer, 200, L"Failed to create DirectUI parser: E_FAIL because of an unknown issue");
+			}
+			else
+			{
+				swprintf(buffer, 200, L"Failed to create DirectUI parser: E_FAIL as XProviderCP is 0.");
+			}
 		}
 		else
 		{
@@ -146,10 +152,10 @@ HRESULT STDMETHODCALLTYPE CElementProvider::SetResourceID(UINT id)
 	//First parmeter: hinstance of module
 	//2nd: Resource ID of uifile
 	//3rd param: The main resid value
-	int hr = DirectUI::XResourceProvider::Create(g_hInst, (UCString)id, (UCString)buffer, 0, &this->resourceProvider);
+	int hr = DirectUI::XResourceProvider::Create(g_hInst, (UCString)id, (UCString)buffer, 0, (XResourceProvider**)&this->XProviderCP);
 	if (SUCCEEDED(hr))
 	{
-		hr = DirectUI::XProvider::Initialize(NULL, (IXProviderCP*)this->resourceProvider);
+		hr = DirectUI::XProvider::Initialize(NULL, (IXProviderCP*)this->XProviderCP);
 		if (!SUCCEEDED(hr))
 		{
 			WCHAR szResource[40] = { 0 };
@@ -251,12 +257,6 @@ HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param)
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnNavigateAway() {
-	if (!disabledEnterKey)
-	{
-		// for whatever reason, this function is called twice. The second call to sethandleenterkey crashes explorer, so work around this by storing a field
-		disabledEnterKey = true;
-		DirectUI::XProvider::SetHandleEnterKey(false);
-	}
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnInnerElementDestroyed()
