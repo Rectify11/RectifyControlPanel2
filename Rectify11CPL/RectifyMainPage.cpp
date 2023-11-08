@@ -220,9 +220,9 @@ void RectifyMainPage::OnEvent(Event* iev)
 	}
 
 	// handle menu section
-	if (iev->type == Button::Click && iev->target->GetClassInfoW() == CCCheckBox::GetClassInfoPtr())
+	if (iev->type == Button::Click && !wcscmp((const wchar_t*)iev->target->GetClassInfoW()->GetName(), (const wchar_t*)CCRadioButton::GetClassInfoPtr()->GetName()))
 	{
-		CCCheckBox* chkbox = (CCCheckBox*)iev->target;
+		CCRadioButton* chkbox = (CCRadioButton*)iev->target;
 		if (chkbox->GetSelected())
 		{
 			HRESULT hr = E_ACTIVATIONDENIED_SHELLERROR;
