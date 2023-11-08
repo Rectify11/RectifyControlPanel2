@@ -122,7 +122,7 @@ HRESULT CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* result_handl
 		{
 			if (this->XProviderCP)
 			{
-				swprintf(buffer, 200, L"Failed to create DirectUI parser: E_FAIL because of an unknown issue");
+				swprintf(buffer, 200, L"Failed to create DirectUI parser: E_FAIL. Make sure that duires.dll is present in system32.");
 			}
 			else
 			{
