@@ -13,7 +13,7 @@
 #include "RectifyThemeCfgPage.h"
 #include <map>
 
-CElementProvider::CElementProvider() : _punkSite(NULL)
+CElementProvider::CElementProvider() : Site(NULL)
 {
 	if (FAILED(InitProcessPriv(14, (unsigned short*)g_hInst, 1, true)))
 	{
@@ -195,13 +195,13 @@ HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
 	if (root->FindDescendent(StrToID((UCString)L"MainPageElem")) != NULL)
 	{
 		RectifyMainPage* page = (RectifyMainPage*)root->FindDescendent(StrToID((UCString)L"MainPageElem"));
-		page->SetSite(_punkSite);
+		page->SetSite(Site);
 		page->OnInit();
 	}
 	else if (root->FindDescendent(StrToID((UCString)L"ThemePageElem")) != NULL)
 	{
 		RectifyThemeCfgPage* page = (RectifyThemeCfgPage*)root->FindDescendent(StrToID((UCString)L"ThemePageElem"));
-		page->SetSite(_punkSite);
+		page->SetSite(Site);
 		page->OnInit();
 	}
 
@@ -230,7 +230,7 @@ HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param)
 			if (SUCCEEDED(hr))
 			{
 				IPropertyBag* bag = NULL;
-				HRESULT hr = IUnknown_QueryService(_punkSite, IID_IFrameManager, IID_IPropertyBag, (LPVOID*)&bag);
+				HRESULT hr = IUnknown_QueryService(Site, IID_IFrameManager, IID_IPropertyBag, (LPVOID*)&bag);
 				if (SUCCEEDED(hr))
 				{
 					if (SUCCEEDED(PSPropertyBag_ReadStr(bag, L"SearchText", value, 260)) && value[0])
@@ -241,7 +241,7 @@ HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param)
 							if (SUCCEEDED(SHParseDisplayName(path, NULL, &pidlist, 0, NULL)))
 							{
 								IShellBrowser* browser = NULL;
-								if (SUCCEEDED(IUnknown_QueryService(_punkSite, SID_STopLevelBrowser, IID_IShellBrowser, (LPVOID*)&browser)))
+								if (SUCCEEDED(IUnknown_QueryService(Site, SID_STopLevelBrowser, IID_IShellBrowser, (LPVOID*)&browser)))
 								{
 									hr = browser->BrowseObject(pidlist, SBSP_ACTIVATE_NOFOCUS | SBSP_SAMEBROWSER | SBSP_CREATENOHISTORY);
 									browser->Release();
@@ -256,7 +256,8 @@ HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param)
 	}
 	return 0;
 }
-HRESULT STDMETHODCALLTYPE CElementProvider::OnNavigateAway() {
+HRESULT STDMETHODCALLTYPE CElementProvider::OnNavigateAway()
+{
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnInnerElementDestroyed()
@@ -297,7 +298,6 @@ HRESULT CElementProvider::SetSite(IUnknown* punkSite)
 	if (punkSite != NULL)
 	{
 		IUnknown_Set((IUnknown**)&this->Site, punkSite);
-		IUnknown_Set((IUnknown**)&this->_punkSite, punkSite);
 	}
 
 	return S_OK;

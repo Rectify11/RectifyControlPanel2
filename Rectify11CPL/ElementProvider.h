@@ -44,6 +44,6 @@ public:
 	virtual HRESULT STDMETHODCALLTYPE GetSite(REFIID riid, void** ppvSite);
 
 private:
-	IUnknown* _punkSite;
 	~CElementProvider();
+	IUnknown* Site;
 };
