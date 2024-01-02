@@ -3,7 +3,7 @@
   <ItemGroup>
     <ClCompile Include="ClassFactory.cpp" />
     <ClCompile Include="ElementProvider.cpp" />
-    <ClCompile Include="Register.cpp" />
+    <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="CControlPanelNavLink.cpp">
       <Filter>Navpane</Filter>
     </ClCompile>
@@ -15,8 +15,12 @@
     <ClCompile Include="ElevationManager.cpp" />
     <ClCompile Include="proxy.c" />
     <ClCompile Include="IRectifyUtil_p.c" />
-    <ClCompile Include="RectifyMainPage.cpp" />
-    <ClCompile Include="RectifyThemeCfgPage.cpp" />
+    <ClCompile Include="RectifyMainPage.cpp">
+      <Filter>Pages</Filter>
+    </ClCompile>
+    <ClCompile Include="RectifyThemeCfgPage.cpp">
+      <Filter>Pages</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClassFactory.h" />
@@ -38,29 +42,50 @@
     <ClInclude Include="CRectifyUtil.h" />
     <ClInclude Include="ElevationManager.h" />
     <ClInclude Include="Templetes.h" />
-    <ClInclude Include="RectifyMainPage.h" />
-    <ClInclude Include="RectifyThemeCfgPage.h" />
+    <ClInclude Include="RectifyMainPage.h">
+      <Filter>Pages</Filter>
+    </ClInclude>
+    <ClInclude Include="RectifyThemeCfgPage.h">
+      <Filter>Pages</Filter>
+    </ClInclude>
+    <ClInclude Include="dllmain.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Rectify11CPL.rc" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="pages.xml" />
-    <Xml Include="RectifyThemeCfgPage.xml" />
     <Xml Include="taskslist.xml" />
+    <Xml Include="RectifyThemeCfgPage.xml">
+      <Filter>Pages</Filter>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="icon1.ico" />
-    <Image Include="preview_light.bmp" />
-    <Image Include="preview_dark.bmp" />
+    <Image Include="preview_light.bmp">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="preview_dark.bmp">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="icon.ico">
+      <Filter>Resources</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Rectify11CPL.def" />
-    <None Include="RectifyMainPage.xml" />
+    <None Include="RectifyMainPage.xml">
+      <Filter>Pages</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Navpane">
       <UniqueIdentifier>{8b73cde0-0b02-48cb-8cf1-398e18cf959a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pages">
+      <UniqueIdentifier>{d80f80cc-b6fb-44dd-a072-8e5b17ed81be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{efa0e6bc-fb45-4e7c-968b-72eb63c837a3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

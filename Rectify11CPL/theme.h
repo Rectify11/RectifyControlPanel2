@@ -1,4 +1,5 @@
 #pragma once
+#include <winternl.h>
 
 // NOTE: The following code is from https://github.com/namazso/SecureUxTheme/blob/923b51ed5a20412ede1b56827e078f281d3648f0/ThemeLib/theme.cpp
 // which is licensed under the LGPL 2.1 license

@@ -52,7 +52,6 @@ extern "C"
 //	}
 //}
 
-
 void DllAddRef()
 {
 	InterlockedIncrement(&g_cRefModule);
