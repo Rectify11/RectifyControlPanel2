@@ -43,7 +43,7 @@ IRectifyUtil* ElevationManager::Initialize(HWND window)
         {
             WCHAR buffer[1024];
             swprintf(buffer, 1024, L"MultiObjectElevationFactory::Initialize() failed with %d", hr);
-            MessageBox(NULL, buffer, L"work", MB_ICONERROR);
+            MessageBox(NULL, buffer, L"Error", MB_ICONERROR);
             return NULL;
         }
        
@@ -53,7 +53,7 @@ IRectifyUtil* ElevationManager::Initialize(HWND window)
             std::string message = std::system_category().message(hr);
             CHAR buffer[1024];
             sprintf_s(buffer, "CreateElevatedObject() failed with %d (%s)", hr, message.c_str());
-            MessageBoxA(NULL, buffer, "work", MB_ICONERROR);
+            MessageBoxA(NULL, buffer, "Error", MB_ICONERROR);
         }
         ppv->Release();
         if (SUCCEEDED(hr))

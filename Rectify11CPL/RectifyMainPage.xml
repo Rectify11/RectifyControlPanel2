@@ -215,8 +215,8 @@
 							</element>
 							<!--Checkboxes-->
 							<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)" width="400rp">
-								<TouchCheckBox layoutpos="top" id="Atom(MicaChk)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Enable Mica"/>
-								<TouchCheckbox layoutpos="top" id="Atom(TabChk)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Use tabbed instead of Mica"/>
+								<TouchCheckBox layoutpos="top" id="Atom(MicaChk)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="resstr(110)"/>
+								<TouchCheckbox layoutpos="top" id="Atom(TabChk)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="resstr(111)"/>
 							</element>
 						</element>
 					</element>
@@ -237,13 +237,13 @@
 						<element layoutpos="top" layout="borderlayout()">
 							<!--Checkboxes-->
 							<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)" width="400rp">
-								<CCRadioButton layoutpos="top" id="Atom(Win11DefaultMenus)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Windows 11 default"/>
-								<CCRadioButton layoutpos="top" id="Atom(NilesoftSmall)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Enhanced fluent menus"/>
-								<CCRadioButton layoutpos="top" id="Atom(NilesoftFull)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Enhanced fluent menus (all items in root)"/>
-								<CCRadioButton layoutpos="top" id="Atom(Classic)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Classic menus"/>
-								<CCRadioButton layoutpos="top" id="Atom(ClassicTransparent)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Classic menus with transparency"/>
-								<TouchButton layoutpos="top" id="atom(BtnRestartExplorer)" class="primary" accname="Restart explorer" content="Restart explorer to apply changes"/>
-								<TouchButton layoutpos="top" id="atom(Link_EnableAdmin)" class="primary" accname="Change settings that are unavailable" content="Change settings that are unavailable"/>
+								<CCRadioButton layoutpos="top" id="Atom(Win11DefaultMenus)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="resstr(112)"/>
+								<CCRadioButton layoutpos="top" id="Atom(NilesoftSmall)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="resstr(113)"/>
+								<CCRadioButton layoutpos="top" id="Atom(NilesoftFull)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="resstr(114)"/>
+								<CCRadioButton layoutpos="top" id="Atom(Classic)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="resstr(115)"/>
+								<CCRadioButton layoutpos="top" id="Atom(ClassicTransparent)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="resstr(116)"/>
+								<TouchButton layoutpos="top" id="atom(BtnRestartExplorer)" class="primary" accname="Restart explorer" content="resstr(117)"/>
+								<TouchButton layoutpos="top" id="atom(Link_EnableAdmin)" class="primary" accname="Change settings that are unavailable" content="resstr(118)"/>
 							</element>
 						</element>
 					</element>
@@ -258,7 +258,7 @@
 						<bind connect="Title" font="iconfont;115%" content="resstr(109)" />
 					</macro>
 					<element layoutpos="top" layout="flowlayout(0)" font="iconfont;115%">
-						<element id="atom(RectifyVersion)" content="Rectify11 version: Loading..."/>
+						<element id="atom(RectifyVersion)" content="resstr(120)"/>
 					</element>
 					<!--<element id="atom(UpdateLink)" font="iconfont;115%" layout="flowlayout(0)" background="20575" padding="rect(4rp,4rp,4rp,4rp)" margin="rect(0,8rp,0,0)">
 						<element id="atom(UpdateIcon)" content="icon(81,16rp,16rp,library(imageres.dll))" margin="rect(0,0,4rp,0)"/>

@@ -173,7 +173,7 @@
 						<button id="atom(buttonHelp)" class="cp_help_glyph" acchelp="resstr(1112)" accName="resstr(1109)" />
 					</element>
 					<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)">
-						<element class="cp_content_instruction" content="Theme preferences" />
+						<element class="cp_content_instruction" content="resstr(106)" />
 
 					</element>
 				</element>
@@ -182,15 +182,15 @@
 					<!--Theme combobox and preview-->
 					<!--Checkboxes-->
 					<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)" width="400rp" margin="rect(0,16rp,0,0)">
-						<TouchCheckBox layoutpos="top" id="Atom(IgnoreBg)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Preserve my desktop background"/>
-						<TouchCheckbox layoutpos="top" id="Atom(IgnoreCursors)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Preserve my mouse cursors"/>
-						<TouchCheckBox layoutpos="top" id="Atom(IgnoreIcons)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Preserve my desktop icons"/>
-						<TouchCheckbox layoutpos="top" id="Atom(IgnoreColors)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Preserve my accent color"/>
-						<TouchCheckBox layoutpos="top" id="Atom(IgnoreSounds)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Preserve my system sounds"/>
-						<TouchCheckbox layoutpos="top" id="Atom(IgnoreScreensavers)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="Preserve my screensaver (if one is applied)"/>
+						<TouchCheckBox layoutpos="top" id="Atom(IgnoreBg)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="resstr(122)"/>
+						<TouchCheckbox layoutpos="top" id="Atom(IgnoreCursors)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="resstr(123)"/>
+						<TouchCheckBox layoutpos="top" id="Atom(IgnoreIcons)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="resstr(124)"/>
+						<TouchCheckbox layoutpos="top" id="Atom(IgnoreColors)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="resstr(125)"/>
+						<TouchCheckBox layoutpos="top" id="Atom(IgnoreSounds)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="resstr(126)"/>
+						<TouchCheckbox layoutpos="top" id="Atom(IgnoreScreensavers)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="resstr(127)"/>
 						<element layout="flowlayout(0,0,0,0)" margin="rect(0,16rp,0,0)">
-							<TouchButton layoutpos="top" id="atom(SaveThemePreferences)" accessible="true" margin="rect(0,16rp,8rp,8rp)" class="primary" content="Save"/>
-							<TouchButton layoutpos="top" id="atom(IgnoreThemePreferences)" accessible="true" margin="rect(0,16rp,8rp,8rp)" class="secondary" content="Cancel"/>
+							<TouchButton layoutpos="top" id="atom(SaveThemePreferences)" accessible="true" margin="rect(0,16rp,8rp,8rp)" class="primary" content="resstr(120)"/>
+							<TouchButton layoutpos="top" id="atom(IgnoreThemePreferences)" accessible="true" margin="rect(0,16rp,8rp,8rp)" class="secondary" content="resstr(121)"/>
 						</element>
 					</element>
 

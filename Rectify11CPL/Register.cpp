@@ -74,7 +74,7 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void* lpReserved)
 
 		if (sizeof(XProvider) != 0x28)
 		{
-			MessageBox(NULL, TEXT("Fatal error: unexpected size of XProvider class"), TEXT(""), 0);
+			MessageBox(NULL, TEXT("Fatal error: unexpected size of XProvider class"), TEXT("DllMain"), 0);
 			return FALSE;
 		}
 

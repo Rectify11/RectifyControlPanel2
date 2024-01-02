@@ -414,14 +414,34 @@ void RectifyMainPage::OnInit()
 			PVOID pvData = value;
 			DWORD size = sizeof(value);
 			LONG result = RegGetValue(HKEY_LOCAL_MACHINE, L"Software\\Rectify11", L"Version", RRF_RT_REG_SZ, 0, pvData, &size);
-			std::wstring vstr = std::wstring(L"Rectify11 version: ");
+			std::wstring vstr = std::wstring(L"");
 			if (result == 0)
 			{
-				vstr += (LPCWSTR)pvData;
+				WCHAR versionstr[1024];
+				if (FAILED(LoadStringW(g_hInst, IDS_VERSION, versionstr, 1023)))
+				{
+					wcscpy_s(versionstr, L"[VERSION STRING MISSING]: ");
+				}
+				vstr += versionstr;
+				vstr += L" ";
+				vstr += value;
 			}
 			else
 			{
-				vstr += L"Unknown";
+				WCHAR versionstr[1024];
+				WCHAR notapplicable[1024];
+				if (FAILED(LoadStringW(g_hInst, IDS_VERSION, versionstr, 1023)))
+				{
+					wcscpy_s(versionstr, L"[VERSION STRING MISSING]: ");
+				}
+				if (FAILED(LoadStringW(g_hInst, IDS_NA, notapplicable, 1023)))
+				{
+					wcscpy_s(notapplicable, L"[N/A STRING MISSING]: ");
+				}
+
+				vstr += versionstr;
+				vstr += L" ";
+				vstr += notapplicable;
 			}
 			version->SetContentString((UCString)vstr.c_str());
 		}
