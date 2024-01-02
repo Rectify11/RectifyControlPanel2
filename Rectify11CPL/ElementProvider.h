@@ -11,6 +11,7 @@ class CElementProvider : public DirectUI::XProvider, public IDUIElementProviderI
 {
 public:
 	CElementProvider();
+	virtual ~CElementProvider();
 
 	// IUnknown
 	IFACEMETHODIMP QueryInterface(REFIID riid, __out void** ppv);
@@ -44,6 +45,5 @@ public:
 	virtual HRESULT STDMETHODCALLTYPE GetSite(REFIID riid, void** ppvSite);
 
 private:
-	~CElementProvider();
 	IUnknown* Site;
 };

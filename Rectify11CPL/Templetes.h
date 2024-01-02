@@ -1,7 +1,4 @@
 #pragma once
-
-
-
 namespace DirectUI {
 	template<typename Name>
 	class StandardCreator {
@@ -29,6 +26,7 @@ namespace DirectUI {
 		static HRESULT Create(ClassInfo** result)
 		{
 			ClassInfo* theClass = new ClassInfo();
+			memset(theClass->data, 0, sizeof(theClass->data));
 			HRESULT hr = theClass->Initialize(g_hInst, (UCString)NewClass::DoGetClassName(), false, NULL, 0);
 			if (SUCCEEDED(hr))
 			{
@@ -50,7 +48,7 @@ namespace DirectUI {
 
 			if (SUCCEEDED(hr))
 			{
-				CritSecLock* lock = new DirectUI::CritSecLock(Element::GetFactoryLock());
+				CritSecLock lock(Element::GetFactoryLock());
 				IClassInfo* baseclassptr = BaseClass::GetClassInfoPtr();
 				IClassInfo* newrclass = NewClass::GetClassInfoPtr();
 				if (DirectUI::ClassInfoBase::ClassExist(&baseclassptr, NULL, 0, newrclass, g_hInst, (UCString)NewClass::DoGetClassName(), false))

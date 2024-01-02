@@ -32,11 +32,9 @@ IRectifyUtil* ElevationManager::Initialize(HWND window)
         return NULL;
     };
 
-
     IMultiObjectElevationFactory* ppv = NULL;
     IRectifyUtil* ppv2 = NULL;
     HRESULT hr = CoCreateInstance(CLSID_MultiObjectElevationFactory, NULL, CLSCTX_INPROC_SERVER, GUID_IMultiObjectElevationFactory, (LPVOID*)&ppv);
-    //hr = CoCreateInstance(CLSID_CRectifyUtil, NULL, 3, INTERACE_IRectifyUtil, (LPVOID*)&ppv2);
     if (SUCCEEDED(hr))
     {
         HWND hwnd = FindWindow(TEXT("Progman"), TEXT("Program Manager"));

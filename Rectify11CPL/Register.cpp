@@ -17,20 +17,40 @@ HINSTANCE g_hInst = NULL;
 LONG g_cRefModule = 0;
 WCHAR g_szExtTitle[1024];
 
-
+// Import from proxy.c
 extern "C"
 {
 	HRESULT __stdcall DllGetClassObject2(const IID* rclsid, const IID* riid, void** ppv); //proxy.c
 	HRESULT DllCanUnloadNow2(void); //proxy.c
 }
-void* operator new(std::size_t size)
-{
-	return HeapAlloc(GetProcessHeap(), 8, size);
-}
-void operator delete(void* rawMemory, std::size_t size) throw()
-{
-	HeapFree(GetProcessHeap(), 0, rawMemory);
-}
+
+//void* operator new(std::size_t size, const std::nothrow_t& tag) noexcept
+//{
+//	if (size == 0)
+//	{
+//		return NULL;
+//	}
+//
+//	return HeapAlloc(GetProcessHeap(), 8, size);
+//}
+//
+//void* operator new[](std::size_t size, const std::nothrow_t& tag) noexcept
+//{
+//	if (size == 0)
+//	{
+//		return NULL;
+//	}
+//
+//	return HeapAlloc(GetProcessHeap(), 8, size);
+//}
+//
+//void operator delete(void* rawMemory, std::size_t size, const std::nothrow_t& tag) noexcept
+//{
+//	if (rawMemory)
+//	{
+//		HeapFree(GetProcessHeap(), 0, rawMemory);
+//	}
+//}
 
 
 void DllAddRef()
@@ -52,8 +72,6 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void* lpReserved)
 			wcscpy_s(g_szExtTitle, L"Failed to load localized string");
 		}
 
-		//MessageBox(NULL, "Attach a debugger NOW", "", 0);
-
 		if (sizeof(XProvider) != 0x28)
 		{
 			MessageBox(NULL, TEXT("Fatal error: unexpected size of XProvider class"), TEXT(""), 0);
@@ -69,7 +87,14 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void* lpReserved)
 HRESULT DllCanUnloadNow(void)
 {
 	HRESULT proxyUnload = DllCanUnloadNow2();
-	return g_cRefModule ? S_FALSE : proxyUnload;
+
+	HRESULT hr = g_cRefModule ? S_FALSE : proxyUnload;
+
+	if (hr != S_OK)
+	{
+		OutputDebugString(TEXT("Rectify11CPL.dll: Not unloading as DllCanUnloadNow() returned S_FALSE\n"));
+	}
+	return hr;
 }
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
@@ -87,7 +112,6 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
 	if (FAILED(hr))
 	{
 		// for some reason rclsid is IPSFactoryBuffer?? Work around this by replacing it. ugly but it works
-
 		hr = DllGetClassObject2(&IID_IRectifyUtil, &riid, ppv);
 	}
 	if (FAILED(hr))

@@ -2,6 +2,10 @@
 #include "RectifyMainPage.h"
 #include "CRectifyUtil.h"
 #include "ElevationManager.h"
+#include "CControlPanelNavLinkCommand.h"
+#include "CControlPanelNavLink.h"
+#include "CControlPanelNavLinks.h"
+#include <new>
 
 IClassInfo* RectifyMainPage::Class = NULL;
 
@@ -20,10 +24,12 @@ HRESULT RectifyMainPage::CreateInstance(Element* rootElement, unsigned long* deb
 {
 	int hr = E_OUTOFMEMORY;
 
-	RectifyMainPage* instance = new RectifyMainPage();
+	// Using HeapAlloc instead of new() is required as DirectUI::Element::_DisplayNodeCallback calls HeapFree() with the element
+	RectifyMainPage* instance = (RectifyMainPage*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(RectifyMainPage));
 
 	if (instance != NULL)
 	{
+		new (instance) RectifyMainPage();
 		hr = instance->Initialize(0, rootElement, debug_variable);
 		if (SUCCEEDED(hr))
 		{

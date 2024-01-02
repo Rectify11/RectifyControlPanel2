@@ -1,6 +1,7 @@
 #include "Rectify11CPL.h"
 #include "CControlPanelNavLinks.h"
 #include "CControlPanelNavLink.h"
+#include "CControlPanelNavLinkCommand.h"
 
 CControlPanelNavLinks::CControlPanelNavLinks()
 {

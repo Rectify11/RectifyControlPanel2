@@ -23,8 +23,7 @@ CElementProvider::CElementProvider() : Site(NULL)
 	{
 		SHOW_ERROR("Failed to initialize DirectUI for thread\n");
 	}
-	refCount = 1;
-	DllAddRef();
+	DllAddRef(); // Prevent unloading DLL when this class has not been properly destroyed
 }
 
 CElementProvider::~CElementProvider()
@@ -54,11 +53,11 @@ HRESULT CElementProvider::QueryInterface(REFIID riid, __out void** ppv)
 	}
 	if (hr != S_OK)
 	{
-		char szGuid[40] = { 0 };
+		WCHAR szGuid[40] = { 0 };
 
-		sprintf_s(szGuid, "{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}", riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7]);
+		swprintf_s(szGuid, 40, L"{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}", riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7]);
 
-		//MessageBox(NULL, szGuid, TEXT("Unknown interface in CElementProvider::QueryInterface()"), MB_ICONERROR);
+		MessageBox(NULL, szGuid, TEXT("Unknown interface in CElementProvider::QueryInterface()"), MB_ICONERROR);
 	}
 	return hr;
 }
@@ -70,13 +69,14 @@ ULONG CElementProvider::AddRef()
 
 ULONG CElementProvider::Release()
 {
-	LONGLONG ret = refCount--;
-	if (refCount == 0)
+	ULONG ret = refCount--;
+	ULONG newRefCount = refCount;
+	if (ret == 1)
 	{
 		delete this;
 	}
 
-	return ret;
+	return newRefCount;
 }
 
 // XProvider implementation
@@ -122,7 +122,7 @@ HRESULT CElementProvider::CreateDUI(DirectUI::IXElementCP* a, HWND* result_handl
 		{
 			if (this->XProviderCP)
 			{
-				swprintf(buffer, 200, L"Failed to create DirectUI parser: E_FAIL. Make sure that duires.dll is present in system32.");
+				swprintf(buffer, 200, L"Failed to create DirectUI parser: E_FAIL. This is most likely caused by duires.dll missing in System32. Rerun the latest version of the Rectify11 installer.");
 			}
 			else
 			{
@@ -161,7 +161,7 @@ HRESULT STDMETHODCALLTYPE CElementProvider::SetResourceID(UINT id)
 			WCHAR szResource[40] = { 0 };
 			swprintf(szResource, 40, L"%d", id);
 
-			MessageBox(NULL, szResource, TEXT("CElementProvider::SetResourceId Failed to initialize xprovider"), MB_ICONERROR);
+			MessageBox(NULL, szResource, TEXT("CElementProvider::SetResourceId - failed to initialize XProvider class"), MB_ICONERROR);
 		}
 	}
 	else
@@ -169,7 +169,7 @@ HRESULT STDMETHODCALLTYPE CElementProvider::SetResourceID(UINT id)
 		WCHAR szResource[40] = { 0 };
 		swprintf(szResource, 40, L"%d", id);
 
-		MessageBox(NULL, szResource, TEXT("CElementProvider::SetResourceId failed to create xprovider"), MB_ICONERROR);
+		MessageBox(NULL, szResource, TEXT("CElementProvider::SetResourceId - failed to create xprovider"), MB_ICONERROR);
 	}
 	return hr;
 }
@@ -177,8 +177,8 @@ HRESULT STDMETHODCALLTYPE CElementProvider::SetResourceID(UINT id)
 
 HRESULT STDMETHODCALLTYPE CElementProvider::OptionallyTakeInitialFocus(BOOL* result)
 {
-	*result = 0;
-	return 0;
+	*result = FALSE;
+	return S_OK;
 }
 
 // IFrameNotificationClient implementation
@@ -256,12 +256,30 @@ HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param)
 	}
 	return 0;
 }
+
 HRESULT STDMETHODCALLTYPE CElementProvider::OnNavigateAway()
 {
+	SetHandleEnterKey(FALSE);
+	SetDefaultButtonTracking(FALSE);
+
+	// for whatever reason, OnNavigateAway is called twice. Instead of someone
+	// at microsoft properly fixing the issue, they just null out some fields in XProvider
+	// to prevent destroying a random memory address.
+
+	XProviderCP = NULL;
+	_RandomElement = NULL;
+	_RootElement = NULL;
+
 	return 0;
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::OnInnerElementDestroyed()
 {
+	//if (XProviderCP)
+	//{
+		XProviderCP = NULL;
+		_RootElement = NULL;
+		_RandomElement = NULL;
+	//}
 	return 0;
 }
 // IFrameShellViewClient implementation
@@ -295,11 +313,7 @@ HRESULT STDMETHODCALLTYPE CElementProvider::QueryService(
 // IObjectWithSite implementation
 HRESULT CElementProvider::SetSite(IUnknown* punkSite)
 {
-	if (punkSite != NULL)
-	{
-		IUnknown_Set((IUnknown**)&this->Site, punkSite);
-	}
-
+	IUnknown_Set((IUnknown**)&this->Site, punkSite);
 	return S_OK;
 }
 

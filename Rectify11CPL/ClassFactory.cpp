@@ -52,7 +52,7 @@ HRESULT CElementProvider_CreateInstance(__in REFIID riid, __deref_out void** ppv
         hr = pElementProvider->QueryInterface(riid, ppv);
 
         DirectUI::ClassInfo<RectifyMainPage, DirectUI::Element, DirectUI::StandardCreator<RectifyMainPage>>::Register();
-        DirectUI::ClassInfo<RectifyThemeCfgPage, DirectUI::Element, DirectUI::StandardCreator<RectifyThemeCfgPage>>::Register();
+        //DirectUI::ClassInfo<RectifyThemeCfgPage, DirectUI::Element, DirectUI::StandardCreator<RectifyThemeCfgPage>>::Register();
         pElementProvider->Release();
     }
     return hr;
