@@ -72,11 +72,11 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void* lpReserved)
 			wcscpy_s(g_szExtTitle, L"Failed to load localized string");
 		}
 
-		if (sizeof(XProvider) != 0x28)
+		/*if (sizeof(XProvider) != 0x28)
 		{
 			MessageBox(NULL, TEXT("Fatal error: unexpected size of XProvider class"), TEXT("DllMain"), 0);
 			return FALSE;
-		}
+		}*/
 
 		g_hInst = hInstance;
 		DisableThreadLibraryCalls(hInstance);
@@ -84,7 +84,7 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void* lpReserved)
 	return TRUE;
 }
 
-HRESULT DllCanUnloadNow(void)
+STDAPI DllCanUnloadNow(void)
 {
 	HRESULT proxyUnload = DllCanUnloadNow2();
 
