@@ -18,10 +18,11 @@ HRESULT RectifyThemeCfgPage::CreateInstance(Element* rootElement, unsigned long*
 {
 	int hr = E_OUTOFMEMORY;
 
-	RectifyThemeCfgPage* instance = new RectifyThemeCfgPage();
+	RectifyThemeCfgPage* instance = (RectifyThemeCfgPage*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(RectifyThemeCfgPage));
 
 	if (instance != NULL)
 	{
+		new (instance) RectifyThemeCfgPage();
 		hr = instance->Initialize(0, rootElement, debug_variable);
 		if (SUCCEEDED(hr))
 		{
