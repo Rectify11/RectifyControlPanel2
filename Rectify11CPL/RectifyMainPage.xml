@@ -242,8 +242,12 @@
 								<CCRadioButton layoutpos="top" id="Atom(NilesoftFull)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="resstr(114)"/>
 								<CCRadioButton layoutpos="top" id="Atom(Classic)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="resstr(115)"/>
 								<CCRadioButton layoutpos="top" id="Atom(ClassicTransparent)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="resstr(116)"/>
+								
 								<TouchButton layoutpos="top" id="atom(BtnRestartExplorer)" class="primary" accname="Restart explorer" content="resstr(117)"/>
-								<TouchButton layoutpos="top" id="atom(Link_EnableAdmin)" class="primary" accname="Change settings that are unavailable" content="resstr(118)"/>
+								<TouchButton class="primary" layout="flowlayout(0,2,2,0)">
+									<element id="atom(icon)" content="icon(78,24rp,24rp,1,1,library(imageres.dll))" margin="rect(0,0,8rp,0)" background="argb(0,0,0,0)"/>
+									<richtext id="atom(text)" content="resstr(118)" contentalign="middlecenter|endellipsis" padding="rect(0,0,0,4rp)" background="argb(0,0,0,0)"/>
+								</TouchButton>
 							</element>
 						</element>
 					</element>
