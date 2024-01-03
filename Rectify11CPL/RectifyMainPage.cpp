@@ -92,12 +92,15 @@ void RectifyMainPage::OnEvent(Event* iev)
 				CCRadioButton* Classic = (CCRadioButton*)FindDescendent(StrToID((UCString)L"Classic"));
 				CCRadioButton* ClassicTransparent = (CCRadioButton*)FindDescendent(StrToID((UCString)L"ClassicTransparent"));
 
-
+				ULONG key = 0;
+				this->StartDefer(&key);
 				CCRadioButton* Options[] = { Win11DefaultMenus, NilesoftSmall, NilesoftFull, Classic, ClassicTransparent };
 				for (size_t i = 0; i < 5; i++)
 				{
 					Options[i]->SetEnabled(TRUE);
 				}
+
+				this->EndDefer(key);
 			}
 		}
 	}
