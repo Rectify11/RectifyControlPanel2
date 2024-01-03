@@ -230,7 +230,7 @@
 
 						<!--Themes header line thing-->
 						<macro expand="informationsectiontitle">
-							<bind connect="Title" font="iconfont;115%" content="Menus" />
+							<bind connect="Title" font="iconfont;115%" content="resstr(129)" />
 						</macro>
 
 						<!--Theme combobox and preview-->

@@ -132,6 +132,7 @@ END
 STRINGTABLE
 BEGIN
     IDS_NA                  "N/A"
+    IDS_MENUS               "Menus"
 END
 
 #endif    // English (United States) resources

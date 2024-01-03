@@ -36,6 +36,7 @@
 #define IDS_IGNORESOUNDS                126
 #define IDS_IGNORESCREENSAVER           127
 #define IDS_NA                          128
+#define IDS_MENUS                       129
 #define IDR_MAINPAGE                    1001
 #define IDR_UPDATEPAGE                  1002
 
