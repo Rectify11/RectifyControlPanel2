@@ -133,6 +133,7 @@ STRINGTABLE
 BEGIN
     IDS_NA                  "N/A"
     IDS_MENUS               "Menus"
+    IDS_CPLTHEMEPREF        "Change the theme of Rectify11"
 END
 
 #endif    // English (United States) resources
