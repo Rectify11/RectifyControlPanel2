@@ -15,7 +15,6 @@
 
 HINSTANCE g_hInst = NULL;
 LONG g_cRefModule = 0;
-WCHAR g_szExtTitle[1024];
 
 // Import from proxy.c
 extern "C"
@@ -66,11 +65,6 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void* lpReserved)
 {
 	if (DLL_PROCESS_ATTACH == dwReason)
 	{
-		if (FAILED(LoadStringW(g_hInst, IDS_CPLNAME, g_szExtTitle, 1023)))
-		{
-			wcscpy_s(g_szExtTitle, L"Failed to load localized string");
-		}
-
 		/*if (sizeof(XProvider) != 0x28)
 		{
 			MessageBox(NULL, TEXT("Fatal error: unexpected size of XProvider class"), TEXT("DllMain"), 0);
@@ -199,11 +193,11 @@ STDAPI DllRegisterServer()
 	REGSTRUCT rgRegEntries[] =
 	{
 		HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, NULL,                       (LPBYTE)L"@%s,-107",   REG_SZ, 0,
-		HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"InfoTip",                 (LPBYTE)L"Customize Rectify11 settings such as theme settings",   REG_SZ,0,
+		HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"InfoTip",                 (LPBYTE)L"@%s,-131",   REG_SZ,0,
 		HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"System.ControlPanel.Category",(LPBYTE)L"1,5",   REG_SZ, 0,
 		HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"System.Software.TasksFileUrl",(LPBYTE)L"%s,-110",   REG_SZ, 0,
 		HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"System.ApplicationName",(LPBYTE)L"Rectify11.SettingsCPL",   REG_SZ, 0,
-		HKEY_CLASSES_ROOT,  L"CLSID\\%s\\InprocServer32", szFolderViewImplClassID, NULL,                       (LPBYTE)L"C:\\Windows\\System32\\Shdocvw.dll",          REG_SZ, 0,
+		HKEY_CLASSES_ROOT,  L"CLSID\\%s\\InprocServer32", szFolderViewImplClassID, NULL,                       (LPBYTE)L"@%SystemRoot%\\Rectify11\\Rectify11CPL\\Rectify11CPL.dll,-10",          REG_SZ, 0,
 		HKEY_CLASSES_ROOT,  L"CLSID\\%s\\InprocServer32", szFolderViewImplClassID, L"ThreadingModel",          (LPBYTE)L"Apartment",   REG_SZ, 0,
 		HKEY_CLASSES_ROOT,  L"CLSID\\%s\\DefaultIcon",    szFolderViewImplClassID, NULL,                       (LPBYTE)L"%s,0",        REG_SZ, 0,
 		HKEY_CLASSES_ROOT,  L"CLSID\\%s\\ShellFolder",    szFolderViewImplClassID, L"Attributes",              (LPBYTE)&dwData,        REG_DWORD, 0,
@@ -212,7 +206,7 @@ STDAPI DllRegisterServer()
 		HKEY_CLASSES_ROOT,  L"CLSID\\%s\\Instance\\InitPropertyBag", szFolderViewImplClassID,    L"ResourceID",          (LPBYTE)&dwResourceId,   REG_DWORD, 0,
 
 		//element provider
-		HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szElementClassID, NULL,                       (LPBYTE)g_szExtTitle,   REG_SZ, 0,
+		HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szElementClassID, NULL,                       (LPBYTE)L"Rectify11 Control Panel Element Provider",   REG_SZ, 0,
 		HKEY_CLASSES_ROOT,  L"CLSID\\%s\\InprocServer32", szElementClassID, NULL,                       (LPBYTE)L"%s",          REG_SZ, 0,
 		HKEY_CLASSES_ROOT,  L"CLSID\\%s\\InprocServer32", szElementClassID, L"ThreadingModel",          (LPBYTE)L"Apartment",   REG_SZ, 0,
 
@@ -242,7 +236,7 @@ STDAPI DllRegisterServer()
 		HKEY_CLASSES_ROOT,  L"AppID\\%s",                szServerID, L"DllSurrogate",                       (LPBYTE)L"",   REG_SZ, 0,
 		HKEY_CLASSES_ROOT,  L"AppID\\%s",                szServerID, L"AccessPermission",                       (LPBYTE)&AccessPermission,   REG_BINARY, sizeof(AccessPermission),
 		HKEY_CLASSES_ROOT,  L"AppID\\%s",                szServerID, L"LaunchPermission",                       (LPBYTE)&LaunchPermission,   REG_BINARY, sizeof(LaunchPermission),
-	
+
 		// Proxy
 		HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szProxy, NULL,                       (LPBYTE)L"IRectifyUtil_PSFactory",   REG_SZ, 0,
 		HKEY_CLASSES_ROOT,  L"CLSID\\%s\\InprocServer32", szProxy, NULL,                       (LPBYTE)L"%s",          REG_SZ, 0,
@@ -324,7 +318,8 @@ STDAPI DllRegisterServer()
 			if (S_OK == lResult)
 			{
 				// Copy our name into the string.
-				hr = StringCchCopyW(szData, ARRAYSIZE(szData), g_szExtTitle);
+				WCHAR LocalizedName[] = L"@C:\\Windows\\Rectify11\\Rectify11CPL\\Rectify11CPL.dll,-107";
+				hr = StringCchCopyW(szData, ARRAYSIZE(szData), LocalizedName);
 				if (SUCCEEDED(hr))
 				{
 					// Set the name of our extension.
@@ -342,7 +337,7 @@ STDAPI DllRegisterServer()
 							if (S_OK == lResult)
 							{
 								// Create the value string.
-								hr = StringCchCopyW(szData, ARRAYSIZE(szData), g_szExtTitle);
+								hr = StringCchCopyW(szData, ARRAYSIZE(szData), LocalizedName);
 								if (SUCCEEDED(hr))
 								{
 									lResult = RegSetValueExW(hKey,

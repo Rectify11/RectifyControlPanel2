@@ -38,6 +38,9 @@
 #define IDS_NA                          128
 #define IDS_MENUS                       129
 #define IDS_CPLTHEMEPREF                130
+#define IDS_CPLTIP                      131
+#define IDS_SYSINFO                     132
+#define IDS_UNINSTALL                   133
 #define IDR_MAINPAGE                    1001
 #define IDR_UPDATEPAGE                  1002
 

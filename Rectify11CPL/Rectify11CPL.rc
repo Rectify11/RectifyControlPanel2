@@ -134,6 +134,9 @@ BEGIN
     IDS_NA                  "N/A"
     IDS_MENUS               "Menus"
     IDS_CPLTHEMEPREF        "Change the theme of Rectify11"
+    IDS_CPLTIP              "Customize Rectify11 settings such as theme settings"
+    IDS_SYSINFO             "System Information"
+    IDS_UNINSTALL           "Uninstall Rectify11"
 END
 
 #endif    // English (United States) resources
@@ -190,6 +193,9 @@ BEGIN
     IDS_NA                  "€Ì— „Õœœ"
     IDS_MENUS               "«·ﬁÊ«∆„"
     IDS_CPLTHEMEPREF        " €ÌÌ— «·”„«  ›Ì Rectify11"
+    IDS_CPLTIP              "[TODO: LOCALIZE CPLTIP]"
+    IDS_SYSINFO             "[TODO: LOCALIZE: SYSINFO]"
+    IDS_UNINSTALL           "[TODO: LOCALIZE: UNINSTALL]"
 END
 
 #endif    // Arabic (Saudi Arabia) resources

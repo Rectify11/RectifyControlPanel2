@@ -10,7 +10,7 @@
 		<!-- Theme change -->
 		<sh:task id="{3B75A7AE-C4E4-4E5A-9420-7CECCDA75425}">
 			<!-- This is a generated GUID, specific to this task link -->
-			<sh:name>Change the theme of Rectify11</sh:name>
+			<sh:name>@c:\windows\rectify11\rectify11cpl\rectify11cpl.dll,-130</sh:name>
 			<sh:keywords>theme;rectify11</sh:keywords>
 			<sh:controlpanel name="Rectify11.SettingsCPL"/>
 		</sh:task>

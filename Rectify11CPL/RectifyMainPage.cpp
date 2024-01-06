@@ -297,13 +297,25 @@ void RectifyMainPage::InitNavLinks()
 {
 	auto links = new CControlPanelNavLinks();
 
-	WCHAR buffer[1024];
-	if (FAILED(LoadStringW(g_hInst, IDS_UPDATE, buffer, 1023)))
+	WCHAR themePrefString[1024];
+	if (FAILED(LoadStringW(g_hInst, IDS_UPDATE, themePrefString, 1023)))
 	{
-		wcscpy_s(buffer, L"Failed to load localized string");
+		wcscpy_s(themePrefString, L"[ THEME APPLY PREF ]");
 	}
-	links->AddLinkControlPanel(buffer, L"Rectify11.SettingsCPL", L"pageThemePref", CPNAV_Normal, NULL);
-	links->AddLinkControlPanel(L"System information", L"Microsoft.System", L"", CPNAV_SeeAlso, NULL);
+	WCHAR sysInfoString[1024];
+	if (FAILED(LoadStringW(g_hInst, IDS_SYSINFO, sysInfoString, 1023)))
+	{
+		wcscpy_s(sysInfoString, L"[ SYS INFO ]");
+	}
+	WCHAR uninstallString[1024];
+	if (FAILED(LoadStringW(g_hInst, IDS_UNINSTALLr, uninstallString, 1023)))
+	{
+		wcscpy_s(uninstallString, L"[ UNINSTALL ]");
+	}
+
+	links->AddLinkControlPanel(themePrefString, L"Rectify11.SettingsCPL", L"pageThemePref", CPNAV_Normal, NULL);
+	links->AddLinkShellEx(uninstallString, L"C:\\Windows\\Rectify11\\Uninstall.exe", L"", CPNAV_Normal, NULL);
+	links->AddLinkControlPanel(sysInfoString, L"Microsoft.System", L"", CPNAV_SomethingElse, NULL);
 
 
 	GUID SID_PerLayoutPropertyBag = {};

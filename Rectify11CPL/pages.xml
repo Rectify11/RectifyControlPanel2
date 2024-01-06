@@ -1,8 +1,8 @@
 <pagedefinition>
-	<properties elementprovider="{EC8669E2-7F9F-42AC-A2D7-307E23CA9E20}" layout="1001" icon="themecpl.dll,-1" displayname="@rectify11cpl.dll,-107" navpane="true" helptopic="mshelp://windows/?id=22CE1F24-0318-46BD-BC17-D0EF889F466B" canonicalname="pageRectifyHub" />
+	<properties elementprovider="{EC8669E2-7F9F-42AC-A2D7-307E23CA9E20}" layout="1001" icon="C:\Windows\Rectify11\Rectify11CPL\rectify11cpl.dll,0" displayname="@C:\Windows\Rectify11\Rectify11CPL\rectify11cpl.dll,-107" navpane="true" helptopic="mshelp://windows/?id=22CE1F24-0318-46BD-BC17-D0EF889F466B" canonicalname="pageRectifyHub" />
 	<childpages>
 		<pagedefinition>
-			<properties layout="1002" icon="rectify11cpl.dll,0"  displayname="@rectify11cpl.dll,-106"  helptopic="mshelp://windows/?id=495c2226-19f1-49eb-9fd8-6dd7f2c0b49e" canonicalname="pageThemePref"/>
+			<properties layout="1002" icon="C:\Windows\Rectify11\Rectify11CPL\rectify11cpl.dll,0"  displayname="@C:\Windows\Rectify11\Rectify11CPL\rectify11cpl.dll,-106"  helptopic="mshelp://windows/?id=495c2226-19f1-49eb-9fd8-6dd7f2c0b49e" canonicalname="pageThemePref"/>
 		</pagedefinition>
 	</childpages>
 </pagedefinition>
