@@ -308,7 +308,7 @@ void RectifyMainPage::InitNavLinks()
 		wcscpy_s(sysInfoString, L"[ SYS INFO ]");
 	}
 	WCHAR uninstallString[1024];
-	if (FAILED(LoadStringW(g_hInst, IDS_UNINSTALLr, uninstallString, 1023)))
+	if (FAILED(LoadStringW(g_hInst, IDS_UNINSTALL, uninstallString, 1023)))
 	{
 		wcscpy_s(uninstallString, L"[ UNINSTALL ]");
 	}
