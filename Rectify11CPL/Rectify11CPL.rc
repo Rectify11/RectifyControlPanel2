@@ -112,8 +112,8 @@ END
 STRINGTABLE
 BEGIN
     IDS_WIN11DEFAULT        "Windows 11 default"
-    IDS_FLUENTCTX           "Enhanced fluent menus"
-    IDS_NILESHELLALL        "Enhanced fluent menus (all items in root)"
+    IDS_FLUENTCTX           "Nilesoft Shell"
+    IDS_NILESHELLALL        "Nilesoft Shell (all items in root)"
     IDS_CLASSICCTX          "Classic menus"
     IDS_CLASSICTRANSPARENTCTX "Classic menus with transparency"
     IDS_RESTARTEXPLORER     "Restart explorer to apply changes"
@@ -137,6 +137,62 @@ BEGIN
 END
 
 #endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Arabic (Saudi Arabia) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ARA)
+LANGUAGE LANG_ARABIC, SUBLANG_ARABIC_SAUDI_ARABIA
+#pragma code_page(1256)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_THEMEHOOKFAIL       "›‘· ›Ì  Õ„Ì· SecureUXTheme Ê·‰ Ì „  Õ„Ì· „⁄·Ê„«  «·‰”ﬁ."
+    IDS_CPLTITLE            " €ÌÌ— ≈⁄œ«œ«  Rectify11"
+    IDS_THEME               "«·‰”ﬁ:"
+    IDS_ThemePref           " ›÷Ì·« Ì"
+    IDS_CPLNAME             "≈⁄œ«œ«  Rectify11"
+    IDS_THEMESHEADER        "«·”„« "
+    IDS_INFORMATIONHEADER   "„⁄·Ê„«  √Œ—Ï"
+    IDS_ENABLEMICA          " ›⁄Ì· Mica"
+    IDS_TABBED              "«” Œœ«„ Mica Alt »œ· Mica"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_WIN11DEFAULT        "ﬁÊ«∆„ Windows 11 «·«› —«÷Ì…"
+    IDS_FLUENTCTX           "ﬁÊ«∆„ Nilesoft Shell „’€—…"
+    IDS_NILESHELLALL        "ﬁÊ«∆„ Nilesoft Shell ﬂ«„·…"
+    IDS_CLASSICCTX          "ﬁÊ«∆„ Windows 10"
+    IDS_CLASSICTRANSPARENTCTX "ﬁÊ«∆„ Windows 10 ‘›«›…"
+    IDS_RESTARTEXPLORER     "√⁄œ  ‘€Ì· Explorer ·Õ›Ÿ «·»Ì«‰« "
+    IDS_ELEVATIONNEEDED     " €ÌÌ— «·≈⁄œ«œ«  «·€Ì— „ «Õ…"
+    IDS_VERSION             "·≈’œ«—:"
+    IDS_Ok                  "„Ê«›ﬁ"
+    IDS_CANCEL              "≈·€«¡"
+    IDS_IGNOREBG            "Õ«›Ÿ ⁄·Ï Œ·›Ì Ì"
+    IDS_IGNORECURSOR        "Õ«›Ÿ ⁄·Ï ‘ﬂ· «·„«Ê”"
+    IDS_IGNOREIGONS         "Õ«›Ÿ ⁄·Ï ‘ﬂ· «·√ÌﬁÊ‰« "
+    IDS_IGNOREACCENT        "Õ«›Ÿ ⁄·Ï ·Ê‰Ì «·„›÷·"
+    IDS_IGNORESOUNDS        "Õ«›Ÿ ⁄·Ï √’Ê«  «·‰Ÿ«„ «·Œ«’… »Ì"
+    IDS_IGNORESCREENSAVER   "Õ«›Ÿ ⁄·Ï ‘«‘… «·Œ„Ê· «·Œ«’… »Ì (›Ì Õ«·… ÊÃÊœÂ«)"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_NA                  "€Ì— „Õœœ"
+    IDS_MENUS               "«·ﬁÊ«∆„"
+    IDS_CPLTHEMEPREF        " €ÌÌ— «·”„«  ›Ì Rectify11"
+END
+
+#endif    // Arabic (Saudi Arabia) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
