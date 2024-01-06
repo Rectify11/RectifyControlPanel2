@@ -200,7 +200,6 @@ STDAPI DllRegisterServer()
 	{
 		HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, NULL,                       (LPBYTE)L"@%s,-107",   REG_SZ, 0,
 		HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"InfoTip",                 (LPBYTE)L"Customize Rectify11 settings such as theme settings",   REG_SZ,0,
-		HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"System.ApplicationName",  (LPBYTE)L"Rectify11.ControlPanelMain",   REG_SZ, 0,
 		HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"System.ControlPanel.Category",(LPBYTE)L"1,5",   REG_SZ, 0,
 		HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"System.Software.TasksFileUrl",(LPBYTE)L"%s,-110",   REG_SZ, 0,
 		HKEY_CLASSES_ROOT,  L"CLSID\\%s",                 szFolderViewImplClassID, L"System.ApplicationName",(LPBYTE)L"Rectify11.SettingsCPL",   REG_SZ, 0,

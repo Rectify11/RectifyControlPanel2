@@ -4,7 +4,7 @@
 
 //shell:::{542EEE1B-A254-46F7-B980-35BECF6076A4}
 
-// control /name Rectify11.ControlPanelMain /page pageThemePref
+// control /name Rectify11.SettingsCPL /page pageThemePref
 
 // {542EEE1B-A254-46F7-B980-35BECF6076A4}
 DEFINE_GUID(CLSID_FolderViewImpl, 0x542eee1b, 0xa254, 0x46f7, 0xb9, 0x80, 0x35, 0xbe, 0xcf, 0x60, 0x76, 0xa4);
