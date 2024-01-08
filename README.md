@@ -1,9 +1,8 @@
 <p align="center">
-  <br><br>
-  <b>Rectify Control Panel</b><br>
+    <img src="https://raw.githubusercontent.com/Rectify11/RectifyControlPanel2/master/logo.png">
   The first control panel applet not made by Microsoft to use Microsoft's DirectUI library<br><br>
-  <a href="./Rectify11CPL">Source Code</a> | 
-  <a href="[https://](https://discord.gg/rectify11-community-1077324213142175744)">Discord</a> | 
+[![Source Code](https://img.shields.io/discord/1077324213142175744?style=flat-square)](https://github.com/Rectify11/RectifyControlPanel2/tree/master/Rectify11CPL)
+[![Discord](https://img.shields.io/discord/1077324213142175744?style=flat-square)](https://discord.gg/gsgu9GCtsk)
   <br><br>
   <img src="Images/Screenshot.png"><br><br>
 </p>
