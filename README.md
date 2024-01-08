@@ -6,7 +6,7 @@
 
 <div align="center">
 
-[![Source Code](https://img.shields.io/discord/1077324213142175744?style=flat-square)](https://github.com/Rectify11/RectifyControlPanel2/tree/master/Rectify11CPL)
+[![Source Code](https://img.shields.io/badge/source_code-teal)](https://github.com/Rectify11/RectifyControlPanel2/tree/master/Rectify11CPL)
 [![Discord](https://img.shields.io/discord/1077324213142175744?style=flat-square)](https://discord.gg/gsgu9GCtsk)
 
 
