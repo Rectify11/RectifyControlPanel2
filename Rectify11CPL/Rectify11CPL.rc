@@ -90,7 +90,6 @@ IDB_LIGHTPREVIEW        BITMAP                  "preview_light.bmp"
 
 IDB_DARKPREVIEW         BITMAP                  "preview_dark.bmp"
 
-
 /////////////////////////////////////////////////////////////////////////////
 //
 // String Table
@@ -144,6 +143,62 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_THEMEHOOKFAIL       "Fehler beim laden von SecureUXTheme ThemeTool. Designinformationen werden nicht geladen."
+    IDS_CPLTITLE            "Rectify11 Einstellungen Ã¤ndern"
+    IDS_THEME               "Design:"
+    IDS_ThemePref           "Design-Einstellungen"
+    IDS_CPLNAME             "Rectify11-Einstellungen"
+    IDS_THEMESHEADER        "Designs"
+    IDS_INFORMATIONHEADER   "Informationen"
+    IDS_ENABLEMICA          "Mica aktivieren"
+    IDS_TABBED              "Tabbed statt Mica verwenden"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_WIN11DEFAULT        "Windows 11 (Standard)"
+    IDS_FLUENTCTX           "Nilesoft Shell (Weitere Optionen Anzeigen)"
+    IDS_NILESHELLALL        "Nilesoft Shell (Alle Optionen Anzeigen)"
+    IDS_CLASSICCTX          "Klassisches KontextmenÃ¼"
+    IDS_CLASSICTRANSPARENTCTX "Klassiches KontextmenÃ¼ (Transparent)"
+    IDS_RESTARTEXPLORER     "Starte den Explorer neu um die Ã„nderungen zu Ã¼bernehmen"
+    IDS_ELEVATIONNEEDED     "Einstellungen Ã¤ndern, die momentan nicht verfÃ¼gbar sind"
+    IDS_VERSION             "Rectify11 version:"
+    IDS_Ok                  "Ok"
+    IDS_CANCEL              "Abbrechen"
+    IDS_IGNOREBG            "Desktophintergrund behalten"
+    IDS_IGNORECURSOR        "Mauszeiger behalten"
+    IDS_IGNOREIGONS         "Desktopsymbole behalten"
+    IDS_IGNOREACCENT        "Akzentfarben behalten"
+    IDS_IGNORESOUNDS        "Soundschema behalten"
+    IDS_IGNORESCREENSAVER   "Bildschirmschoner behalten (falls eingestellt)"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_NA                  "N/V"
+    IDS_MENUS               "KontextmenÃ¼"
+    IDS_CPLTHEMEPREF        "Design von Rectify11 Ã¤ndern"
+    IDS_CPLTIP              "Rectify11-Einstellungen anpassen, so auch die Design-Einstellungen"
+    IDS_SYSINFO             "Systeminformationen"
+    IDS_UNINSTALL           "Rectify11 Deinstallieren"
+END
+
+#endif    // German (Germany) resources
+/////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+/////////////////////////////////////////////////////////////////////////////
 // Arabic (Saudi Arabia) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ARA)
@@ -157,42 +212,88 @@ LANGUAGE LANG_ARABIC, SUBLANG_ARABIC_SAUDI_ARABIA
 
 STRINGTABLE
 BEGIN
-    IDS_THEMEHOOKFAIL       "ÝÔá Ýí ÊÍãíá SecureUXTheme æáä íÊã ÊÍãíá ãÚáæãÇÊ ÇáäÓÞ."
-    IDS_CPLTITLE            "ÊÛííÑ ÅÚÏÇÏÇÊ Rectify11"
-    IDS_THEME               "ÇáäÓÞ:"
-    IDS_ThemePref           "ÊÝÖíáÇÊí"
-    IDS_CPLNAME             "ÅÚÏÇÏÇÊ Rectify11"
-    IDS_THEMESHEADER        "ÇáÓãÇÊ"
-    IDS_INFORMATIONHEADER   "ãÚáæãÇÊ ÃÎÑì"
-    IDS_ENABLEMICA          "ÊÝÚíá Mica"
-    IDS_TABBED              "ÇÓÊÎÏÇã Mica Alt ÈÏá Mica"
+    IDS_WIN11DEFAULT        "Windows 11 default"
+    IDS_FLUENTCTX           "Nilesoft Shell"
+    IDS_NILESHELLALL        "Nilesoft Shell (all items in root)"
+    IDS_CLASSICCTX          "Classic menus"
+    IDS_CLASSICTRANSPARENTCTX "Classic menus with transparency"
+    IDS_RESTARTEXPLORER     "Restart explorer to apply changes"
+    IDS_ELEVATIONNEEDED     "Change settings that are unavailable"
+    IDS_VERSION             "Rectify11 version:"
+    IDS_Ok                  "Ok"
+    IDS_CANCEL              "Cancel"
+    IDS_IGNOREBG            "Preserve my desktop background"
+    IDS_IGNORECURSOR        "Preserve my mouse cursors"
+    IDS_IGNOREIGONS         "Preserve my desktop icons"
+    IDS_IGNOREACCENT        "Preserve my accent color"
+    IDS_IGNORESOUNDS        "Preserve my system sounds"
+    IDS_IGNORESCREENSAVER   "Preserve my screensaver (if one is applied)"
 END
 
 STRINGTABLE
 BEGIN
-    IDS_WIN11DEFAULT        "ÞæÇÆã Windows 11 ÇáÇÝÊÑÇÖíÉ"
-    IDS_FLUENTCTX           "ÞæÇÆã Nilesoft Shell ãÕÛÑÉ"
-    IDS_NILESHELLALL        "ÞæÇÆã Nilesoft Shell ßÇãáÉ"
-    IDS_CLASSICCTX          "ÞæÇÆã Windows 10"
-    IDS_CLASSICTRANSPARENTCTX "ÞæÇÆã Windows 10 ÔÝÇÝÉ"
-    IDS_RESTARTEXPLORER     "ÃÚÏ ÊÔÛíá Explorer áÍÝÙ ÇáÈíÇäÇÊ"
-    IDS_ELEVATIONNEEDED     "ÊÛííÑ ÇáÅÚÏÇÏÇÊ ÇáÛíÑ ãÊÇÍÉ"
-    IDS_VERSION             "áÅÕÏÇÑ:"
-    IDS_Ok                  "ãæÇÝÞ"
-    IDS_CANCEL              "ÅáÛÇÁ"
-    IDS_IGNOREBG            "ÍÇÝÙ Úáì ÎáÝíÊí"
-    IDS_IGNORECURSOR        "ÍÇÝÙ Úáì Ôßá ÇáãÇæÓ"
-    IDS_IGNOREIGONS         "ÍÇÝÙ Úáì Ôßá ÇáÃíÞæäÇÊ"
-    IDS_IGNOREACCENT        "ÍÇÝÙ Úáì áæäí ÇáãÝÖá"
-    IDS_IGNORESOUNDS        "ÍÇÝÙ Úáì ÃÕæÇÊ ÇáäÙÇã ÇáÎÇÕÉ Èí"
-    IDS_IGNORESCREENSAVER   "ÍÇÝÙ Úáì ÔÇÔÉ ÇáÎãæá ÇáÎÇÕÉ Èí (Ýí ÍÇáÉ æÌæÏåÇ)"
+    IDS_NA                  "N/A"
+    IDS_MENUS               "Menus"
+    IDS_CPLTHEMEPREF        "Change the theme of Rectify11"
+    IDS_CPLTIP              "Customize Rectify11 settings such as theme settings"
+    IDS_SYSINFO             "System Information"
+    IDS_UNINSTALL           "Uninstall Rectify11"
+END
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Arabic (Saudi Arabia) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ARA)
+LANGUAGE LANG_ARABIC, SUBLANG_ARABIC_SAUDI_ARABIA
+#pragma code_page(1256)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_THEMEHOOKFAIL       "ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ SecureUXTheme ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½."
+    IDS_CPLTITLE            "ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Rectify11"
+    IDS_THEME               "ï¿½ï¿½ï¿½ï¿½ï¿½:"
+    IDS_ThemePref           "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+    IDS_CPLNAME             "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Rectify11"
+    IDS_THEMESHEADER        "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+    IDS_INFORMATIONHEADER   "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½"
+    IDS_ENABLEMICA          "ï¿½ï¿½ï¿½ï¿½ï¿½ Mica"
+    IDS_TABBED              "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Mica Alt ï¿½ï¿½ï¿½ Mica"
 END
 
 STRINGTABLE
 BEGIN
-    IDS_NA                  "ÛíÑ ãÍÏÏ"
-    IDS_MENUS               "ÇáÞæÇÆã"
-    IDS_CPLTHEMEPREF        "ÊÛííÑ ÇáÓãÇÊ Ýí Rectify11"
+    IDS_WIN11DEFAULT        "ï¿½ï¿½ï¿½ï¿½ï¿½ Windows 11 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+    IDS_FLUENTCTX           "ï¿½ï¿½ï¿½ï¿½ï¿½ Nilesoft Shell ï¿½ï¿½ï¿½ï¿½ï¿½"
+    IDS_NILESHELLALL        "ï¿½ï¿½ï¿½ï¿½ï¿½ Nilesoft Shell ï¿½ï¿½ï¿½ï¿½ï¿½"
+    IDS_CLASSICCTX          "ï¿½ï¿½ï¿½ï¿½ï¿½ Windows 10"
+    IDS_CLASSICTRANSPARENTCTX "ï¿½ï¿½ï¿½ï¿½ï¿½ Windows 10 ï¿½ï¿½ï¿½ï¿½ï¿½"
+    IDS_RESTARTEXPLORER     "ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Explorer ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+    IDS_ELEVATIONNEEDED     "ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½"
+    IDS_VERSION             "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:"
+    IDS_Ok                  "ï¿½ï¿½ï¿½ï¿½ï¿½"
+    IDS_CANCEL              "ï¿½ï¿½ï¿½ï¿½ï¿½"
+    IDS_IGNOREBG            "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+    IDS_IGNORECURSOR        "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+    IDS_IGNOREIGONS         "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+    IDS_IGNOREACCENT        "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+    IDS_IGNORESOUNDS        "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½"
+    IDS_IGNORESCREENSAVER   "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ (ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_NA                  "ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½"
+    IDS_MENUS               "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+    IDS_CPLTHEMEPREF        "ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Rectify11"
     IDS_CPLTIP              "[TODO: LOCALIZE CPLTIP]"
     IDS_SYSINFO             "[TODO: LOCALIZE: SYSINFO]"
     IDS_UNINSTALL           "[TODO: LOCALIZE: UNINSTALL]"
@@ -212,4 +313,3 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
-
