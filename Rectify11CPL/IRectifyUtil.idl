@@ -19,4 +19,9 @@ interface IRectifyUtil : IUnknown
     HRESULT SetMicaForEveryoneEnabled([in] BOOL micaEnabled, [in] BOOL tabbed);
     HRESULT GetCurrentMenuIndex([out] DWORD* pMenuIndex);
     HRESULT SetCurrentMenuByIndex([in] DWORD pMenuIndex);
+
+    // Utilities for rectify 11 installer
+    HRESULT ApplyTheme([in] LPCWSTR pThemeName);
+    HRESULT InstallThemeTool();
+    HRESULT UninstallThemeTool();
 }

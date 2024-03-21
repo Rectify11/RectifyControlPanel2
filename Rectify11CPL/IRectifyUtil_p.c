@@ -46,8 +46,8 @@
 
 #include "IRectifyUtil_h.h"
 
-#define TYPE_FORMAT_STRING_SIZE   7                                 
-#define PROC_FORMAT_STRING_SIZE   165                               
+#define TYPE_FORMAT_STRING_SIZE   11                                
+#define PROC_FORMAT_STRING_SIZE   267                               
 #define EXPR_FORMAT_STRING_SIZE   1                                 
 #define TRANSMIT_AS_TABLE_SIZE    0            
 #define WIRE_MARSHAL_TABLE_SIZE   0            
@@ -303,6 +303,87 @@ static const IRectifyUtil_MIDL_PROC_FORMAT_STRING IRectifyUtil__MIDL_ProcFormatS
 /* 162 */	0x8,		/* FC_LONG */
 			0x0,		/* 0 */
 
+	/* Procedure ApplyTheme */
+
+/* 164 */	0x33,		/* FC_AUTO_HANDLE */
+			0x6c,		/* Old Flags:  object, Oi2 */
+/* 166 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 170 */	NdrFcShort( 0x7 ),	/* 7 */
+/* 172 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 174 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 176 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 178 */	0x46,		/* Oi2 Flags:  clt must size, has return, has ext, */
+			0x2,		/* 2 */
+/* 180 */	0xa,		/* 10 */
+			0x1,		/* Ext Flags:  new corr desc, */
+/* 182 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 184 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 186 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 188 */	NdrFcShort( 0x0 ),	/* 0 */
+
+	/* Parameter pThemeName */
+
+/* 190 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
+/* 192 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 194 */	NdrFcShort( 0x8 ),	/* Type Offset=8 */
+
+	/* Return value */
+
+/* 196 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+/* 198 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
+/* 200 */	0x8,		/* FC_LONG */
+			0x0,		/* 0 */
+
+	/* Procedure InstallThemeTool */
+
+/* 202 */	0x33,		/* FC_AUTO_HANDLE */
+			0x6c,		/* Old Flags:  object, Oi2 */
+/* 204 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 208 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 210 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
+/* 212 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 214 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 216 */	0x44,		/* Oi2 Flags:  has return, has ext, */
+			0x1,		/* 1 */
+/* 218 */	0xa,		/* 10 */
+			0x1,		/* Ext Flags:  new corr desc, */
+/* 220 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 222 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 224 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 226 */	NdrFcShort( 0x0 ),	/* 0 */
+
+	/* Return value */
+
+/* 228 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+/* 230 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 232 */	0x8,		/* FC_LONG */
+			0x0,		/* 0 */
+
+	/* Procedure UninstallThemeTool */
+
+/* 234 */	0x33,		/* FC_AUTO_HANDLE */
+			0x6c,		/* Old Flags:  object, Oi2 */
+/* 236 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 240 */	NdrFcShort( 0x9 ),	/* 9 */
+/* 242 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
+/* 244 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 246 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 248 */	0x44,		/* Oi2 Flags:  has return, has ext, */
+			0x1,		/* 1 */
+/* 250 */	0xa,		/* 10 */
+			0x1,		/* Ext Flags:  new corr desc, */
+/* 252 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 254 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 256 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 258 */	NdrFcShort( 0x0 ),	/* 0 */
+
+	/* Return value */
+
+/* 260 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+/* 262 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 264 */	0x8,		/* FC_LONG */
+			0x0,		/* 0 */
+
 			0x0
         }
     };
@@ -315,6 +396,11 @@ static const IRectifyUtil_MIDL_TYPE_FORMAT_STRING IRectifyUtil__MIDL_TypeFormatS
 /*  2 */	
 			0x11, 0xc,	/* FC_RP [alloced_on_stack] [simple_pointer] */
 /*  4 */	0x8,		/* FC_LONG */
+			0x5c,		/* FC_PAD */
+/*  6 */	
+			0x11, 0x8,	/* FC_RP [simple_pointer] */
+/*  8 */	
+			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
 
 			0x0
@@ -339,7 +425,10 @@ static const unsigned short IRectifyUtil_FormatStringOffsetTable[] =
     0,
     44,
     88,
-    126
+    126,
+    164,
+    202,
+    234
     };
 
 
@@ -383,8 +472,37 @@ namespace {
 
 typedef 
 NDR64_FORMAT_CHAR
-__midl_frag18_t;
-extern const __midl_frag18_t __midl_frag18;
+__midl_frag26_t;
+extern const __midl_frag26_t __midl_frag26;
+
+typedef 
+struct 
+{
+    struct _NDR64_PROC_FORMAT frag1;
+    struct _NDR64_PARAM_FORMAT frag2;
+}
+__midl_frag25_t;
+extern const __midl_frag25_t __midl_frag25;
+
+typedef 
+struct _NDR64_CONFORMANT_STRING_FORMAT
+__midl_frag21_t;
+extern const __midl_frag21_t __midl_frag21;
+
+typedef 
+struct _NDR64_POINTER_FORMAT
+__midl_frag20_t;
+extern const __midl_frag20_t __midl_frag20;
+
+typedef 
+struct 
+{
+    struct _NDR64_PROC_FORMAT frag1;
+    struct _NDR64_PARAM_FORMAT frag2;
+    struct _NDR64_PARAM_FORMAT frag3;
+}
+__midl_frag19_t;
+extern const __midl_frag19_t __midl_frag19;
 
 typedef 
 struct 
@@ -438,8 +556,142 @@ NDR64_FORMAT_UINT32
 __midl_frag1_t;
 extern const __midl_frag1_t __midl_frag1;
 
-static const __midl_frag18_t __midl_frag18 =
+static const __midl_frag26_t __midl_frag26 =
 0x5    /* FC64_INT32 */;
+
+static const __midl_frag25_t __midl_frag25 =
+{ 
+/* UninstallThemeTool */
+    { 
+    /* UninstallThemeTool */      /* procedure UninstallThemeTool */
+        (NDR64_UINT32) 524611 /* 0x80143 */,    /* auto handle */ /* IsIntrepreted, [object], HasReturn */
+        (NDR64_UINT32) 16 /* 0x10 */ ,  /* Stack size */
+        (NDR64_UINT32) 0 /* 0x0 */,
+        (NDR64_UINT32) 8 /* 0x8 */,
+        (NDR64_UINT16) 0 /* 0x0 */,
+        (NDR64_UINT16) 0 /* 0x0 */,
+        (NDR64_UINT16) 1 /* 0x1 */,
+        (NDR64_UINT16) 0 /* 0x0 */
+    },
+    { 
+    /* HRESULT */      /* parameter HRESULT */
+        &__midl_frag26,
+        { 
+        /* HRESULT */
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            (NDR64_UINT16) 0 /* 0x0 */,
+            0
+        },    /* [out], IsReturn, Basetype, ByValue */
+        (NDR64_UINT16) 0 /* 0x0 */,
+        8 /* 0x8 */,   /* Stack offset */
+    }
+};
+
+static const __midl_frag21_t __midl_frag21 =
+{ 
+/* *WCHAR */
+    { 
+    /* *WCHAR */
+        0x64,    /* FC64_CONF_WCHAR_STRING */
+        { 
+        /* *WCHAR */
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        },
+        (NDR64_UINT16) 2 /* 0x2 */
+    }
+};
+
+static const __midl_frag20_t __midl_frag20 =
+{ 
+/* *WCHAR */
+    0x20,    /* FC64_RP */
+    (NDR64_UINT8) 0 /* 0x0 */,
+    (NDR64_UINT16) 0 /* 0x0 */,
+    &__midl_frag21
+};
+
+static const __midl_frag19_t __midl_frag19 =
+{ 
+/* ApplyTheme */
+    { 
+    /* ApplyTheme */      /* procedure ApplyTheme */
+        (NDR64_UINT32) 786755 /* 0xc0143 */,    /* auto handle */ /* IsIntrepreted, [object], ClientMustSize, HasReturn */
+        (NDR64_UINT32) 24 /* 0x18 */ ,  /* Stack size */
+        (NDR64_UINT32) 0 /* 0x0 */,
+        (NDR64_UINT32) 8 /* 0x8 */,
+        (NDR64_UINT16) 0 /* 0x0 */,
+        (NDR64_UINT16) 0 /* 0x0 */,
+        (NDR64_UINT16) 2 /* 0x2 */,
+        (NDR64_UINT16) 0 /* 0x0 */
+    },
+    { 
+    /* pThemeName */      /* parameter pThemeName */
+        &__midl_frag21,
+        { 
+        /* pThemeName */
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            (NDR64_UINT16) 0 /* 0x0 */,
+            0
+        },    /* MustSize, MustFree, [in], SimpleRef */
+        (NDR64_UINT16) 0 /* 0x0 */,
+        8 /* 0x8 */,   /* Stack offset */
+    },
+    { 
+    /* HRESULT */      /* parameter HRESULT */
+        &__midl_frag26,
+        { 
+        /* HRESULT */
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            (NDR64_UINT16) 0 /* 0x0 */,
+            0
+        },    /* [out], IsReturn, Basetype, ByValue */
+        (NDR64_UINT16) 0 /* 0x0 */,
+        16 /* 0x10 */,   /* Stack offset */
+    }
+};
 
 static const __midl_frag16_t __midl_frag16 =
 { 
@@ -457,7 +709,7 @@ static const __midl_frag16_t __midl_frag16 =
     },
     { 
     /* pMenuIndex */      /* parameter pMenuIndex */
-        &__midl_frag18,
+        &__midl_frag26,
         { 
         /* pMenuIndex */
             0,
@@ -481,7 +733,7 @@ static const __midl_frag16_t __midl_frag16 =
     },
     { 
     /* HRESULT */      /* parameter HRESULT */
-        &__midl_frag18,
+        &__midl_frag26,
         { 
         /* HRESULT */
             0,
@@ -511,7 +763,7 @@ static const __midl_frag13_t __midl_frag13 =
     0x20,    /* FC64_RP */
     (NDR64_UINT8) 12 /* 0xc */,
     (NDR64_UINT16) 0 /* 0x0 */,
-    &__midl_frag18
+    &__midl_frag26
 };
 
 static const __midl_frag12_t __midl_frag12 =
@@ -530,7 +782,7 @@ static const __midl_frag12_t __midl_frag12 =
     },
     { 
     /* pMenuIndex */      /* parameter pMenuIndex */
-        &__midl_frag18,
+        &__midl_frag26,
         { 
         /* pMenuIndex */
             0,
@@ -554,7 +806,7 @@ static const __midl_frag12_t __midl_frag12 =
     },
     { 
     /* HRESULT */      /* parameter HRESULT */
-        &__midl_frag18,
+        &__midl_frag26,
         { 
         /* HRESULT */
             0,
@@ -594,7 +846,7 @@ static const __midl_frag8_t __midl_frag8 =
     },
     { 
     /* micaEnabled */      /* parameter micaEnabled */
-        &__midl_frag18,
+        &__midl_frag26,
         { 
         /* micaEnabled */
             0,
@@ -618,7 +870,7 @@ static const __midl_frag8_t __midl_frag8 =
     },
     { 
     /* tabbed */      /* parameter tabbed */
-        &__midl_frag18,
+        &__midl_frag26,
         { 
         /* tabbed */
             0,
@@ -642,7 +894,7 @@ static const __midl_frag8_t __midl_frag8 =
     },
     { 
     /* HRESULT */      /* parameter HRESULT */
-        &__midl_frag18,
+        &__midl_frag26,
         { 
         /* HRESULT */
             0,
@@ -682,7 +934,7 @@ static const __midl_frag2_t __midl_frag2 =
     },
     { 
     /* pEnabled */      /* parameter pEnabled */
-        &__midl_frag18,
+        &__midl_frag26,
         { 
         /* pEnabled */
             0,
@@ -706,7 +958,7 @@ static const __midl_frag2_t __midl_frag2 =
     },
     { 
     /* pTabbed */      /* parameter pTabbed */
-        &__midl_frag18,
+        &__midl_frag26,
         { 
         /* pTabbed */
             0,
@@ -730,7 +982,7 @@ static const __midl_frag2_t __midl_frag2 =
     },
     { 
     /* HRESULT */      /* parameter HRESULT */
-        &__midl_frag18,
+        &__midl_frag26,
         { 
         /* HRESULT */
             0,
@@ -782,7 +1034,10 @@ static const FormatInfoRef IRectifyUtil_Ndr64ProcTable[] =
     &__midl_frag2,
     &__midl_frag8,
     &__midl_frag12,
-    &__midl_frag16
+    &__midl_frag16,
+    &__midl_frag19,
+    &__midl_frag25,
+    &__midl_frag25
     };
 
 
@@ -833,7 +1088,7 @@ static const MIDL_SERVER_INFO IRectifyUtil_ServerInfo =
     2,
     (MIDL_SYNTAX_INFO*)IRectifyUtil_SyntaxInfo
     };
-CINTERFACE_PROXY_VTABLE(7) _IRectifyUtilProxyVtbl = 
+CINTERFACE_PROXY_VTABLE(10) _IRectifyUtilProxyVtbl = 
 {
     &IRectifyUtil_ProxyInfo,
     &IID_IRectifyUtil,
@@ -843,14 +1098,17 @@ CINTERFACE_PROXY_VTABLE(7) _IRectifyUtilProxyVtbl =
     (void *) (INT_PTR) -1 /* IRectifyUtil::GetMicaSettings */ ,
     (void *) (INT_PTR) -1 /* IRectifyUtil::SetMicaForEveryoneEnabled */ ,
     (void *) (INT_PTR) -1 /* IRectifyUtil::GetCurrentMenuIndex */ ,
-    (void *) (INT_PTR) -1 /* IRectifyUtil::SetCurrentMenuByIndex */
+    (void *) (INT_PTR) -1 /* IRectifyUtil::SetCurrentMenuByIndex */ ,
+    (void *) (INT_PTR) -1 /* IRectifyUtil::ApplyTheme */ ,
+    (void *) (INT_PTR) -1 /* IRectifyUtil::InstallThemeTool */ ,
+    (void *) (INT_PTR) -1 /* IRectifyUtil::UninstallThemeTool */
 };
 
 const CInterfaceStubVtbl _IRectifyUtilStubVtbl =
 {
     &IID_IRectifyUtil,
     &IRectifyUtil_ServerInfo,
-    7,
+    10,
     0, /* pure interpreted */
     CStdStubBuffer_METHODS
 };

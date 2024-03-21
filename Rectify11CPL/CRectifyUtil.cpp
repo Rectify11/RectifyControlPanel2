@@ -751,6 +751,94 @@ HRESULT CRectifyUtil::SetCurrentMenuByIndex(DWORD menuIndex)
 	return hr;
 }
 
+static bool themetool_loaded = false;
+HRESULT CRectifyUtil::ApplyTheme(LPCWSTR pThemeName)
+{
+	HRESULT hr = S_OK;
+	if (!themetool_loaded)
+	{
+		hr = themetool_init();
+	}
+
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+	else {
+		themetool_loaded = true;
+	}
+
+	ULONG themeCount = 0;
+	themetool_get_theme_count(&themeCount);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+	std::wstring targetTheme(pThemeName);
+	std::transform(targetTheme.begin(), targetTheme.end(), targetTheme.begin(), ::tolower);
+
+	for (ULONG i = 0; i < themeCount; i++)
+	{
+		ITheme* theme = NULL;
+		themetool_get_theme(i, &theme);
+		
+		WCHAR buffer[512];
+		themetool_theme_get_display_name(theme, buffer, 256);
+
+		std::wstring displayName(buffer);
+		std::transform(displayName.begin(), displayName.end(), displayName.begin(), ::tolower);
+
+		if (displayName == targetTheme)
+		{
+			hr = themetool_set_active(NULL, i, TRUE, 0, 0);
+
+			themetool_theme_release(theme);
+			break;
+		}
+
+		themetool_theme_release(theme);
+	}
+	return hr;
+}
+HRESULT CRectifyUtil::InstallThemeTool()
+{
+	HRESULT hr = S_OK;
+	if (!themetool_loaded)
+	{
+		hr = themetool_init();
+	}
+
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+	else {
+		themetool_loaded = true;
+	}
+
+	hr = secureuxtheme_install(SECUREUXTHEME_INSTALL_HOOK_LOGONUI | SECUREUXTHEME_INSTALL_RENAME_DEFAULTCOLORS);
+	return hr;
+}
+HRESULT CRectifyUtil::UninstallThemeTool()
+{
+	HRESULT hr = S_OK;
+	if (!themetool_loaded)
+	{
+		hr = themetool_init();
+	}
+
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+	else {
+		themetool_loaded = true;
+	}
+
+	hr = secureuxtheme_uninstall();
+	return hr;
+}
+
 BOOL IsDarkTheme()
 {
 	WCHAR value[255] = { 0 };

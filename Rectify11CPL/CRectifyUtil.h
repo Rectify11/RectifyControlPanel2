@@ -21,6 +21,10 @@ public:
 	virtual HRESULT GetCurrentMenuIndex(DWORD* menuIndex);
 	virtual HRESULT SetCurrentMenuByIndex(DWORD pIndex);
 
+	virtual HRESULT ApplyTheme(LPCWSTR pThemeName);
+	virtual HRESULT InstallThemeTool();
+	virtual HRESULT UninstallThemeTool();
+
 	static BOOL KillTask(wstring proc);
 	static void RestartExplorer();
 

@@ -115,6 +115,13 @@ EXTERN_C const IID IID_IRectifyUtil;
         virtual HRESULT STDMETHODCALLTYPE SetCurrentMenuByIndex( 
             /* [in] */ DWORD pMenuIndex) = 0;
         
+        virtual HRESULT STDMETHODCALLTYPE ApplyTheme( 
+            /* [in] */ LPCWSTR pThemeName) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE InstallThemeTool( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE UninstallThemeTool( void) = 0;
+        
     };
     
     
@@ -161,6 +168,19 @@ EXTERN_C const IID IID_IRectifyUtil;
             IRectifyUtil * This,
             /* [in] */ DWORD pMenuIndex);
         
+        DECLSPEC_XFGVIRT(IRectifyUtil, ApplyTheme)
+        HRESULT ( STDMETHODCALLTYPE *ApplyTheme )( 
+            IRectifyUtil * This,
+            /* [in] */ LPCWSTR pThemeName);
+        
+        DECLSPEC_XFGVIRT(IRectifyUtil, InstallThemeTool)
+        HRESULT ( STDMETHODCALLTYPE *InstallThemeTool )( 
+            IRectifyUtil * This);
+        
+        DECLSPEC_XFGVIRT(IRectifyUtil, UninstallThemeTool)
+        HRESULT ( STDMETHODCALLTYPE *UninstallThemeTool )( 
+            IRectifyUtil * This);
+        
         END_INTERFACE
     } IRectifyUtilVtbl;
 
@@ -195,6 +215,15 @@ EXTERN_C const IID IID_IRectifyUtil;
 
 #define IRectifyUtil_SetCurrentMenuByIndex(This,pMenuIndex)	\
     ( (This)->lpVtbl -> SetCurrentMenuByIndex(This,pMenuIndex) ) 
+
+#define IRectifyUtil_ApplyTheme(This,pThemeName)	\
+    ( (This)->lpVtbl -> ApplyTheme(This,pThemeName) ) 
+
+#define IRectifyUtil_InstallThemeTool(This)	\
+    ( (This)->lpVtbl -> InstallThemeTool(This) ) 
+
+#define IRectifyUtil_UninstallThemeTool(This)	\
+    ( (This)->lpVtbl -> UninstallThemeTool(This) ) 
 
 #endif /* COBJMACROS */
 
