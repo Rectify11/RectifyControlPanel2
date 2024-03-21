@@ -23,34 +23,6 @@ extern "C"
 	HRESULT DllCanUnloadNow2(void); //proxy.c
 }
 
-//void* operator new(std::size_t size, const std::nothrow_t& tag) noexcept
-//{
-//	if (size == 0)
-//	{
-//		return NULL;
-//	}
-//
-//	return HeapAlloc(GetProcessHeap(), 8, size);
-//}
-//
-//void* operator new[](std::size_t size, const std::nothrow_t& tag) noexcept
-//{
-//	if (size == 0)
-//	{
-//		return NULL;
-//	}
-//
-//	return HeapAlloc(GetProcessHeap(), 8, size);
-//}
-//
-//void operator delete(void* rawMemory, std::size_t size, const std::nothrow_t& tag) noexcept
-//{
-//	if (rawMemory)
-//	{
-//		HeapFree(GetProcessHeap(), 0, rawMemory);
-//	}
-//}
-
 void DllAddRef()
 {
 	InterlockedIncrement(&g_cRefModule);
@@ -65,12 +37,6 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void* lpReserved)
 {
 	if (DLL_PROCESS_ATTACH == dwReason)
 	{
-		/*if (sizeof(XProvider) != 0x28)
-		{
-			MessageBox(NULL, TEXT("Fatal error: unexpected size of XProvider class"), TEXT("DllMain"), 0);
-			return FALSE;
-		}*/
-
 		g_hInst = hInstance;
 		DisableThreadLibraryCalls(hInstance);
 	}
@@ -85,7 +51,7 @@ STDAPI DllCanUnloadNow(void)
 
 	if (hr != S_OK)
 	{
-		OutputDebugString(TEXT("Rectify11CPL.dll: Not unloading as DllCanUnloadNow() returned S_FALSE\n"));
+		OutputDebugString(TEXT("Rectify11CPL.dll: WARNING: Not unloading as DllCanUnloadNow() returned S_FALSE\n"));
 	}
 	return hr;
 }

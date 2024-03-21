@@ -1,3 +1,5 @@
+// This class is created by Shell32 CLayoutFolder class. This class "provides" the Element for DirectUI to render in explorer.
+
 #include <windows.h>
 #include <shlobj.h>
 #include <propkey.h>
@@ -23,7 +25,9 @@ CElementProvider::CElementProvider() : Site(NULL)
 	{
 		SHOW_ERROR("Failed to initialize DirectUI for thread\n");
 	}
-	DllAddRef(); // Prevent unloading DLL when this class has not been properly destroyed
+
+	// Prevent unloading DLL when this class has not been properly destroyed
+	DllAddRef();
 }
 
 CElementProvider::~CElementProvider()
@@ -35,7 +39,6 @@ CElementProvider::~CElementProvider()
 }
 
 // IUnknown Implementation
-
 HRESULT CElementProvider::QueryInterface(REFIID riid, __out void** ppv)
 {
 	static const QITAB qit[] = {
@@ -50,14 +53,6 @@ HRESULT CElementProvider::QueryInterface(REFIID riid, __out void** ppv)
 	if (hr != S_OK)
 	{
 		hr = DirectUI::XProvider::QueryInterface(riid, ppv);
-	}
-	if (hr != S_OK)
-	{
-		WCHAR szGuid[40] = { 0 };
-
-		swprintf_s(szGuid, 40, L"{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}", riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7]);
-
-		//MessageBox(NULL, szGuid, TEXT("Unknown interface in CElementProvider::QueryInterface()"), MB_ICONERROR);
 	}
 	return hr;
 }
@@ -192,6 +187,9 @@ HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
 
 	Element* root = XProvider::GetRoot();
 
+	// Call initialization function as DirectUI does not provide an "OnLoad" method, unlike WPF/Winforms
+	// This is a bit hacky as Microsoft treats elements as COM objects, and instead iterates through each element, calling
+	// the appropriate method.
 	if (root->FindDescendent(StrToID((UCString)L"MainPageElem")) != NULL)
 	{
 		RectifyMainPage* page = (RectifyMainPage*)root->FindDescendent(StrToID((UCString)L"MainPageElem"));
@@ -209,7 +207,7 @@ HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
 }
 HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param)
 {
-	//the param is text
+	// NOTE: param is LPCWSTR
 
 	if (!StrCmpCW((LPCWSTR)param, L"SettingsChanged"))
 	{
@@ -229,10 +227,12 @@ HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param)
 			hr = CLSIDFromString(L"{31e4fa78-02b4-419f-9430-7b7585237c77}", (LPCLSID)&IID_IFrameManager);
 			if (SUCCEEDED(hr))
 			{
+				// find explorer property bag
 				IPropertyBag* bag = NULL;
 				HRESULT hr = IUnknown_QueryService(Site, IID_IFrameManager, IID_IPropertyBag, (LPVOID*)&bag);
 				if (SUCCEEDED(hr))
 				{
+					// read search text
 					if (SUCCEEDED(PSPropertyBag_ReadStr(bag, L"SearchText", value, 260)) && value[0])
 					{
 						if (SUCCEEDED(StringCchPrintfW(path, 41, L"::%s", L"{26ee0668-a00a-44d7-9371-beb064c98683}")))
@@ -243,6 +243,7 @@ HRESULT STDMETHODCALLTYPE CElementProvider::Notify(WORD* param)
 								IShellBrowser* browser = NULL;
 								if (SUCCEEDED(IUnknown_QueryService(Site, SID_STopLevelBrowser, IID_IShellBrowser, (LPVOID*)&browser)))
 								{
+									// navigate to search text
 									hr = browser->BrowseObject(pidlist, SBSP_ACTIVATE_NOFOCUS | SBSP_SAMEBROWSER | SBSP_CREATENOHISTORY);
 									browser->Release();
 								}

@@ -1,8 +1,10 @@
 #pragma once
+// DirectUI class creation helper
+
 namespace DirectUI {
 	template<typename Name>
 	class StandardCreator {
-
+		// Unknown as to what this implements
 	};
 	template<typename NewClass, typename BaseClass, typename Creator>
 	class ClassInfo : ClassInfoBase
@@ -17,6 +19,7 @@ namespace DirectUI {
 			return BaseClass::GetClassInfoPtr();
 		}
 		HRESULT DoRegister() { return ClassInfoBase::Register(); }
+
 		void Destroy() override
 		{
 			delete this;
@@ -26,7 +29,10 @@ namespace DirectUI {
 		static HRESULT Create(ClassInfo** result)
 		{
 			ClassInfo* theClass = new ClassInfo();
+
+			// DirectUI expects fields to be initialized to zero
 			memset(theClass->data, 0, sizeof(theClass->data));
+
 			HRESULT hr = theClass->Initialize(g_hInst, (UCString)NewClass::DoGetClassName(), false, NULL, 0);
 			if (SUCCEEDED(hr))
 			{
@@ -37,6 +43,8 @@ namespace DirectUI {
 		static HRESULT Register()
 		{
 			HRESULT hr = S_OK;
+			
+			// register base class
 			if (BaseClass::GetClassInfoPtr() == NULL)
 			{
 				hr = BaseClass::Register();
@@ -49,8 +57,11 @@ namespace DirectUI {
 			if (SUCCEEDED(hr))
 			{
 				CritSecLock lock(Element::GetFactoryLock());
+
 				IClassInfo* baseclassptr = BaseClass::GetClassInfoPtr();
 				IClassInfo* newrclass = NewClass::GetClassInfoPtr();
+
+				// ensure that the class does not exist
 				if (DirectUI::ClassInfoBase::ClassExist(&baseclassptr, NULL, 0, newrclass, g_hInst, (UCString)NewClass::DoGetClassName(), false))
 				{
 					NewClass::Class = baseclassptr;
@@ -60,13 +71,13 @@ namespace DirectUI {
 					ClassInfo* classInfo = NULL;
 					if (SUCCEEDED(hr = Create(&classInfo)))
 					{
-						if (FAILED(hr = classInfo->DoRegister()))
+						if (SUCCEEDED(hr = classInfo->DoRegister()))
 						{
-							classInfo->Destroy();
+							NewClass::Class = (IClassInfo*)classInfo;
 						}
 						else
 						{
-							NewClass::Class = (IClassInfo*)classInfo;
+							classInfo->Destroy();
 						}
 					}
 				}

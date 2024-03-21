@@ -1,3 +1,6 @@
+// This class implements the IRectifyUtil interface. This class is registered as a COM object to allow the code
+// to be ran as administrator, without elevating explorer.exe or starting another process
+
 #include "Rectify11CPL.h"
 #include "CRectifyUtil.h"
 #include "psapi.h"
@@ -256,9 +259,9 @@ BOOL CRectifyUtil::KillTask(wstring proc)
 			return FALSE;
 		}
 
-		const auto explorer = OpenProcess(PROCESS_TERMINATE, false, pid);
-		BOOL result = TerminateProcess(explorer, 1);
-		CloseHandle(explorer);
+		const auto proc = OpenProcess(PROCESS_TERMINATE, false, pid);
+		BOOL result = TerminateProcess(proc, 1);
+		CloseHandle(proc);
 	}
 	return TRUE;
 }
@@ -277,7 +280,6 @@ HRESULT startProc(LPCWSTR proc, wstring args = L"", bool waitForExit = false)
 	{
 		ExpandEnvironmentStringsW(proc, proc_buffer, 999);
 	}
-
 
 	WCHAR args_buffer[1000] = {0};
 	if (!args.empty())
