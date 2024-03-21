@@ -146,7 +146,11 @@ END
 //
 // String Table
 //
+/////////////////////////////////////////////////////////////////////////////
+// German (Germany) resources
 
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
+LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 STRINGTABLE
 BEGIN
     IDS_THEMEHOOKFAIL       "Fehler beim laden von SecureUXTheme ThemeTool. Designinformationen werden nicht geladen."
@@ -204,57 +208,6 @@ END
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ARA)
 LANGUAGE LANG_ARABIC, SUBLANG_ARABIC_SAUDI_ARABIA
 #pragma code_page(1256)
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// String Table
-//
-
-STRINGTABLE
-BEGIN
-    IDS_WIN11DEFAULT        "Windows 11 default"
-    IDS_FLUENTCTX           "Nilesoft Shell"
-    IDS_NILESHELLALL        "Nilesoft Shell (all items in root)"
-    IDS_CLASSICCTX          "Classic menus"
-    IDS_CLASSICTRANSPARENTCTX "Classic menus with transparency"
-    IDS_RESTARTEXPLORER     "Restart explorer to apply changes"
-    IDS_ELEVATIONNEEDED     "Change settings that are unavailable"
-    IDS_VERSION             "Rectify11 version:"
-    IDS_Ok                  "Ok"
-    IDS_CANCEL              "Cancel"
-    IDS_IGNOREBG            "Preserve my desktop background"
-    IDS_IGNORECURSOR        "Preserve my mouse cursors"
-    IDS_IGNOREIGONS         "Preserve my desktop icons"
-    IDS_IGNOREACCENT        "Preserve my accent color"
-    IDS_IGNORESOUNDS        "Preserve my system sounds"
-    IDS_IGNORESCREENSAVER   "Preserve my screensaver (if one is applied)"
-END
-
-STRINGTABLE
-BEGIN
-    IDS_NA                  "N/A"
-    IDS_MENUS               "Menus"
-    IDS_CPLTHEMEPREF        "Change the theme of Rectify11"
-    IDS_CPLTIP              "Customize Rectify11 settings such as theme settings"
-    IDS_SYSINFO             "System Information"
-    IDS_UNINSTALL           "Uninstall Rectify11"
-END
-
-#endif    // English (United States) resources
-/////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////////
-// Arabic (Saudi Arabia) resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ARA)
-LANGUAGE LANG_ARABIC, SUBLANG_ARABIC_SAUDI_ARABIA
-#pragma code_page(1256)
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// String Table
-//
 
 STRINGTABLE
 BEGIN
