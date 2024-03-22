@@ -808,7 +808,7 @@ HRESULT CRectifyUtil::InstallThemeTool()
 		hr = themetool_init();
 	}
 
-	if (FAILED(hr))
+	if (hr != S_OK)
 	{
 		return hr;
 	}
