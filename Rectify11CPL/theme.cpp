@@ -18,6 +18,7 @@ typedef HRESULT(FAR WINAPI* ThemeDll_themetool_theme_get_vs_path)(ITheme* theme,
 typedef void(FAR WINAPI* ThemeDll_themetool_theme_release)(ITheme* theme);
 typedef HRESULT(FAR WINAPI* ThemeDll_themetool_install)(ULONG flags);
 typedef HRESULT(FAR WINAPI* ThemeDll_themetool_uninstall)();
+typedef ULONG(FAR WINAPI* ThemeDll_secureuxtheme_get_state_flags)();
 
 HRESULT loadThemeDll()
 {
@@ -226,6 +227,23 @@ HRESULT secureuxtheme_uninstall()
 	}
 
 	ThemeDll_themetool_uninstall proc = (ThemeDll_themetool_uninstall)GetProcAddress(themeDllModule, "secureuxtheme_uninstall");
+	if (proc == NULL)
+	{
+		return HRESULT_FROM_WIN32(GetLastError());
+	}
+
+	return proc();
+}
+
+ULONG secureuxtheme_get_state_flags(void)
+{
+	HRESULT hr = loadThemeDll();
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+	ThemeDll_secureuxtheme_get_state_flags proc = (ThemeDll_secureuxtheme_get_state_flags)GetProcAddress(themeDllModule, "secureuxtheme_get_state_flags");
 	if (proc == NULL)
 	{
 		return HRESULT_FROM_WIN32(GetLastError());

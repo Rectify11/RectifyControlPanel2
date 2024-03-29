@@ -30,6 +30,8 @@ DWORD FindProcessId(const WCHAR* procname)
 	int pid = 0;
 	BOOL hResult;
 
+	memset(&pe, 0, sizeof(pe));
+
 	// snapshot of all processes in the system
 	hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 	if (INVALID_HANDLE_VALUE == hSnapshot) return 0;
@@ -60,7 +62,7 @@ HRESULT deleteTask(std::wstring taskName)
 {
 	HRESULT hr = S_OK;
 
-	ITaskService* pITS;
+	ITaskService* pITS = NULL;
 	hr = CoCreateInstance(CLSID_TaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskService, (void**)&pITS);
 	if (FAILED(hr)) {
 		return hr;
@@ -96,7 +98,7 @@ HRESULT taskExists(wstring taskName, BOOL* taskExists)
 {
 	HRESULT hr = S_OK;
 	*taskExists = FALSE;
-	ITaskService* pITS;
+	ITaskService* pITS = NULL;
 	hr = CoCreateInstance(CLSID_TaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskService, (void**)&pITS);
 	if (FAILED(hr)) {
 		return hr;
@@ -137,7 +139,7 @@ HRESULT createTask(std::wstring taskName, std::wstring taskExe)
 {
 	HRESULT hr = S_OK;
 
-	ITaskService* pITS;
+	ITaskService* pITS = NULL;
 	hr = CoCreateInstance(CLSID_TaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskService, (void**)&pITS);
 	if (FAILED(hr)) {
 		return hr;
@@ -379,14 +381,14 @@ void CRectifyUtil::RestartExplorer()
 HRESULT CreateLink(LPCWSTR lpszTarget, LPCWSTR lpszDesc, LPCWSTR lpszWorkingDir, LPCSTR lpszShortcutPath)
 {
 	HRESULT hres;
-	IShellLink* psl;
+	IShellLink* psl = NULL;
 
 	// Get a pointer to the IShellLink interface. It is assumed that CoInitialize
 	// has already been called.
 	hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, (LPVOID*)&psl);
 	if (SUCCEEDED(hres))
 	{
-		IPersistFile* ppf;
+		IPersistFile* ppf = NULL;
 
 		// Set the path to the shortcut target and add the description. 
 		psl->SetPath(lpszTarget);

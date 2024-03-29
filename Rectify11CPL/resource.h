@@ -41,6 +41,12 @@
 #define IDS_CPLTIP                      131
 #define IDS_SYSINFO                     132
 #define IDS_UNINSTALL                   133
+#define IDS_THEMETOOLSTATUS             134
+#define IDS_OUTDATED                    135
+#define IDS_NOTINSTALLED                136
+#define IDS_THEMETOOLWARN               137
+#define IDS_THEMETOOLINSTALL            138
+#define IDS_THEMETOOLALT                139
 #define IDR_MAINPAGE                    1001
 #define IDR_UPDATEPAGE                  1002
 

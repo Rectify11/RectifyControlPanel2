@@ -37,5 +37,6 @@ private:
 	void UpdateThemeGraphic();
 	void ShowRestartExplorer();
 	void InitNavLinks();
+	void UpdateThemetoolStatus();
 	HWND GetMainHwnd();
 };

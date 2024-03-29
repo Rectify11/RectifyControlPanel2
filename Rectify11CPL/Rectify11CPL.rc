@@ -13,6 +13,71 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
+// German (Germany) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
+LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
+#pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_THEMEHOOKFAIL       "Fehler beim laden von SecureUXTheme ThemeTool. Designinformationen werden nicht geladen."
+    IDS_CPLTITLE            "Rectify11 Einstellungen ändern"
+    IDS_THEME               "Design:"
+    IDS_ThemePref           "Design-Einstellungen"
+    IDS_CPLNAME             "Rectify11-Einstellungen"
+    IDS_THEMESHEADER        "Designs"
+    IDS_INFORMATIONHEADER   "Informationen"
+    IDS_ENABLEMICA          "Mica aktivieren"
+    IDS_TABBED              "Tabbed statt Mica verwenden"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_WIN11DEFAULT        "Windows 11 (Standard)"
+    IDS_FLUENTCTX           "Nilesoft Shell (Weitere Optionen Anzeigen)"
+    IDS_NILESHELLALL        "Nilesoft Shell (Alle Optionen Anzeigen)"
+    IDS_CLASSICCTX          "Klassisches Kontextmenü"
+    IDS_CLASSICTRANSPARENTCTX "Klassiches Kontextmenü (Transparent)"
+    IDS_RESTARTEXPLORER     "Starte den Explorer neu um die Änderungen zu übernehmen"
+    IDS_ELEVATIONNEEDED     "Einstellungen ändern, die momentan nicht verfügbar sind"
+    IDS_VERSION             "Rectify11 version:"
+    IDS_Ok                  "Ok"
+    IDS_CANCEL              "Abbrechen"
+    IDS_IGNOREBG            "Desktophintergrund behalten"
+    IDS_IGNORECURSOR        "Mauszeiger behalten"
+    IDS_IGNOREIGONS         "Desktopsymbole behalten"
+    IDS_IGNOREACCENT        "Akzentfarben behalten"
+    IDS_IGNORESOUNDS        "Soundschema behalten"
+    IDS_IGNORESCREENSAVER   "Bildschirmschoner behalten (falls eingestellt)"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_NA                  "N/V"
+    IDS_MENUS               "Kontextmenü"
+    IDS_CPLTHEMEPREF        "Design von Rectify11 ändern"
+    IDS_CPLTIP              "Rectify11-Einstellungen anpassen, so auch die Design-Einstellungen"
+    IDS_SYSINFO             "Systeminformationen"
+    IDS_UNINSTALL           "Rectify11 Deinstallieren"
+    IDS_THEMETOOLSTATUS     "SecureUXThemePatcher status: "
+    IDS_OUTDATED            "Outdated"
+    IDS_NOTINSTALLED        "Not installed"
+    IDS_THEMETOOLWARN       "Unknown status. Please reinstall."
+    IDS_THEMETOOLINSTALL    "Reinstall SecureUxTheme patcher"
+    IDS_THEMETOOLALT        "Reinstalls the SecureUxThemePatcher. This is needed if the Rectify11 visual style is not being applied."
+END
+
+#endif    // German (Germany) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
 // English (United States) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
@@ -90,6 +155,7 @@ IDB_LIGHTPREVIEW        BITMAP                  "preview_light.bmp"
 
 IDB_DARKPREVIEW         BITMAP                  "preview_dark.bmp"
 
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // String Table
@@ -136,6 +202,12 @@ BEGIN
     IDS_CPLTIP              "Customize Rectify11 settings such as theme settings"
     IDS_SYSINFO             "System Information"
     IDS_UNINSTALL           "Uninstall Rectify11"
+    IDS_THEMETOOLSTATUS     "SecureUXThemePatcher status: "
+    IDS_OUTDATED            "Outdated"
+    IDS_NOTINSTALLED        "Not installed"
+    IDS_THEMETOOLWARN       "Unknown status. Please reinstall."
+    IDS_THEMETOOLINSTALL    "Reinstall SecureUxTheme patcher"
+    IDS_THEMETOOLALT        "Reinstalls the SecureUxThemePatcher. This is needed if the Rectify11 visual style is not being applied."
 END
 
 #endif    // English (United States) resources
@@ -143,71 +215,16 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-//
-// String Table
-//
-/////////////////////////////////////////////////////////////////////////////
-// German (Germany) resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
-LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
-STRINGTABLE
-BEGIN
-    IDS_THEMEHOOKFAIL       "Fehler beim laden von SecureUXTheme ThemeTool. Designinformationen werden nicht geladen."
-    IDS_CPLTITLE            "Rectify11 Einstellungen ändern"
-    IDS_THEME               "Design:"
-    IDS_ThemePref           "Design-Einstellungen"
-    IDS_CPLNAME             "Rectify11-Einstellungen"
-    IDS_THEMESHEADER        "Designs"
-    IDS_INFORMATIONHEADER   "Informationen"
-    IDS_ENABLEMICA          "Mica aktivieren"
-    IDS_TABBED              "Tabbed statt Mica verwenden"
-END
-
-STRINGTABLE
-BEGIN
-    IDS_WIN11DEFAULT        "Windows 11 (Standard)"
-    IDS_FLUENTCTX           "Nilesoft Shell (Weitere Optionen Anzeigen)"
-    IDS_NILESHELLALL        "Nilesoft Shell (Alle Optionen Anzeigen)"
-    IDS_CLASSICCTX          "Klassisches Kontextmenü"
-    IDS_CLASSICTRANSPARENTCTX "Klassiches Kontextmenü (Transparent)"
-    IDS_RESTARTEXPLORER     "Starte den Explorer neu um die Änderungen zu übernehmen"
-    IDS_ELEVATIONNEEDED     "Einstellungen ändern, die momentan nicht verfügbar sind"
-    IDS_VERSION             "Rectify11 version:"
-    IDS_Ok                  "Ok"
-    IDS_CANCEL              "Abbrechen"
-    IDS_IGNOREBG            "Desktophintergrund behalten"
-    IDS_IGNORECURSOR        "Mauszeiger behalten"
-    IDS_IGNOREIGONS         "Desktopsymbole behalten"
-    IDS_IGNOREACCENT        "Akzentfarben behalten"
-    IDS_IGNORESOUNDS        "Soundschema behalten"
-    IDS_IGNORESCREENSAVER   "Bildschirmschoner behalten (falls eingestellt)"
-END
-
-STRINGTABLE
-BEGIN
-    IDS_NA                  "N/V"
-    IDS_MENUS               "Kontextmenü"
-    IDS_CPLTHEMEPREF        "Design von Rectify11 ändern"
-    IDS_CPLTIP              "Rectify11-Einstellungen anpassen, so auch die Design-Einstellungen"
-    IDS_SYSINFO             "Systeminformationen"
-    IDS_UNINSTALL           "Rectify11 Deinstallieren"
-END
-
-#endif    // German (Germany) resources
-/////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// String Table
-//
-
-/////////////////////////////////////////////////////////////////////////////
 // Arabic (Saudi Arabia) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ARA)
 LANGUAGE LANG_ARABIC, SUBLANG_ARABIC_SAUDI_ARABIA
 #pragma code_page(1256)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
 
 STRINGTABLE
 BEGIN
@@ -250,6 +267,12 @@ BEGIN
     IDS_CPLTIP              "[TODO: LOCALIZE CPLTIP]"
     IDS_SYSINFO             "[TODO: LOCALIZE: SYSINFO]"
     IDS_UNINSTALL           "[TODO: LOCALIZE: UNINSTALL]"
+    IDS_THEMETOOLSTATUS     "SecureUXThemePatcher status: "
+    IDS_OUTDATED            "Outdated"
+    IDS_NOTINSTALLED        "Not installed"
+    IDS_THEMETOOLWARN       "Unknown status. Please reinstall."
+    IDS_THEMETOOLINSTALL    "Reinstall SecureUxTheme patcher"
+    IDS_THEMETOOLALT        "Reinstalls the SecureUxThemePatcher. This is needed if the Rectify11 visual style is not being applied."
 END
 
 #endif    // Arabic (Saudi Arabia) resources
@@ -266,3 +289,4 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
+

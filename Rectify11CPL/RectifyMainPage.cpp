@@ -68,6 +68,7 @@ void RectifyMainPage::OnEvent(Event* iev)
 			IRectifyUtil* utility = ElevationManager::Initialize(GetMainHwnd());
 			TouchCheckBox* MicaForEveryoneCheckbox = (TouchCheckBox*)FindDescendent(StrToID((UCString)L"MicaChk"));
 			TouchCheckBox* TabbedCheckbox = (TouchCheckBox*)FindDescendent(StrToID((UCString)L"TabChk"));
+			TouchButton* ThemetoolInstall = (TouchButton*)FindDescendent(StrToID((UCString)L"ThemetoolInstall"));
 			if (utility != NULL)
 			{
 				// Destroy old class
@@ -83,6 +84,7 @@ void RectifyMainPage::OnEvent(Event* iev)
 				this->StartDefer(&key);
 				iev->target->SetLayoutPos(-3);
 				iev->target->SetVisible(FALSE);
+				ThemetoolInstall->SetEnabled(TRUE);
 
 				MicaForEveryoneCheckbox->SetEnabled(TRUE);
 				if (MicaForEveryoneCheckbox->GetCheckedState() != CheckedStateFlags_NONE)
@@ -228,7 +230,22 @@ void RectifyMainPage::OnEvent(Event* iev)
 			RectifyUtil->SetMicaForEveryoneEnabled(TRUE, TabbedCheckbox->GetCheckedState() ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
 		}
 	}
+	else if (iev->target->GetID() == StrToID((UCString)L"ThemetoolInstall"))
+	{
+		iev->target->SetEnabled(FALSE);
+		HRESULT hr = RectifyUtil->InstallThemeTool();
+		if (FAILED(hr))
+		{
+			CHAR buffer[1024];
+			std::string message = std::system_category().message(hr);
 
+			snprintf(buffer, sizeof(buffer), "Failed to install SecureUxTheme. Error code is %x, which translates to %s.", hr, message.c_str());
+			MessageBoxA(GetMainHwnd(), buffer, "Error during SecureUxTheme install", MB_ICONERROR);
+		}
+
+		UpdateThemetoolStatus();
+		iev->target->SetEnabled(TRUE);
+	}
 	// handle menu section
 	if (iev->type == Button::Click && !wcscmp((const wchar_t*)iev->target->GetClassInfoW()->GetName(), (const wchar_t*)CCRadioButton::GetClassInfoPtr()->GetName()))
 	{
@@ -345,6 +362,59 @@ void RectifyMainPage::InitNavLinks()
 	}
 }
 
+void RectifyMainPage::UpdateThemetoolStatus()
+{
+	Element* status = (TouchButton*)FindDescendent(StrToID((UCString)L"ThemetoolStatus"));
+
+	ULONG flags = secureuxtheme_get_state_flags();
+	wstring statusText;
+
+	WCHAR buffer1[1024];
+	if (FAILED(LoadStringW(g_hInst, IDS_THEMETOOLSTATUS, buffer1, 1023)))
+	{
+		wcscpy_s(buffer1, L"[SECURE UX STATUS STRING MISSING]: ");
+	}
+
+	statusText += buffer1;
+
+
+	if (flags & SECUREUXTHEME_STATE_INSTALLED)
+	{
+		if (flags & SECUREUXTHEME_STATE_CURRENT)
+		{
+			if (FAILED(LoadStringW(g_hInst, IDS_Ok, buffer1, 1023)))
+			{
+				wcscpy_s(buffer1, L"OK STRING MISSING");
+			}
+
+			statusText += buffer1;
+
+			status->SetForegroundStdColor(44); // forest green
+		}
+		else {
+			if (FAILED(LoadStringW(g_hInst, IDS_OUTDATED, buffer1, 1023)))
+			{
+				wcscpy_s(buffer1, L"OUTDATED STRING MISSING");
+			}
+
+			statusText += buffer1;
+
+			status->SetForegroundStdColor(138); // yellow
+		}
+	}
+	else {
+		if (FAILED(LoadStringW(g_hInst, IDS_NOTINSTALLED, buffer1, 1023)))
+		{
+			wcscpy_s(buffer1, L"NOT INSTALLED STRING MISSING");
+		}
+
+		statusText += buffer1;
+
+		status->SetForegroundStdColor(113); // red
+	}
+
+	status->SetContentString((UCString)statusText.c_str());
+}
 
 void RectifyMainPage::OnInit()
 {
@@ -359,6 +429,7 @@ void RectifyMainPage::OnInit()
 	Element* version = (Element*)root->FindDescendent(StrToID((UCString)L"RectifyVersion"));
 	TouchButton* enableAdmin = (TouchButton*)root->FindDescendent(StrToID((UCString)L"Link_EnableAdmin"));
 	TouchButton* BtnRestartExplorer = (TouchButton*)root->FindDescendent(StrToID((UCString)L"BtnRestartExplorer"));
+	TouchButton* ThemetoolInstall = (TouchButton*)root->FindDescendent(StrToID((UCString)L"ThemetoolInstall"));
 
 	CCRadioButton* Win11DefaultMenus = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"Win11DefaultMenus"));
 	CCRadioButton* NilesoftSmall = (CCRadioButton*)root->FindDescendent(StrToID((UCString)L"NilesoftSmall"));
@@ -424,6 +495,7 @@ void RectifyMainPage::OnInit()
 		else {
 			MessageBox(NULL, TEXT("Failed to count the amount of themes"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
 		}
+
 		if (version != NULL)
 		{
 			WCHAR value[255] = { 0 };
@@ -512,12 +584,16 @@ void RectifyMainPage::OnInit()
 	{
 		enableAdmin->SetLayoutPos(-3);
 		enableAdmin->SetVisible(FALSE);
+		ThemetoolInstall->SetEnabled(TRUE);
 	}
 	else
 	{
 		MicaForEveryoneCheckbox->SetEnabled(FALSE);
 		TabbedCheckbox->SetEnabled(FALSE);
+		ThemetoolInstall->SetEnabled(FALSE);
 	}
+
+	UpdateThemetoolStatus();
 
 	UpdateThemeGraphic();
 	initializing = false;
