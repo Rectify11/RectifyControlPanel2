@@ -555,6 +555,10 @@ HRESULT CRectifyUtil::SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed)
 		struct stat sb;
 		if (stat("c:/windows/MicaForEveryone", &sb) == 0)
 		{
+			// kill micaforeveryone and explorerframe if already running
+			KillTask(L"MicaForEveryone.exe");
+			KillTask(L"ExplorerFrame.exe");
+
 			char* localappdata = nullptr;
 			size_t sz = 0;
 			if (_dupenv_s(&localappdata, &sz, "localappdata") == 0 && localappdata != nullptr)
@@ -583,7 +587,7 @@ HRESULT CRectifyUtil::SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed)
 
 				if (!check_if_file_exists(config_file_src))
 				{
-					swprintf(buffer, 1024, L"Warning: Micaforeveryone configuration file is missing! File name is %ws. Is micaforeveryone installed correctly in the rectify11 installer?", config_file_src.c_str());
+					swprintf(buffer, 1024, L"Warning: Micaforeveryone configuration file is missing! File name is %ws. Try reinstalling themes option in Rectify11 Installer", config_file_src.c_str());
 					MessageBox(NULL, buffer, L"Rectify11 control panel applet", MB_ICONWARNING);
 				}
 				else
@@ -604,29 +608,11 @@ HRESULT CRectifyUtil::SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed)
 				else
 				{
 					deleteTask(L"mfefix");
-					KillTask(L"explorerframe.exe");
+					KillTask(L"ExplorerFrame.exe");
 				}
 
 				// Start mica for everyone
-				STARTUPINFOW si;
-				PROCESS_INFORMATION pi;
-				ZeroMemory(&si, sizeof(si));
-				si.cb = sizeof(si);
-				ZeroMemory(&pi, sizeof(pi));
-				CreateProcessW(L"%systemroot%\\MicaForEveryone\\MicaForEveryone.exe",
-					NULL,        // Command line
-					NULL,           // Process handle not inheritable
-					NULL,           // Thread handle not inheritable
-					FALSE,          // Set handle inheritance to FALSE
-					0,              // No creation flags
-					NULL,           // Use parent's environment block
-					NULL,           // Use parent's starting directory 
-					&si,            // Pointer to STARTUPINFO structure
-					&pi             // Pointer to PROCESS_INFORMATION structure (removed extra parentheses)
-				);
-
-				CloseHandle(pi.hProcess);
-				CloseHandle(pi.hThread);
+				startProc(L"%systemroot%\\MicaForEveryone\\MicaForEveryone.exe");
 			}
 			else
 			{
@@ -648,7 +634,7 @@ HRESULT CRectifyUtil::SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed)
 		}
 		deleteTask(L"mfefix");
 		KillTask(L"MicaForEveryone.exe");
-		KillTask(L"explorerframe.exe");
+		KillTask(L"ExplorerFrame.exe");
 	}
 	return hr;
 }

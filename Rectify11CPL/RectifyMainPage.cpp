@@ -55,7 +55,7 @@ IClassInfo* RectifyMainPage::GetClassInfoW()
 
 void RectifyMainPage::OnEvent(Event* iev)
 {
-	if (iev->flag != GMF_ROUTED)
+	if (iev->flag != GMF_BUBBLED)
 		return;
 	if (!iev->handled)
 		Element::OnEvent(iev);
@@ -213,11 +213,11 @@ void RectifyMainPage::OnEvent(Event* iev)
 			CheckedStateFlags MicaEnabled2 = MicaForEveryoneCheckbox->GetCheckedState();
 			CheckedStateFlags TabbedEnabled = TabbedCheckbox->GetCheckedState();
 
-			RectifyUtil->SetMicaForEveryoneEnabled(MicaEnabled2 ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE, TabbedEnabled ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+			RectifyUtil->SetMicaForEveryoneEnabled(MicaEnabled2 == CheckedStateFlags_CHECKED ? TRUE : FALSE, TabbedEnabled ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
 
 			// Enable/disable the tabbed checkbox
 			if (TabbedCheckbox != NULL)
-				TabbedCheckbox->SetEnabled(MicaEnabled2 ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+				TabbedCheckbox->SetEnabled(MicaEnabled2 == CheckedStateFlags_CHECKED ? TRUE : FALSE);
 		}
 	}
 	else if (iev->target->GetID() == StrToID((UCString)L"TabChk"))
@@ -227,7 +227,7 @@ void RectifyMainPage::OnEvent(Event* iev)
 
 		if (iev->type == TouchButton::Click)
 		{
-			RectifyUtil->SetMicaForEveryoneEnabled(TRUE, TabbedCheckbox->GetCheckedState() ? CheckedStateFlags_CHECKED : CheckedStateFlags_NONE);
+			RectifyUtil->SetMicaForEveryoneEnabled(TRUE, TabbedCheckbox->GetCheckedState() == CheckedStateFlags_CHECKED ? TRUE : FALSE);
 		}
 	}
 	else if (iev->target->GetID() == StrToID((UCString)L"ThemetoolInstall"))
