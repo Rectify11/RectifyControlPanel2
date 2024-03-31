@@ -27,14 +27,14 @@ LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 STRINGTABLE
 BEGIN
     IDS_THEMEHOOKFAIL       "Fehler beim laden von SecureUXTheme ThemeTool. Designinformationen werden nicht geladen."
-    IDS_CPLTITLE            "Rectify11 Einstellungen ändern"
+    IDS_CPLTITLE            "Rectify11 Einstellungen"
     IDS_THEME               "Design:"
     IDS_ThemePref           "Design-Einstellungen"
     IDS_CPLNAME             "Rectify11-Einstellungen"
     IDS_THEMESHEADER        "Designs"
     IDS_INFORMATIONHEADER   "Informationen"
     IDS_ENABLEMICA          "Mica aktivieren"
-    IDS_TABBED              "Tabbed statt Mica verwenden"
+    IDS_TABBED              "Mica Alt aktivieren"
 END
 
 STRINGTABLE
@@ -66,11 +66,11 @@ BEGIN
     IDS_SYSINFO             "Systeminformationen"
     IDS_UNINSTALL           "Rectify11 Deinstallieren"
     IDS_THEMETOOLSTATUS     "SecureUXThemePatcher status: "
-    IDS_OUTDATED            "Outdated"
-    IDS_NOTINSTALLED        "Not installed"
-    IDS_THEMETOOLWARN       "Unknown status. Please reinstall."
-    IDS_THEMETOOLINSTALL    "Reinstall SecureUxTheme patcher"
-    IDS_THEMETOOLALT        "Reinstalls the SecureUxThemePatcher. This is needed if the Rectify11 visual style is not being applied."
+    IDS_OUTDATED            "Veraltet"
+    IDS_NOTINSTALLED        "Nicht installiert"
+    IDS_THEMETOOLWARN       "Unbekannter Status. Bitte neu installieren."
+    IDS_THEMETOOLINSTALL    "SecureUxTheme-Patcher neu installieren"
+    IDS_THEMETOOLALT        "Installiert den SecureUxThemePatcher neu. Dies ist erforderlich, wenn das Rectify11-Design nicht angewendet wird."
 END
 
 #endif    // German (Germany) resources
@@ -289,4 +289,3 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
-
