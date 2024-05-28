@@ -80,13 +80,22 @@ HRESULT CFolderViewImplClassFactory::CreateInstance(__in_opt IUnknown* punkOuter
     HRESULT hr = !punkOuter ? S_OK : CLASS_E_NOAGGREGATION;
     if (SUCCEEDED(hr))
     {
-        if (CLSID_FolderViewImplElement == m_rclsid)
+        if (m_rclsid == CLSID_FolderViewImplElement)
         {
             hr = CElementProvider_CreateInstance(riid, ppv);
         }
-        else if (CLSID_CRectifyUtil == m_rclsid)
+        else if (m_rclsid == CLSID_CRectifyUtil)
         {
             hr = CRectifyUtil_CreateInstance(riid, ppv);
+        }
+        else if (m_rclsid == IID_IUnknown)
+        {
+            AddRef();
+            
+            // TODO: is this correct? Not sure why this is being called with IUnknown instead of CRectifyUtil
+            //       in Windows 11 23H2
+            *ppv = this;
+            return S_OK;
         }
         else
         {
@@ -96,7 +105,7 @@ HRESULT CFolderViewImplClassFactory::CreateInstance(__in_opt IUnknown* punkOuter
 
             swprintf(szGuid, 40, L"{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}", riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7]);
 
-            MessageBox(NULL, szGuid, TEXT("Unknown interface in CFolderViewImplClassFactory::CreateInstance()"), 0);
+            MessageBox(NULL, szGuid, TEXT("Unknown interface in CFolderViewImplClassFactory::CreateInstance()"), MB_ICONERROR);
         }
     }
     return hr;
