@@ -75,9 +75,9 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
 	}
 	if (FAILED(hr))
 	{
-		WCHAR szGuid[100] = { 0 };
+		WCHAR szGuid[400] = { 0 };
 
-		swprintf(szGuid, 100, L"{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}\n{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
+		swprintf(szGuid, 400, L"RCLSID: {%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}\n RIID: {%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
 			rclsid.Data1, rclsid.Data2, rclsid.Data3, rclsid.Data4[0], rclsid.Data4[1], rclsid.Data4[2], rclsid.Data4[3], rclsid.Data4[4], rclsid.Data4[5], rclsid.Data4[6], rclsid.Data4[7],
 			riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7]);
 
