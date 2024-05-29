@@ -130,9 +130,9 @@ void RectifyMainPage::OnEvent(Event* iev)
 
 			// load appy flags
 			HKEY Rectify11;
-			if (RegCreateKey(HKEY_CURRENT_USER, TEXT("SOFTWARE\\Rectify11"), &Rectify11))
+			if (RegCreateKey(HKEY_CURRENT_USER, Rectify11PrefsKey, &Rectify11))
 			{
-				SHOW_ERROR("Failed to create rectify11 key");
+				SHOW_ERROR("Failed to create Rectify11Prefs key");
 				return;
 			}
 

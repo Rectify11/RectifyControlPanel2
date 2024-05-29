@@ -1,5 +1,6 @@
 #include "Rectify11CPL.h"
 #include "RectifyThemeCfgPage.h"
+#include "CRectifyUtil.h"
 
 IClassInfo* RectifyThemeCfgPage::Class = NULL;
 
@@ -73,7 +74,7 @@ void RectifyThemeCfgPage::OnEvent(Event* iev)
 			DWORD IgnoreScreensaversVal = IgnoreScreensavers->GetCheckedState() != CheckedStateFlags_NONE;
 
 			HKEY Rectify11;
-			if (RegCreateKey(HKEY_CURRENT_USER, TEXT("SOFTWARE\\Rectify11"), &Rectify11))
+			if (RegCreateKey(HKEY_CURRENT_USER, Rectify11PrefsKey, &Rectify11))
 			{
 				SHOW_ERROR("Failed to create rectify11 key");
 				return;
@@ -135,7 +136,7 @@ void RectifyThemeCfgPage::OnInit()
 	TouchButton* IgnoreThemePreferences = (TouchButton*)root->FindDescendent(StrToID((UCString)L"IgnoreThemePreferences"));
 
 	HKEY Rectify11;
-	if (RegCreateKey(HKEY_CURRENT_USER, TEXT("SOFTWARE\\Rectify11"), &Rectify11))
+	if (RegCreateKey(HKEY_CURRENT_USER, Rectify11PrefsKey, &Rectify11))
 	{
 		SHOW_ERROR("Failed to create rectify11 key");
 		return;

@@ -13,6 +13,8 @@
 #pragma comment(lib, "comsupp.lib")
 #pragma comment(lib, "comsuppw.lib")
 
+WCHAR Rectify11PrefsKey[] = L"SOFTWARE\\Rectify11Prefs";
+
 CRectifyUtil::CRectifyUtil() : m_ref(1)
 {
 	DllAddRef();
@@ -755,6 +757,58 @@ HRESULT CRectifyUtil::ApplyTheme(LPCWSTR pThemeName)
 	else {
 		themetool_loaded = true;
 	}
+	ULONG apply_flags = 0;
+
+	// load appy flags
+	HKEY Rectify11;
+	if (RegCreateKey(HKEY_CURRENT_USER, Rectify11PrefsKey, &Rectify11))
+	{
+		SHOW_ERROR("Failed to create Rectify11Prefs key");
+		return;
+	}
+
+	DWORD size = 4;
+
+	DWORD IgnoreBgVal = 0;
+	DWORD IgnoreCursorsVal = 0;
+	DWORD IgnoreIconsVal = 0;
+	DWORD IgnoreColorsVal = 0;
+	DWORD IgnoreSoundsVal = 0;
+	DWORD IgnoreScreensaversVal = 0;
+
+	RegQueryValueExW(Rectify11, L"IgnoreBg", 0, NULL, (LPBYTE)&IgnoreBgVal, &size);
+	RegQueryValueExW(Rectify11, L"IgnoreCursors", 0, NULL, (LPBYTE)&IgnoreCursorsVal, &size);
+	RegQueryValueExW(Rectify11, L"IgnoreIcons", 0, NULL, (LPBYTE)&IgnoreIconsVal, &size);
+	RegQueryValueExW(Rectify11, L"IgnoreColors", 0, NULL, (LPBYTE)&IgnoreColorsVal, &size);
+	RegQueryValueExW(Rectify11, L"IgnoreSounds", 0, NULL, (LPBYTE)&IgnoreSoundsVal, &size);
+	RegQueryValueExW(Rectify11, L"IgnoreScreensavers", 0, NULL, (LPBYTE)&IgnoreScreensaversVal, &size);
+	RegCloseKey(Rectify11);
+
+	if (IgnoreBgVal)
+	{
+		apply_flags |= THEMETOOL_APPLY_FLAG_IGNORE_BACKGROUND;
+	}
+	if (IgnoreCursorsVal)
+	{
+		apply_flags |= THEMETOOL_APPLY_FLAG_IGNORE_CURSOR;
+	}
+	if (IgnoreIconsVal)
+	{
+		apply_flags |= THEMETOOL_APPLY_FLAG_IGNORE_DESKTOP_ICONS;
+	}
+	if (IgnoreColorsVal)
+	{
+		apply_flags |= THEMETOOL_APPLY_FLAG_IGNORE_COLOR;
+	}
+	if (IgnoreSoundsVal)
+	{
+		apply_flags |= THEMETOOL_APPLY_FLAG_IGNORE_SOUND;
+	}
+	if (IgnoreSoundsVal)
+	{
+		apply_flags |= THEMETOOL_APPLY_FLAG_IGNORE_SCREENSAVER;
+	}
+
 
 	ULONG themeCount = 0;
 	themetool_get_theme_count(&themeCount);

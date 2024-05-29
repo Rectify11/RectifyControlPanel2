@@ -3,6 +3,7 @@
 #include "IRectifyUtil_h.h"
 using namespace std;
 
+extern WCHAR Rectify11PrefsKey[];
 
 class CRectifyUtil : IRectifyUtil
 {
