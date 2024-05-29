@@ -88,14 +88,12 @@ HRESULT CFolderViewImplClassFactory::CreateInstance(__in_opt IUnknown* punkOuter
         {
             hr = CRectifyUtil_CreateInstance(riid, ppv);
         }
-        else if (m_rclsid == IID_IUnknown)
+        else if (riid == IID_IUnknown)
         {
-            AddRef();
-            
             // TODO: is this correct? Not sure why this is being called with IUnknown instead of CRectifyUtil
             //       in Windows 11 23H2
-            *ppv = this;
-            return S_OK;
+            // for some reason m_rclsid is DCC67965-7FFB-0000-1400 ....
+            hr = CRectifyUtil_CreateInstance(riid, ppv);
         }
         else
         {
@@ -103,7 +101,7 @@ HRESULT CFolderViewImplClassFactory::CreateInstance(__in_opt IUnknown* punkOuter
 
             WCHAR szGuid[400] = { 0 };
 
-            swprintf(szGuid, 400, L"RIID: {%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}\RCLSID: {%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
+            swprintf(szGuid, 400, L"RIID: {%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}\nRCLSID: {%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
                 riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7],
                 m_rclsid.Data1, m_rclsid.Data2, m_rclsid.Data3, m_rclsid.Data4[0], m_rclsid.Data4[1], m_rclsid.Data4[2], m_rclsid.Data4[3], m_rclsid.Data4[4], m_rclsid.Data4[5], m_rclsid.Data4[6], m_rclsid.Data4[7]);
 
