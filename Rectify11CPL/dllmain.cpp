@@ -81,7 +81,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
 			rclsid.Data1, rclsid.Data2, rclsid.Data3, rclsid.Data4[0], rclsid.Data4[1], rclsid.Data4[2], rclsid.Data4[3], rclsid.Data4[4], rclsid.Data4[5], rclsid.Data4[6], rclsid.Data4[7],
 			riid.Data1, riid.Data2, riid.Data3, riid.Data4[0], riid.Data4[1], riid.Data4[2], riid.Data4[3], riid.Data4[4], riid.Data4[5], riid.Data4[6], riid.Data4[7]);
 
-		MessageBox(NULL, szGuid, TEXT("Unknown interface in DllGetClassObject()"), 0);
+		MessageBox(NULL, szGuid, TEXT("Unknown interface in DllGetClassObject()"), MB_ICONERROR);
 	}
 	return hr;
 }
