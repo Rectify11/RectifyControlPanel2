@@ -764,7 +764,6 @@ HRESULT CRectifyUtil::ApplyTheme(LPCWSTR pThemeName)
 	if (RegCreateKey(HKEY_CURRENT_USER, Rectify11PrefsKey, &Rectify11))
 	{
 		SHOW_ERROR("Failed to create Rectify11Prefs key");
-		return;
 	}
 
 	DWORD size = 4;
