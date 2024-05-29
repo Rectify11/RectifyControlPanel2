@@ -1,6 +1,6 @@
 <duixml>
 	<stylesheets>
-		<style resid="cp_style">
+		<style resid="r11_cp_style">
 			<Button accessible="true" contentalign="wrapleft"/>
 			<Element overhang="false" background="argb(0,0,0,0)"/>
 			<CCPushButton transparent="true" accessible="true" minsize="size(76rp,23rp)" font="gtf(CONTROLPANELSTYLE,14,0)" margin="rect(6rp,0rp,0rp,0rp)"/>
@@ -12,17 +12,32 @@
 			<if class="cp_topbox">
 				<Element accessible="true" accrole="client" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
 			</if>
-			<if class="cp_hub_frame">
-				<Element padding="rect(13rp,1rp,1rp,10rp)"/>
-			</if>
 			<if class="cp_spoke_frame">
 				<Element padding="rect(0rp,19rp,0rp,10rp)"/>
 			</if>
 			<if class="cp_help_glyph">
-				<Button height="18rp" width="18rp" content="icon(99,sysmetric(49),sysmetric(50),library(imageres.dll))" padding="rect(1rp,1rp,1rp,1rp)" cursor="hand" accRole="link" accdefaction="click" accState="0x00100000" tooltip="true"/>
+				<Button height="24rp" content="" padding="rect(0rp,2rp,8rp,0rp)" cursor="hand" accRole="link" accdefaction="click" accState="0x00100000" tooltip="true"/>
+			</if>
+			<if class="cp_help_glyph_legacy">
+				<Button height="24rp" width="24rp" content="icon(99,sysmetric(49),sysmetric(50),library(imageres.dll))" padding="rect(0rp,8rp,8rp,0rp)" cursor="hand" accRole="link" accdefaction="click" accState="0x00100000" tooltip="true"/>
 				<if keyfocused="true">
 					<Button contentalign="focusrect"/>
 				</if>
+			</if>
+			<if class="cp_shield_glyph">
+				<RichText content="resstr(2011, library(duires.dll))" font="resstr(2006, library(duires.dll))" background="argb(0,0,0,0)"/>
+			</if>
+			<if class="cp_info_glyph">
+				<RichText content="resstr(2013, library(duires.dll))" font="resstr(2012, library(duires.dll))" background="argb(0,0,0,0)"/>
+			</if>
+			<if class="cp_help_glyph_modern">
+				<RichText content="resstr(2014, library(duires.dll))" font="resstr(2012, library(duires.dll))" background="argb(0,0,0,0)" foreground="themeable(gtc(ControlPanelStyle, 7, 1, 3803), Hotlight)"/>
+			</if>
+			<if class="cp_help_innerglyph_modern">
+				<RichText content="resstr(2015, library(duires.dll))" font="resstr(2012, library(duires.dll))" background="argb(0,0,0,0)" foreground="Window"/>
+			</if>
+			<if class="cp_help_text">
+				<RichText content="resstr(904, library(user32.dll))" font="messagefont;115%" background="argb(0,0,0,0)" foreground="themeable(gtc(ControlPanelStyle, 6, 0, 3803), Windowtext)" height="22rp"/>
 			</if>
 			<if class="cp_content_pane">
 				<Element width="600rp" padding="rect(10rp,0rp,10rp,0rp)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
@@ -121,7 +136,7 @@
 					<TouchButton background="themeable(dtb(DirectUISecondary::Button, 1, 4), 20665)" foreground="themeable(gtc(DirectUISecondary::Button, 1, 4, 3803))" bordercolor="themeable(gtc(Communications::Rebar, 0, 0, 3805), threedface)"/>
 				</if>
 			</if>
-			<TouchCheckBox contentalign="endellipsis" background="20575" accessible="true" accrole="checkbutton" font="resstr(113, library(duires.dll))" minsize="size(100rp,16rp)" padding="rect(0rp,8rp,0rp,0rp)"/>
+			<TouchCheckBox contentalign="endellipsis" background="20575" accessible="true" accrole="checkbutton" foreground="Windowtext" font="resstr(113, library(duires.dll))" minsize="size(100rp,16rp)" padding="rect(0rp,8rp,0rp,0rp)"/>
 			<if checkedstate="unchecked">
 				<TouchCheckBox accdefaction="resstr(105, library(dui70.dll))"/>
 			</if>
@@ -129,7 +144,7 @@
 				<TouchCheckBox accdefaction="resstr(106, library(dui70.dll))"/>
 			</if>
 			<if Enabled="false">
-				<TouchCheckBox foreground="10017"/>
+				<TouchCheckBox foreground="themeable(gtc(Button, 3, 4, 3803), 10017)"/>
 			</if>
 			<if id="atom(TCB_Glyph)">
 				<TouchCheckBoxGlyph contentalign="middlecenter" height="20rp" width="20rp" background="themeable(dtb(DirectUI::Button, 3, 1))" foreground="20646" borderthickness="rect(0rp,0rp,0rp,0rp)" bordercolor="20638" constrainlayout="NarrowClip" font="resstr(114, library(duires.dll))"/>
@@ -161,6 +176,50 @@
 					</if>
 				</if>
 			</if>
+			<if Expanded="false">
+				<Expando height="28rp"/>
+			</if>
+			<if Expanded="true">
+				<Expando height="96rp"/>
+			</if>
+			<if class="ExpandoBody">
+				<Expando background="dtb(ControlPanel,2,0)" margin="rect(0,0rp,0,4rp)" animation="sizev|rectanglev|log|veryfast|delayshort"/>
+			</if>
+			<if id="atom(Icon_ExpandoButton)">
+				<Button background="argb(0,0,0,0)" margin="rect(0,0,6rp,0)" cursor="hand" accessible="true" accstate="0x00300000" font="resstr(2006, library(duires.dll))" content="resstr(2008, library(duires.dll))"/>
+				<if selected="true">
+					<Button content="resstr(2007, library(duires.dll))"/>
+				</if>
+			</if>
+			<if class="clipper">
+				<Clipper background="argb(0,0,0,0)" animation="rectanglev|s|mediumfast"/>
+			</if>
+			<if class="expando_clipped">
+				<Element background="argb(0,0,0,0)" animation="rectanglev|s|mediumfast"/>
+			</if>
+			<if class="expando_button">
+				<AccessibleButton alpha="216" animation="alpha|none|s|veryfast" foreground="gtc(ControlPanelStyle, 10, 2, 3803)"/>
+				<if Enabled="true">
+					<if mousefocused="true">
+						<AccessibleButton alpha="255" background="dtb(Explorer::ListView, 1, 3)"/>
+					</if>
+					<if Pressed="true">
+						<AccessibleButton alpha="160" background="dtb(Explorer::ListView, 1, 3)"/>
+					</if>
+					<if keyfocused="true" mousefocused="false">
+						<AccessibleButton alpha="216"/>
+					</if>
+				</if>
+				<if Enabled="false">
+					<AccessibleButton alpha="176" foreground="Graytext"/>
+				</if>
+			</if>
+			<if class="expando_contentarea">
+				<Element padding="rect(0rp,8rp,2rp,2rp)" background="argb(0,0,0,0)"/>
+			</if>
+			<if class="expando_header_text">
+				<Element font="messagefont;115%"/>
+			</if>
 		</style>
 		<style resid="CPLTaskHubStyle">
 			<if class="ShieldIcon">
@@ -172,24 +231,30 @@
 	<!--This defines the Themes_________ headers-->
 	<element resid="informationsectiontitle" layoutpos="top" layout="filllayout()" padding="rect(0rp,0rp,0rp,10rp)">
 		<element layout="borderlayout()" padding="rect(0rp,2rp,0rp,5rp)">
-			<element class="cp_content_divider_line" width="1rp"/>
+			<element class="cp_content_divider_line" width="1rp" height="0rp"/>
 		</element>
 		<element layout="flowlayout()">
-			<element id="atom(Title)" class="cp_content_divider_header" content="Heres a divder with header"/>
+			<Element id="atom(Title)" padding="rect(0rp,0rp,2rp,0rp)" contentalign="wrapleft" accessible="true" accRole="statictext" font="themeable(gtf(ControlPanelStyle, 19, 0), 'captionfont')" background="Window" foreground="themeable(gtc(ControlPanelStyle,9,0,3803), Windowtext)" compositedtext="true" textglowsize="0" content="Heres a divder with header"/>
 		</element>
 	</element>
 
 	<RectifyMainPage resid="main" layout="borderlayout()" accessible="true" accrole="window" sheet="common" id="atom(MainPageElem)">
-		<ScrollViewer xscrollable="false" layoutpos="top" sheet="common" accessible="true" accrole="pane" class="cp_topbox">
-			<element sheet="cp_style" class="cp_topbox" width="9999rp" padding="rect(60rp,15rp,10rp,10rp)" layoutpos="client" layout="borderlayout()" accessible="true" accname="resstr(104)">
+		<ScrollViewer xscrollable="false" layoutpos="top" sheet="common" accessible="true" accrole="pane" class="cp_topbox" animation="sizev|s|mediumfast">
+			<element sheet="r11_cp_style" class="cp_topbox" width="9999rp" padding="rect(60rp,15rp,10rp,10rp)" layoutpos="client" layout="borderlayout()" accessible="true" accname="resstr(104)" animation="sizev|s|mediumfast">
 
 				<!--Title and help button-->
 				<element layoutpos="top" layout="borderlayout()">
 					<element layoutpos="right" layout="flowlayout(0,0,1)">
-						<button id="atom(buttonHelp)" class="cp_help_glyph" acchelp="resstr(1112)" accName="resstr(1109)" />
+						<Button class="cp_help_glyph" sheet="r11_cp_style" id="atom(buttonHelp)" accname="resstr(1109)" acchelp="resstr(1112)" layout="borderlayout()">
+							<Element layout="filllayout()" layoutpos="left">
+								<RichText class="cp_help_glyph_modern" layoutpos="client"/>
+								<RichText class="cp_help_innerglyph_modern" layoutpos="client"/>
+							</Element>
+							<RichText class="cp_help_text"/>
+						</Button>
 					</element>
 					<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)">
-						<element class="cp_content_instruction" content="resstr(104)" />
+						<element class="cp_content_instruction" content="resstr(104)" compositedtext="true" textglowsize="0" />
 
 					</element>
 				</element>
@@ -201,34 +266,51 @@
 
 						<!--Themes header line thing-->
 						<macro expand="informationsectiontitle">
-							<bind connect="Title" font="iconfont;115%" content="resstr(108)" />
+							<bind connect="Title" content="resstr(108)" />
 						</macro>
 
 						<!--Theme combobox and preview-->
 						<element layoutpos="top" layout="borderlayout()">
-							<element id="atom(ThemePreview)" width="152rp" height="152rp" layoutpos="right" accessible="true" accrole="graphic" accname="resstr(301)" />
+							<element id="atom(ThemePreviewContainer)" layout="borderlayout()" layoutpos="right">
+								<element id="atom(ThemePreview)" width="144rp" height="144rp" padding="rect(12rp,12rp,12rp,12rp)" background="dtb(AltTab, 1, 1)" layoutpos="top" accessible="true" accrole="graphic" accname="resstr(301)" compositedtext="true" textglowsize="0" />
+							</element>
 							<element id="atom(advancedStorageHandlerSettings)" layoutpos="top" layout="verticalflowlayout()" width="600rp">
 								<element resid="indentedMacroHandlerSetting" layoutpos="top" layout="flowlayout(0,0,0,0)">
-									<element id="atom(ThemeTxt)" font="iconfont;115%" contentalign="middleleft" accessible="true" height="40rp" accrole="statictext" tooltip="true" active="mouse" content="resstr(105)" />
-									<ComboBox id="atom(ThemeCmb)" width="300rp" accessible="true" padding="rect(0,8rp,0,8rp)" margin="rect(32rp,0,0,8rp)" accRole="combobox" font="iconfont;115%" />
+									<element id="atom(ThemeTxt)" class="cp_content_text" font="messagefont;115%" contentalign="middleleft" accessible="true" height="40rp" accrole="statictext" tooltip="true" active="mouse" compositedtext="true" textglowsize="0" content="resstr(105)" />
+									<ComboBox id="atom(ThemeCmb)" width="300rp" accessible="true" padding="rect(0,8rp,0,8rp)" margin="rect(12rp,0,0,6rp)" accRole="combobox" font="messagefont;115%" />
 								</element>
 							</element>
-							
-							<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)" width="400rp">
 
-								<!--Themetool status-->
-								<element id="atom(ThemetoolStatus)" font="iconfont;115%" contentalign="middleleft" accessible="true" height="40rp" accrole="statictext" tooltip="true" active="mouse" content="resstr(134)" />
-								<TouchButton id="atom(ThemetoolInstall)" class="primary" content="resstr(138)" accessible="true" tooltip="true" accdesc="resstr(139)"></TouchButton>
+							<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)" width="400rp">
 
 								<!--Checkboxes-->
 								<TouchCheckBox layoutpos="top" id="Atom(MicaChk)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="resstr(110)"/>
 								<TouchCheckbox layoutpos="top" id="Atom(TabChk)" accessible="true" margin="rect(0,8rp,0,8rp)" font="iconfont;115%" content="resstr(111)"/>
+								<Expando resid="Resid_CredentialDetailsExpando" layoutpos="top" layout="verticalflowlayout(0,0,0,0)" class="ExpandoBody">
+									<AccessibleButton id="atom(arrow)" layoutpos="top" layout="flowlayout(0,0,0,0)" accessible="true" accrole="pushbutton" class="expando_button">
+										<Element layoutpos="top" layout="flowlayout(0,2,2,0)" padding="rect(6rp,4rp,6rp,4rp)" background="argb(0,0,0,0)">
+											<Button id="atom(Icon_ExpandoButton)" active="inactive" accessible="true" accrole="pushbutton" accdefaction="Press" compositedtext="true" textglowsize="0" padding="rect(0,2rp,0,2rp)"/>
+											<Element class="expando_header_text" content="resstr(141)" accessible="true" contentalign="endellipsis" tooltip="true" accrole="statictext" compositedtext="true" textglowsize="0" padding="rect(0,0,4rp,2rp)"/>
+										</Element>
+									</AccessibleButton>
+									<Clipper id="atom(clipper)" layout="borderlayout()" layoutpos="client" class="clipper">
+										<Element id="atom(clipped)" layoutpos="bottom" layout="borderlayout()" class="expando_clipped">
+											<Element layoutpos="left" layout="borderlayout()" class="expando_contentarea">
+												<Element layoutpos="top" layout="borderlayout()" padding="rect(4rp,0rp,0rp,0rp)" background="argb(0,0,0,0)">
+													<element id="atom(ThemetoolStatus)" font="messagefont;115%" contentalign="middleleft" accessible="true" height="40rp" accrole="statictext" tooltip="true" active="mouse" content="resstr(134)" compositedtext="true" textglowsize="0" layoutpos="top"/>
+													<TouchButton id="atom(ThemetoolInstall)" class="secondary" content="resstr(139)" accessible="true" tooltip="true" accdesc="resstr(140)" layoutpos="top"></TouchButton>
+												</Element>
+											</Element>
+										</Element>
+									</Clipper>
+								</Expando>
+
 							</element>
 						</element>
 					</element>
 
 				</Element>
-				<Element id="atom(MenuSection)" class="cp_content_pane" layoutpos="top" layout="filllayout()">
+				<Element id="atom(MenuSection)" class="cp_content_pane" layoutpos="top" layout="filllayout()" animation="position|s|mediumfast">
 
 					<element layout="borderlayout()" background="20575">
 						<!--Spacing-->
@@ -236,7 +318,7 @@
 
 						<!--Themes header line thing-->
 						<macro expand="informationsectiontitle">
-							<bind connect="Title" font="iconfont;115%" content="resstr(129)" />
+							<bind connect="Title" content="resstr(129)" />
 						</macro>
 
 						<!--Theme combobox and preview-->
@@ -251,25 +333,26 @@
 
 								<TouchButton layoutpos="top" id="atom(BtnRestartExplorer)" class="primary" accname="Restart explorer" content="resstr(117)"/>
 								<TouchButton class="primary" layout="flowlayout(0,2,2,0)">
-									<element id="atom(icon)" content="icon(78,24rp,24rp,1,1,library(imageres.dll))" margin="rect(0,0,8rp,0)" background="argb(0,0,0,0)"/>
-									<richtext id="atom(text)" content="resstr(118)" contentalign="middlecenter|endellipsis" padding="rect(0,0,0,4rp)" background="argb(0,0,0,0)"/>
+									<RichText id="atom(icon)" font="resstr(2006, library(duires.dll))" layoutpos="left" content="resstr(2011, library(duires.dll))" padding="rect(0,2rp,0,0)" background="argb(0,0,0,0)"/>
+									<RichText id="atom(text)" content="resstr(118)" contentalign="middlecenter|endellipsis" padding="rect(0,0,0,1rp)" background="argb(0,0,0,0)"/>
 								</TouchButton>
 							</element>
 						</element>
 					</element>
 
 				</Element>
-				<Element id="atom(InformationSection)" class="cp_content_pane" layoutpos="top" layout="borderlayout()">
+				<Element id="atom(InformationSection)" class="cp_content_pane" layoutpos="top" layout="borderlayout()" animation="position|s|mediumfast" padding="rect(10rp,0,10rp,48rp)">
 					<!--Spacing-->
 					<Element layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,24rp)" />
 
 					<!--Information header line thing-->
 					<macro expand="informationsectiontitle">
-						<bind connect="Title" font="iconfont;115%" content="resstr(109)" />
+						<bind connect="Title" content="resstr(109)" />
 					</macro>
-					<element layoutpos="top" layout="flowlayout(0)" font="iconfont;115%">
-						<element id="atom(RectifyVersion)" content="resstr(120)"/>
+					<element layoutpos="top" layout="borderlayout()" class="cp_content_text" font="messagefont;115%">
+						<element id="atom(RectifyVersion)" content="resstr(120)" compositedtext="true" textglowsize="0" layoutpos="top"/>
 					</element>
+
 					<!--<element id="atom(UpdateLink)" font="iconfont;115%" layout="flowlayout(0)" background="20575" padding="rect(4rp,4rp,4rp,4rp)" margin="rect(0,8rp,0,0)">
 						<element id="atom(UpdateIcon)" content="icon(81,16rp,16rp,library(imageres.dll))" margin="rect(0,0,4rp,0)"/>
 						<element id="atom(UpdateText)" content="An update is available."/>
