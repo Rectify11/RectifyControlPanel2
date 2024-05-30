@@ -285,7 +285,7 @@ HRESULT startProc(LPCWSTR proc, wstring args = L"", bool waitForExit = false)
 		ExpandEnvironmentStringsW(proc, proc_buffer, 999);
 	}
 
-	WCHAR args_buffer[1000] = {0};
+	WCHAR args_buffer[1000] = { 0 };
 	if (!args.empty())
 	{
 		wcsncpy_s(args_buffer, 999, args.c_str(), args.size());
@@ -299,14 +299,15 @@ HRESULT startProc(LPCWSTR proc, wstring args = L"", bool waitForExit = false)
 		NULL,           // Use parent's environment block
 		NULL,           // Use parent's starting directory 
 		&si,            // Pointer to STARTUPINFO structure
-		&pi             // Pointer to PROCESS_INFORMATION structure (removed extra parentheses)
+		&pi             // Pointer to PROCESS_INFORMATION structure
 	);
 
 	if (!hr)
 	{
 		WCHAR error_buffer[1000];
-		swprintf_s(error_buffer, L"error while creating process: %d", GetLastError());
-		MessageBox(NULL, error_buffer, TEXT("startProc"), MB_ICONERROR);
+		std::string message = std::system_category().message(hr);
+		swprintf_s(error_buffer, L"Error while starting process %s with arguments %s: %s (%ld)", proc, args.c_str(), message.c_str(), GetLastError());
+		MessageBox(NULL, error_buffer, TEXT("Starting process failed"), MB_ICONERROR);
 	}
 	else
 	{
@@ -452,7 +453,7 @@ HRESULT CRectifyUtil::_EnableClassicTransparent()
 		WCHAR workingdir_buffer[MAX_PATH];
 		ExpandEnvironmentStringsW(L"%windir%\\nilesoft\\AcrylicMenus", workingdir_buffer, MAX_PATH);
 
-		WCHAR target_buffer[MAX_PATH] = {0};
+		WCHAR target_buffer[MAX_PATH] = { 0 };
 		ExpandEnvironmentStringsW(L"%windir%\\nilesoft\\AcrylicMenus\\AcrylicMenusLoader.exe", target_buffer, MAX_PATH);
 
 		string shortcut_path = string(path);
@@ -822,7 +823,7 @@ HRESULT CRectifyUtil::ApplyTheme(LPCWSTR pThemeName)
 	{
 		ITheme* theme = NULL;
 		themetool_get_theme(i, &theme);
-		
+
 		WCHAR buffer[512];
 		themetool_theme_get_display_name(theme, buffer, 256);
 
