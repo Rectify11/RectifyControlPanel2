@@ -382,7 +382,7 @@ void RectifyMainPage::UpdateThemetoolStatus()
 	{
 		if (flags & SECUREUXTHEME_STATE_CURRENT)
 		{
-			if (FAILED(LoadStringW(g_hInst, IDS_Ok, buffer1, 1023)))
+			if (FAILED(LoadStringW(g_hInst, IDS_OK, buffer1, 1023)))
 			{
 				wcscpy_s(buffer1, L"OK STRING MISSING");
 			}

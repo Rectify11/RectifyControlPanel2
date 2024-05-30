@@ -27,7 +27,7 @@
 #define IDS_RESTARTEXPLORER             117
 #define IDS_ELEVATIONNEEDED             118
 #define IDS_VERSION                     119
-#define IDS_Ok                          120
+#define IDS_Save                        120
 #define IDS_CANCEL                      121
 #define IDS_IGNOREBG                    122
 #define IDS_IGNORECURSOR                123
@@ -42,11 +42,13 @@
 #define IDS_SYSINFO                     132
 #define IDS_UNINSTALL                   133
 #define IDS_THEMETOOLSTATUS             134
-#define IDS_OUTDATED                    135
-#define IDS_NOTINSTALLED                136
-#define IDS_THEMETOOLWARN               137
-#define IDS_THEMETOOLINSTALL            138
-#define IDS_THEMETOOLALT                139
+#define IDS_OK                          135
+#define IDS_OUTDATED                    136
+#define IDS_NOTINSTALLED                137
+#define IDS_THEMETOOLWARN               138
+#define IDS_THEMETOOLINSTALL            139
+#define IDS_THEMETOOLALT                140
+#define IDS_ADVANCEDOPTIONS             141
 #define IDR_MAINPAGE                    1001
 #define IDR_UPDATEPAGE                  1002
 

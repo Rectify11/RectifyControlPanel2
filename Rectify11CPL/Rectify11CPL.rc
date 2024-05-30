@@ -47,7 +47,7 @@ BEGIN
     IDS_RESTARTEXPLORER     "Starte den Explorer neu um die Änderungen zu übernehmen"
     IDS_ELEVATIONNEEDED     "Einstellungen ändern, die momentan nicht verfügbar sind"
     IDS_VERSION             "Rectify11 version:"
-    IDS_Ok                  "Ok"
+    IDS_Save                "Ok"
     IDS_CANCEL              "Abbrechen"
     IDS_IGNOREBG            "Desktophintergrund behalten"
     IDS_IGNORECURSOR        "Mauszeiger behalten"
@@ -66,11 +66,13 @@ BEGIN
     IDS_SYSINFO             "Systeminformationen"
     IDS_UNINSTALL           "Rectify11 Deinstallieren"
     IDS_THEMETOOLSTATUS     "SecureUXThemePatcher status: "
+	IDS_OK                  "Ok"
     IDS_OUTDATED            "Veraltet"
     IDS_NOTINSTALLED        "Nicht installiert"
     IDS_THEMETOOLWARN       "Unbekannter Status. Bitte neu installieren."
     IDS_THEMETOOLINSTALL    "SecureUxTheme-Patcher neu installieren"
     IDS_THEMETOOLALT        "Installiert den SecureUxThemePatcher neu. Dies ist erforderlich, wenn das Rectify11-Design nicht angewendet wird."
+	IDS_ADVANCEDOPTIONS     "Erweiterte Optionen"
 END
 
 #endif    // German (Germany) resources
@@ -184,7 +186,7 @@ BEGIN
     IDS_RESTARTEXPLORER     "Restart explorer to apply changes"
     IDS_ELEVATIONNEEDED     "Change settings that are unavailable"
     IDS_VERSION             "Rectify11 version:"
-    IDS_Ok                  "Ok"
+    IDS_Save                "Save"
     IDS_CANCEL              "Cancel"
     IDS_IGNOREBG            "Preserve my desktop background"
     IDS_IGNORECURSOR        "Preserve my mouse cursors"
@@ -203,11 +205,13 @@ BEGIN
     IDS_SYSINFO             "System Information"
     IDS_UNINSTALL           "Uninstall Rectify11"
     IDS_THEMETOOLSTATUS     "SecureUXThemePatcher status: "
+	IDS_OK                  "OK"
     IDS_OUTDATED            "Outdated"
     IDS_NOTINSTALLED        "Not installed"
     IDS_THEMETOOLWARN       "Unknown status. Please reinstall."
     IDS_THEMETOOLINSTALL    "Reinstall SecureUxTheme patcher"
     IDS_THEMETOOLALT        "Reinstalls the SecureUxThemePatcher. This is needed if the Rectify11 visual style is not being applied."
+    IDS_ADVANCEDOPTIONS     "Advanced options"
 END
 
 #endif    // English (United States) resources
@@ -228,51 +232,53 @@ LANGUAGE LANG_ARABIC, SUBLANG_ARABIC_SAUDI_ARABIA
 
 STRINGTABLE
 BEGIN
-    IDS_THEMEHOOKFAIL       "��� �� ����� SecureUXTheme ��� ��� ����� ������� �����."
-    IDS_CPLTITLE            "����� ������� Rectify11"
-    IDS_THEME               "�����:"
-    IDS_ThemePref           "��������"
-    IDS_CPLNAME             "������� Rectify11"
-    IDS_THEMESHEADER        "������"
-    IDS_INFORMATIONHEADER   "������� ����"
-    IDS_ENABLEMICA          "����� Mica"
-    IDS_TABBED              "������� Mica Alt ��� Mica"
+    IDS_THEMEHOOKFAIL       "فشل في تحميل SecureUXTheme ولن يتم تحميل معلومات النسق. "
+    IDS_CPLTITLE            "تغيير إعدادات Rectify11"
+    IDS_THEME               "النسق:"
+    IDS_ThemePref           "تفضيلاتي"
+    IDS_CPLNAME             "إعدادات Rectify11"
+    IDS_THEMESHEADER        "السمات"
+    IDS_INFORMATIONHEADER   "معلومات أخرى"
+    IDS_ENABLEMICA          "تفعيل Mica"
+    IDS_TABBED              "استخدام Mica Alt بدل Mica"
 END
 
 STRINGTABLE
 BEGIN
-    IDS_WIN11DEFAULT        "����� Windows 11 ����������"
-    IDS_FLUENTCTX           "����� Nilesoft Shell �����"
-    IDS_NILESHELLALL        "����� Nilesoft Shell �����"
-    IDS_CLASSICCTX          "����� Windows 10"
-    IDS_CLASSICTRANSPARENTCTX "����� Windows 10 �����"
-    IDS_RESTARTEXPLORER     "��� ����� Explorer ���� ��������"
-    IDS_ELEVATIONNEEDED     "����� ��������� ����� �����"
-    IDS_VERSION             "������:"
-    IDS_Ok                  "�����"
-    IDS_CANCEL              "�����"
-    IDS_IGNOREBG            "���� ��� ������"
-    IDS_IGNORECURSOR        "���� ��� ��� ������"
-    IDS_IGNOREIGONS         "���� ��� ��� ���������"
-    IDS_IGNOREACCENT        "���� ��� ���� ������"
-    IDS_IGNORESOUNDS        "���� ��� ����� ������ ������ ��"
-    IDS_IGNORESCREENSAVER   "���� ��� ���� ������ ������ �� (�� ���� ������)"
+    IDS_WIN11DEFAULT        "قوائم Windows 11 الافتراضية"
+    IDS_FLUENTCTX           "قوائم Nilesoft Shell مصغرة"
+    IDS_NILESHELLALL        "قوائم Nilesoft Shell كاملة"
+    IDS_CLASSICCTX          "قوائم Windows 10"
+    IDS_CLASSICTRANSPARENTCTX "قوائم Windows 10 شفافة"
+    IDS_RESTARTEXPLORER     "أعد تشغيل Explorer لحفظ البيانات"
+    IDS_ELEVATIONNEEDED     "تغيير الإعدادات الغير متاحة"
+    IDS_VERSION             "الإصدار:"
+    IDS_Save                "حفظ"
+    IDS_CANCEL              "إلغاء"
+    IDS_IGNOREBG            "حافظ على خلفيتي"
+    IDS_IGNORECURSOR        "حافظ على شكل الماوس"
+    IDS_IGNOREIGONS         "حافظ على شكل الأيقونات"
+    IDS_IGNOREACCENT        "حافظ على لوني المفضل"
+    IDS_IGNORESOUNDS        "حافظ على أصوات النظام الخاصة بي"
+    IDS_IGNORESCREENSAVER   "حافظ على شاشة الخمول الخاصة بي (في حالة وجودها)"
 END
 
 STRINGTABLE
 BEGIN
-    IDS_NA                  "��� ����"
-    IDS_MENUS               "�������"
-    IDS_CPLTHEMEPREF        "����� ������ �� Rectify11"
-    IDS_CPLTIP              "[TODO: LOCALIZE CPLTIP]"
-    IDS_SYSINFO             "[TODO: LOCALIZE: SYSINFO]"
-    IDS_UNINSTALL           "[TODO: LOCALIZE: UNINSTALL]"
-    IDS_THEMETOOLSTATUS     "SecureUXThemePatcher status: "
-    IDS_OUTDATED            "Outdated"
-    IDS_NOTINSTALLED        "Not installed"
-    IDS_THEMETOOLWARN       "Unknown status. Please reinstall."
-    IDS_THEMETOOLINSTALL    "Reinstall SecureUxTheme patcher"
-    IDS_THEMETOOLALT        "Reinstalls the SecureUxThemePatcher. This is needed if the Rectify11 visual style is not being applied."
+    IDS_NA                  "غير محدد"
+    IDS_MENUS               "القوائم"
+    IDS_CPLTHEMEPREF        "تغيير السمات في Rectify11"
+    IDS_CPLTIP              "تخصيص الإعدادات في Rectify11"
+    IDS_SYSINFO             "معلوات عن الجهاز"
+    IDS_UNINSTALL           "إزالة Rectify11"
+    IDS_THEMETOOLSTATUS     "حالة SecureUXTheme: "
+	IDS_OK                  "مثالية"
+    IDS_OUTDATED            "إصدار قديم"
+    IDS_NOTINSTALLED        "غير مثبت"
+    IDS_THEMETOOLWARN       "مجهولة، برجاء إعادة التثبيت"
+    IDS_THEMETOOLINSTALL    "إعادة التثبيت"
+    IDS_THEMETOOLALT        "إعادة تثبيت SecureUXTheme في حالة عدم تطبيق النسق"
+	IDS_ADVANCEDOPTIONS     "خيارات متقدمة"
 END
 
 #endif    // Arabic (Saudi Arabia) resources
@@ -289,3 +295,4 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
+
