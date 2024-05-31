@@ -9,6 +9,10 @@
 #include <comutil.h>
 #include "Guid.h"
 #include <Shlwapi.h>
+#include <locale>
+#include <codecvt>
+#include <string>
+
 #pragma comment(lib, "taskschd.lib")
 #pragma comment(lib, "comsupp.lib")
 #pragma comment(lib, "comsuppw.lib")
@@ -305,8 +309,15 @@ HRESULT startProc(LPCWSTR proc, wstring args = L"", bool waitForExit = false)
 	if (!hr)
 	{
 		WCHAR error_buffer[1000];
-		std::string message = std::system_category().message(hr);
-		swprintf_s(error_buffer, L"Error while starting process %s with arguments %s: %s (%ld)", proc, args.c_str(), message.c_str(), GetLastError());
+
+		DWORD err = GetLastError();
+		std::string message = std::system_category().message(err);
+
+		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+
+		std::wstring messageUnicode = converter.from_bytes(message);
+
+		swprintf_s(error_buffer, L"Error while starting process %s with arguments %s: %s (%ld)", proc, args.c_str(), messageUnicode.c_str(), err);
 		MessageBox(NULL, error_buffer, TEXT("Starting process failed"), MB_ICONERROR);
 	}
 	else
