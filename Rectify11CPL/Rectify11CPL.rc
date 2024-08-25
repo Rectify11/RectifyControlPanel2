@@ -285,6 +285,72 @@ END
 /////////////////////////////////////////////////////////////////////////////
 
 
+/////////////////////////////////////////////////////////////////////////////
+// Chinese (Simplified Chinese) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ARA)
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_THEMEHOOKFAIL       "由于未能初始化SecureUXthemeTool，主题信息将不会被加载。"
+    IDS_CPLTITLE            "修改Rectify11设置"
+    IDS_THEME               "主题:"
+    IDS_ThemePref           "主题首选项"
+    IDS_CPLNAME             "Rectify11设置"
+    IDS_THEMESHEADER        "主题"
+    IDS_INFORMATIONHEADER   "信息"
+    IDS_ENABLEMICA          "开启Mica"
+    IDS_TABBED              "使用Tabbed代替Mica"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_WIN11DEFAULT        "Windows 11 默认"
+    IDS_FLUENTCTX           "Nilesoft Shell"
+    IDS_NILESHELLALL        "Nilesoft Shell (所有项目)"
+    IDS_CLASSICCTX          "经典菜单"
+    IDS_CLASSICTRANSPARENTCTX "透明经典菜单"
+    IDS_RESTARTEXPLORER     "重新启动资源管理器以应用更改"
+    IDS_ELEVATIONNEEDED     "更改不可用的设置"
+    IDS_VERSION             "Rectify11版本:"
+    IDS_Save                "保存"
+    IDS_CANCEL              "取消"
+    IDS_IGNOREBG            "保留我的桌面背景"
+    IDS_IGNORECURSOR        "保留我的鼠标样式"
+    IDS_IGNOREIGONS         "保留我的桌面图标"
+    IDS_IGNOREACCENT        "保留我的强调色"
+    IDS_IGNORESOUNDS        "保留我的系统音效"
+    IDS_IGNORESCREENSAVER   "保留我的屏幕保护程序(如果已应用)"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_NA                  "不适用"
+    IDS_MENUS               "菜单"
+    IDS_CPLTHEMEPREF        "更改Rectify11的主题"
+    IDS_CPLTIP              "自定义主题设置等Rectify11设置"
+    IDS_SYSINFO             "系统信息"
+    IDS_UNINSTALL           "卸载Rectify11"
+    IDS_THEMETOOLSTATUS     "SecureUX主题修补程序状态: "
+    IDS_OK                  "好的"
+    IDS_OUTDATED            "已过时"
+    IDS_NOTINSTALLED        "未安装"
+    IDS_THEMETOOLWARN       "状态未知，请重新安装。"
+    IDS_THEMETOOLINSTALL    "重新安装SecureUx主题修补程序"
+    IDS_THEMETOOLALT        "如果未应用Rectify11视觉样式，则需要重新安装SecureUx主题修补程序。"
+    IDS_ADVANCEDOPTIONS     "高级选项"
+END
+
+#endif    // Chinese (Simplified Chinese) resources
+/////////////////////////////////////////////////////////////////////////////
+
 
 #ifndef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
