@@ -12,12 +12,11 @@
 #include "ElementProvider.h"
 #include "resource.h"
 #include "RectifyMainPage.h"
-#include "RectifyThemeCfgPage.h"
 #include <map>
 
 CElementProvider::CElementProvider() : Site(NULL)
 {
-	if (FAILED(InitProcessPriv(14, (unsigned short*)g_hInst, 1, true)))
+	if (FAILED(InitProcessPriv(DUI_VERSION_WIN10_2022, g_hInst, 1, true)))
 	{
 		SHOW_ERROR("Failed to initialize DirectUI\n");
 	}
@@ -147,7 +146,7 @@ HRESULT STDMETHODCALLTYPE CElementProvider::SetResourceID(UINT id)
 	//First parmeter: hinstance of module
 	//2nd: Resource ID of uifile
 	//3rd param: The main resid value
-	int hr = DirectUI::XResourceProvider::Create(g_hInst, (UCString)id, (UCString)buffer, 0, (XResourceProvider**)&this->XProviderCP);
+	int hr = DirectUI::XResourceProvider::Create(g_hInst, (const wchar_t*)id, (const wchar_t*)buffer, 0, (XResourceProvider**)&this->XProviderCP);
 	if (SUCCEEDED(hr))
 	{
 		hr = DirectUI::XProvider::Initialize(NULL, (IXProviderCP*)this->XProviderCP);
@@ -190,15 +189,9 @@ HRESULT STDMETHODCALLTYPE CElementProvider::LayoutInitialized()
 	// Call initialization function as DirectUI does not provide an "OnLoad" method, unlike WPF/Winforms
 	// This is a bit hacky as Microsoft treats elements as COM objects, and instead iterates through each element, calling
 	// the appropriate method.
-	if (root->FindDescendent(StrToID((UCString)L"MainPageElem")) != NULL)
+	if (root->FindDescendent(StrToID((const wchar_t*)L"MainPageElem")) != NULL)
 	{
-		RectifyMainPage* page = (RectifyMainPage*)root->FindDescendent(StrToID((UCString)L"MainPageElem"));
-		page->SetSite(Site);
-		page->OnInit();
-	}
-	else if (root->FindDescendent(StrToID((UCString)L"ThemePageElem")) != NULL)
-	{
-		RectifyThemeCfgPage* page = (RectifyThemeCfgPage*)root->FindDescendent(StrToID((UCString)L"ThemePageElem"));
+		RectifyMainPage* page = (RectifyMainPage*)root->FindDescendent(StrToID((const wchar_t*)L"MainPageElem"));
 		page->SetSite(Site);
 		page->OnInit();
 	}

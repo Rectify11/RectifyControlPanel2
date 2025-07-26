@@ -117,6 +117,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)Rectify11CPL.dll</OutputFile>
@@ -172,6 +173,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)Rectify11CPL.dll</OutputFile>
@@ -197,7 +199,6 @@
     <ClCompile Include="proxy.c" />
     <ClCompile Include="ElementProvider.cpp" />
     <ClCompile Include="ElevationManager.cpp" />
-    <ClCompile Include="RectifyThemeCfgPage.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="theme.cpp" />
   </ItemGroup>
@@ -217,8 +218,6 @@
     <ClInclude Include="ElevationManager.h" />
     <ClInclude Include="Rectify11CPL.h" />
     <ClInclude Include="Guid.h" />
-    <ClInclude Include="RectifyThemeCfgPage.h" />
-    <ClInclude Include="Templetes.h" />
     <ClInclude Include="theme.h" />
     <ClInclude Include="undoc.h" />
     <ClInclude Include="resource.h" />
@@ -234,7 +233,6 @@
   <ItemGroup>
     <Xml Include="pages.xml" />
     <Xml Include="taskslist.xml" />
-    <Xml Include="RectifyThemeCfgPage.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dui70\DirectUI\DirectUI.vcxproj">

@@ -10,8 +10,7 @@ public:
 	RectifyMainPage();
 	virtual ~RectifyMainPage() override;
 
-	static DirectUI::IClassInfo* Class;
-	static HRESULT CreateInstance(Element* a, unsigned long* b, Element** c);
+	static HRESULT Create(Element* a, unsigned long* b, Element** c);
 
 	//Element
 	virtual IClassInfo* GetClassInfoW() override;
@@ -25,7 +24,9 @@ public:
 	virtual void SetSite(IUnknown* site) { this->site = site;  }
 
 	static inline DirectUI::IClassInfo* GetClassInfoPtr() { return Class; }
-	static inline UCString DoGetClassName() { return (UCString)L"RectifyMainPage"; }
+	static inline const wchar_t* DoGetClassName() { return (const wchar_t*)L"RectifyMainPage"; }
+	static void WINAPI SetClassInfoPtr(IClassInfo* ptr) { Class = ptr; };
+	static HRESULT Register();
 private:
 	bool HasAdmin = false;
 	IRectifyUtil* RectifyUtil = NULL;
@@ -33,6 +34,8 @@ private:
 	ThemesMapBase ThemesMap;
 	IUnknown* site = NULL;
 	bool initializing = true;
+
+	static DirectUI::IClassInfo* Class;
 
 	void UpdateThemeGraphic();
 	void ShowRestartExplorer();

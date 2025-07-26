@@ -4,9 +4,7 @@
 #include "ElementProvider.h"
 #include "ClassFactory.h"
 #include "Guid.h"
-#include "Templetes.h"
 #include "RectifyMainPage.h"
-#include "RectifyThemeCfgPage.h"
 
 CFolderViewImplClassFactory::CFolderViewImplClassFactory(REFCLSID rclsid) : m_cRef(1), m_rclsid(rclsid)
 {
@@ -50,9 +48,11 @@ HRESULT CElementProvider_CreateInstance(__in REFIID riid, __deref_out void** ppv
     if (SUCCEEDED(hr))
     {
         hr = pElementProvider->QueryInterface(riid, ppv);
+        if (FAILED(hr)) return hr;
 
-        DirectUI::ClassInfo<RectifyMainPage, DirectUI::Element, DirectUI::StandardCreator<RectifyMainPage>>::Register();
-        DirectUI::ClassInfo<RectifyThemeCfgPage, DirectUI::Element, DirectUI::StandardCreator<RectifyThemeCfgPage>>::Register();
+        hr = RectifyMainPage::Register();
+        if (FAILED(hr)) return hr;
+
         pElementProvider->Release();
     }
     return hr;

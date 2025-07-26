@@ -29,7 +29,6 @@ BEGIN
     IDS_THEMEHOOKFAIL       "Fehler beim laden von SecureUXTheme ThemeTool. Designinformationen werden nicht geladen."
     IDS_CPLTITLE            "Rectify11 Einstellungen"
     IDS_THEME               "Design:"
-    IDS_ThemePref           "Design-Einstellungen"
     IDS_CPLNAME             "Rectify11-Einstellungen"
     IDS_THEMESHEADER        "Designs"
     IDS_INFORMATIONHEADER   "Informationen"
@@ -145,8 +144,6 @@ IDR_TASK                XML                     "taskslist.xml"
 
 IDR_MAINPAGE            UIFILE                  "RectifyMainPage.xml"
 
-IDR_UPDATEPAGE          UIFILE                  "RectifyThemeCfgPage.xml"
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -168,7 +165,6 @@ BEGIN
     IDS_THEMEHOOKFAIL       "Failed to initialize SecureUXTheme ThemeTool. Theme information will not be loaded."
     IDS_CPLTITLE            "Change Rectify11 Settings"
     IDS_THEME               "Theme:"
-    IDS_ThemePref           "Theme preferences"
     IDS_CPLNAME             "Rectify11 Settings"
     IDS_THEMESHEADER        "Themes"
     IDS_INFORMATIONHEADER   "Information"
@@ -235,7 +231,6 @@ BEGIN
     IDS_THEMEHOOKFAIL       "فشل في تحميل SecureUXTheme ولن يتم تحميل معلومات النسق. "
     IDS_CPLTITLE            "تغيير إعدادات Rectify11"
     IDS_THEME               "النسق:"
-    IDS_ThemePref           "تفضيلاتي"
     IDS_CPLNAME             "إعدادات Rectify11"
     IDS_THEMESHEADER        "السمات"
     IDS_INFORMATIONHEADER   "معلومات أخرى"
